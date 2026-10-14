@@ -1,0 +1,15 @@
+node_modules
+dist
+dev-dist
+*.local
+.env
+.env.*
+!.env.example
+# Ảnh thẻ thật không được đưa lên repo
+local-cards/
+*.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+
+e2e/out/

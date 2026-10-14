@@ -1,0 +1,29 @@
+/* Font tiếng Việt đóng gói trong app (chạy offline, không gọi Google Fonts). */
+@import '@fontsource/be-vietnam-pro/400.css';
+@import '@fontsource/be-vietnam-pro/500.css';
+@import '@fontsource/be-vietnam-pro/700.css';
+@import '@fontsource/be-vietnam-pro/800.css';
+@import '@fontsource/be-vietnam-pro/900.css';
+@import 'tailwindcss';
+@import './tokens.css';
+@import './components.css';
+
+@layer base {
+  html {
+    background: var(--c-sleeve);
+    color: var(--c-ink);
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    min-height: 100dvh;
+  }
+  button {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 3px solid var(--c-sky);
+    outline-offset: 2px;
+  }
+}

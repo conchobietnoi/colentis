@@ -1,0 +1,40 @@
+import { launch, login, tab, mkUser, sql, ok, finish, shot, clearG } from './helpers.mjs'
+console.log('S4: thư admin, hồ sơ, đăng xuất')
+const ADM = await mkUser('Quản trị'), U = await mkUser('Dũng Phạm')
+await sql('update profiles set is_admin=true where id=$1', [ADM.id])
+const gifts = [{ type: 'card', rarity: 'rare', qty: 1 }, { type: 'rescue', qty: 2 }, { type: 'title', id: 'streak-3' }]
+const r = await ADM.call('admin_send_mail', { title: 'Quà thử nghiệm', body: 'Cảm ơn bạn!', gifts, usernames: [U.username], at: null })
+ok(r.ok, 'admin gửi thư quà: ' + (r.ok ? '' : JSON.stringify(r.body)))
+const a = await launch(); const { page } = a
+await login(page, U.email)
+await page.click('[data-act=mail]:visible'); await page.waitForTimeout(900)
+const letter = await page.$('.letter:has-text("Quà thử nghiệm")'); ok(!!letter, 'thư hiện trong hòm thư'); await letter?.click(); await page.waitForTimeout(900)
+await shot(page, 's4-letter')
+await page.click('[data-act=claimmail]:visible'); await page.waitForSelector('#gskip', { timeout: 10000 }); await page.waitForTimeout(800); await clearG(page)
+const cnt = await sql(`select (select count(*)::int from user_cards where user_id=$1) cards, (select rescue_bonus from profiles where id=$1) rescue, (select count(*)::int from user_titles where user_id=$1 and title_id='streak-3') t`, [U.id])
+ok(cnt[0].rescue === 4 && cnt[0].t === 1, 'nhận đủ thẻ cứu và danh hiệu: ' + JSON.stringify(cnt[0]))
+ok((await sql(`select count(*)::int n from reward_grants where user_id=$1 and source='admin'`, [U.id]))[0].n === 1, 'nhận 1 thẻ ngẫu nhiên Hiếm')
+// hồ sơ
+await page.keyboard.press('Escape'); const back = await page.$$('[data-act=back]:visible'); for (const b of back) await b.click().catch(() => {}); await page.waitForTimeout(600)
+await tab(page, 'Hồ sơ'); await page.click('[data-act=editprof] >> nth=0'); await page.waitForTimeout(700)
+await page.fill('#epn', 'Dũng Mới'); await page.fill('#epu', 'dungmoi_' + (Math.floor(Math.random() * 900) + 100)); await page.waitForTimeout(1200)
+await page.setInputFiles('#epf', '/tmp/av.png'); await page.waitForTimeout(1200)
+await shot(page, 's4-crop')
+await page.click('[data-ep=use]'); await page.waitForTimeout(1200)
+await page.click('#eps'); await page.waitForTimeout(2500)
+const p = (await sql('select display_name, username, avatar_path, username_changed_at from profiles where id=$1', [U.id]))[0]
+ok(p.display_name === 'Dũng Mới' && /^dungmoi_/.test(p.username), 'đổi tên và username: ' + p.display_name + ' @' + p.username)
+ok(p.avatar_path && p.avatar_path.startsWith(U.id + '/'), 'ảnh đại diện lưu trong thư mục riêng: ' + p.avatar_path)
+await shot(page, 's4-profile')
+const second = await U.call('update_profile', { p: { username: 'dungmoi_x' + Math.floor(Math.random() * 90 + 10) } })
+ok(!second.ok && /USERNAME_COOLDOWN/.test(JSON.stringify(second.body)), 'đổi username lần 2 trong 3 ngày bị chặn')
+// đăng xuất
+await page.click('[data-x=signout]'); await page.waitForTimeout(600); await page.click('[data-x=cfok]'); await page.waitForTimeout(2500)
+ok(!!(await page.$('#fe')), 'đăng xuất đưa về màn đăng nhập')
+await page.fill('#fe', U.email); await page.fill('#fp2', 'sai-mat-khau'); await page.click('#agb'); await page.waitForTimeout(1500)
+const err = await page.$eval('[data-f=pw] .err', (e) => e.textContent).catch(() => '')
+ok(/chưa đúng/.test(err), 'sai mật khẩu báo lỗi tiếng Việt: ' + err)
+const real = a.logs.filter((l) => !/status of 400/.test(l)) // 400 là phản hồi đúng của lần đăng nhập sai mật khẩu
+ok(real.length === 0, 'không lỗi JS: ' + real.join('|').slice(0, 300))
+await a.browser.close()
+process.exit(await finish() ? 1 : 0)

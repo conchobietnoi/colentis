@@ -1,0 +1,460 @@
+/*
+ * Thành phần cần hiệu ứng/gradient phức tạp — khó viết gọn bằng utility.
+ * Phần còn lại dùng Tailwind trực tiếp trong component.
+ */
+
+@layer components {
+
+/* ---------- Ảnh thẻ giữ chỗ (gradient + đốm sáng như mockup) ---------- */
+.card-art {
+  background:
+    radial-gradient(circle at 68% 24%, rgb(255 255 255 / 0.5) 0 12%, transparent 13%),
+    linear-gradient(160deg, var(--a, var(--c-violet)), var(--b, var(--c-blush)));
+}
+
+/* ---------- Ô ngày ---------- */
+.day {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-cell);
+  background: var(--c-paper);
+  border: 1.5px solid var(--cal-frame);
+  color: var(--cal-number);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 0 0 5px;
+  overflow: hidden;
+  text-align: left;
+  line-height: 1.1;
+  transition: transform 0.15s;
+}
+.day:active {
+  transform: scale(0.92);
+}
+.day[data-out] {
+  visibility: hidden;
+}
+.day[data-today] {
+  border: 2.5px solid var(--c-pink);
+  color: var(--c-pink);
+}
+.day[data-future] {
+  font-weight: 500;
+  opacity: 0.85;
+}
+/* Thẻ nhóm phủ cả ô; số ngày vẫn hiện nhỏ trên ảnh */
+.day[data-group] {
+  border: 0;
+  padding: 0;
+}
+.day[data-group]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 70% 25%, rgb(255 255 255 / 0.55) 0 14%, transparent 15%),
+    linear-gradient(160deg, var(--a), var(--b));
+}
+.day[data-group] .day-num {
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  z-index: 1;
+  font-size: 0.625rem;
+  color: #fff;
+  background: rgb(30 27 94 / 0.55);
+  border-radius: 99px;
+  padding: 1px 4px;
+}
+/* Thẻ cá nhân: thẻ nhỏ ở góc */
+.day-me {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 17px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1.5px solid #fff;
+  box-shadow: var(--shadow-chip);
+}
+/* Ngày được cứu: sọc chéo */
+.day[data-saved] {
+  background: repeating-linear-gradient(135deg, var(--c-paper) 0 5px, var(--c-line) 5px 7px);
+}
+/* Ngày trống (đã chốt sau cuối ngày): vòng tròn rỗng */
+.day-empty-mark {
+  position: absolute;
+  left: 50%;
+  bottom: 22%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  border: 2px dashed var(--c-soft);
+  opacity: 0.7;
+}
+/* Chấm task (tối đa 3 màu thành viên) */
+.day-dots {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  display: flex;
+  gap: 3px;
+}
+.day-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.day-lock,
+.day-sync {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  z-index: 1;
+  width: 14px;
+  height: 14px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--c-ink);
+  color: var(--c-paper);
+}
+.day-sync {
+  background: var(--c-butter);
+  color: #1e1b5e;
+}
+
+/* ---------- Avatar có frame tròn (CSS giữ chỗ khi chưa đeo frame SVG) ---------- */
+.ring-av {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.ring-av::before {
+  content: '';
+  position: absolute;
+  inset: -60%;
+  background: conic-gradient(var(--rc), #fff, var(--rc));
+  animation: spin 5s linear infinite;
+}
+.ring-av > span {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--c-paper);
+}
+
+/* ---------- Màn nhận ảnh ---------- */
+.reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  color: #fff;
+  background: radial-gradient(circle at 50% 38%, var(--c-reveal-1), var(--c-reveal-2) 72%);
+}
+.reveal .rays {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 880px;
+  height: 880px;
+  margin: -440px;
+  background: repeating-conic-gradient(transparent 0 9deg, var(--rc) 9deg 13deg);
+  mask: radial-gradient(circle, #000, transparent 62%);
+  opacity: 0;
+  animation: spin 16s linear infinite;
+}
+.reveal[data-stage='show'] .rays {
+  opacity: var(--ri, 0.4);
+  transition: opacity 0.8s;
+}
+.reveal .orb {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 116px;
+  height: 116px;
+  margin: -58px;
+  border-radius: 50%;
+  border: 0;
+  background: radial-gradient(circle at 35% 30%, #fff, #cfd3ee 55%, #1a1650);
+  box-shadow: 0 0 50px rgb(160 170 255 / 0.8);
+  transform: translateY(-560px);
+}
+.reveal[data-stage='drop'] .orb,
+.reveal[data-stage='ready'] .orb {
+  animation: orb-drop 0.9s cubic-bezier(0.3, 1.5, 0.5, 1) forwards;
+}
+.reveal[data-stage='shake'] .orb {
+  transform: none;
+  animation:
+    orb-wobble 0.2s linear infinite,
+    orb-cycle 1.5s steps(1) forwards;
+}
+.reveal[data-stage='burst'] .orb,
+.reveal[data-stage='show'] .orb {
+  opacity: 0;
+  transform: scale(2);
+  transition: 0.25s;
+}
+.reveal .hint {
+  position: absolute;
+  top: 58%;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  opacity: 0;
+}
+.reveal[data-stage='ready'] .hint {
+  opacity: 1;
+  animation: blink 1.2s infinite;
+}
+.reveal .flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+.reveal[data-stage='burst'] .flash {
+  animation: flash 0.7s ease-out;
+}
+.reveal .ring {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 30px;
+  height: 30px;
+  margin: -15px;
+  border-radius: 50%;
+  border: 5px solid var(--rc);
+  opacity: 0;
+}
+.reveal[data-stage='burst'] .ring {
+  animation: ring 0.9s ease-out;
+}
+.reveal .spark {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 9px;
+  height: 9px;
+  margin: -4px;
+  background: var(--c-butter);
+  transform: rotate(45deg);
+  opacity: 0;
+}
+.reveal[data-stage='burst'] .spark {
+  animation: fly 1.1s ease-out forwards;
+}
+.reveal .card-wrap {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 224px;
+  height: 299px;
+  margin: -150px 0 0 -112px;
+  perspective: 900px;
+  opacity: 0;
+}
+.reveal[data-stage='show'] .card-wrap {
+  opacity: 1;
+  animation: pop 0.7s var(--ease-pop);
+}
+.reveal .card3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+}
+.reveal[data-stage='show'] .card3d {
+  transition: transform 0.9s 0.15s;
+  transform: none;
+}
+.reveal .card3d > div {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+.reveal .card-back {
+  transform: rotateY(180deg);
+  background: repeating-linear-gradient(45deg, var(--c-reveal-1) 0 8px, var(--c-reveal-card) 8px 16px);
+  border: 4px solid #fff;
+}
+.reveal .card-front {
+  padding: 5px;
+  background: var(--rc);
+}
+.reveal[data-rarity='legend'] .card-front,
+.reveal[data-rarity='supreme'] .card-front {
+  background: conic-gradient(var(--rc), var(--c-butter), var(--c-sky), var(--rc));
+}
+.reveal .card-front::before {
+  content: '';
+  position: absolute;
+  inset: -60%;
+  background: conic-gradient(var(--rc), #fff, var(--rc), var(--c-butter), var(--rc));
+  animation: spin 4s linear infinite;
+  opacity: 0.9;
+}
+.reveal .rname {
+  position: absolute;
+  top: 62%;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--rc);
+  text-shadow: 0 0 22px var(--rc);
+  opacity: 0;
+}
+.reveal[data-stage='show'] .rname {
+  animation: slam 0.5s 0.55s both;
+}
+.reveal .info {
+  position: absolute;
+  top: 70%;
+  padding: 0 24px;
+  text-align: center;
+  opacity: 0;
+}
+.reveal[data-stage='show'] .info {
+  opacity: 1;
+  transition: opacity 0.6s 1s;
+}
+.reveal .actions {
+  position: absolute;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+}
+.reveal[data-stage='show'] .actions {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.5s 1.3s;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes orb-drop {
+  from {
+    transform: translateY(-560px);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes orb-wobble {
+  0% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg) scale(1.08);
+  }
+  100% {
+    transform: rotate(-8deg);
+  }
+}
+@keyframes orb-cycle {
+  0% {
+    background: radial-gradient(circle at 35% 30%, #fff, #cfd3ee 55%, #1a1650);
+  }
+  25% {
+    background: radial-gradient(circle at 35% 30%, #fff, #2f8cff 55%, #1a1650);
+    box-shadow: 0 0 60px #2f8cff;
+  }
+  50% {
+    background: radial-gradient(circle at 35% 30%, #fff, #9b5cff 55%, #1a1650);
+    box-shadow: 0 0 70px #9b5cff;
+  }
+  75% {
+    background: radial-gradient(circle at 35% 30%, #fff, #ff2e88 55%, #1a1650);
+    box-shadow: 0 0 80px #ff2e88;
+  }
+  100% {
+    background: radial-gradient(circle at 35% 30%, #fff, var(--rc) 55%, #1a1650);
+    box-shadow: 0 0 90px var(--rc);
+  }
+}
+@keyframes flash {
+  from {
+    opacity: 0.95;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes ring {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(22);
+  }
+}
+@keyframes fly {
+  from {
+    opacity: 1;
+    transform: translate(0, 0) rotate(45deg);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(405deg);
+  }
+}
+@keyframes pop {
+  from {
+    transform: scale(0.3);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes slam {
+  from {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Giảm chuyển động: theo máy hoặc công tắc trong app ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ring-av::before,
+  .reveal .rays,
+  .reveal .card-front::before,
+  .animate-pulse-claim,
+  .animate-blink {
+    animation: none !important;
+  }
+}
+[data-motion='reduce'] .ring-av::before,
+[data-motion='reduce'] .reveal .rays,
+[data-motion='reduce'] .reveal .card-front::before,
+[data-motion='reduce'] .animate-pulse-claim,
+[data-motion='reduce'] .animate-blink {
+  animation: none !important;
+}
+}

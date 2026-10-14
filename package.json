@@ -1,0 +1,45 @@
+{
+  "name": "colentis",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "thumbs": "node scripts/make-thumbs.mjs",
+    "compress": "node scripts/compress-cards.mjs",
+    "upload-cards": "node scripts/upload-cards.mjs",
+    "setup-sql": "node scripts/build-setup-sql.mjs",
+    "e2e:shim": "node e2e/shim/server.mjs"
+  },
+  "dependencies": {
+    "@fontsource/be-vietnam-pro": "^5.3.0",
+    "@supabase/supabase-js": "^2.117.3",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.5",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^10.12.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "jose": "^6.2.12",
+    "pg": "^8.23.1",
+    "playwright": "^1.64.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2",
+    "vite": "^8.3.4",
+    "vite-plugin-pwa": "^2.0.0",
+    "workbox-window": "^7.4.1",
+    "sharp": "^0.34.0"
+  }
+}

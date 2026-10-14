@@ -1,0 +1,164 @@
+/*
+ * Design tokens Colentis — lấy từ design/reference/colentis-mockup-full.html.
+ * Giá trị thật nằm trong biến --c-* (đổi theo sáng/tối); @theme map sang lớp Tailwind
+ * (bg-paper, text-ink, border-line, bg-pink, text-rare...).
+ *
+ * Tối: theo máy (prefers-color-scheme). <html data-theme="light|dark"> ghi đè để duyệt.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Bề mặt — "bìa album" */
+  --c-sleeve: #e6e9ff; /* nền màn */
+  --c-paper: #f7f8ff; /* thẻ, ô ngày, sheet */
+  --c-line: #c9cef5; /* viền, gạch đứt */
+  --c-backdrop: #cbd0f7; /* nền ngoài khung điện thoại (desktop) */
+
+  /* Chữ */
+  --c-ink: #1e1b5e; /* chữ chính, nút tối */
+  --c-soft: #5b5f9e; /* chữ phụ */
+  --c-on-ink: #ffffff; /* chữ trên nền ink */
+
+  /* Nhấn — tím/hồng/xanh/vàng */
+  --c-pink: #ff2e88; /* hành động chính, hôm nay, tab đang chọn */
+  --c-sky: #4cc9ff; /* thông tin, focus */
+  --c-butter: #ffe45e; /* streak, nhận quà, dấu tick */
+  --c-violet: #7b61ff;
+  --c-blush: #ff7ab8;
+  --c-mint: #35d0a5;
+  --c-peach: #ff9a5c;
+  --c-danger: #e5484d;
+
+  /* Độ hiếm: Thường / Hiếm / Huyền Thoại / Bá khí */
+  --c-common: #8d94b8;
+  --c-rare: #2f8cff;
+  --c-legend: #9b5cff;
+  --c-supreme: #ff2e88;
+
+  /* Theme lịch (người dùng chỉnh được theo lịch/tháng) */
+  --cal-frame: var(--c-line); /* màu khung ô */
+  --cal-number: var(--c-ink); /* màu số ngày */
+  --cal-weekday: var(--c-soft); /* màu thứ */
+  --cal-month: var(--c-ink); /* màu chữ tháng */
+  --cal-bg: transparent; /* nền tháng (gradient/ảnh) */
+
+  /* Màn nhận ảnh (luôn tối) */
+  --c-reveal-1: #2b2470;
+  --c-reveal-2: #0c0a28;
+  --c-reveal-card: #3a2bcb;
+
+  /* Nhãn dán (streak, danh hiệu dạng chữ): ink/vàng, đảo khi tối */
+  --c-stamp-bg: var(--c-ink);
+  --c-stamp-fg: var(--c-butter);
+
+  /* Lớp phủ */
+  --c-scrim: rgb(20 18 63 / 0.5);
+  --c-device: #14123f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --c-sleeve: #17143f;
+    --c-paper: #221e55;
+    --c-line: #38337f;
+    --c-backdrop: #0f0d2e;
+    --c-ink: #f1f0ff;
+    --c-soft: #a7a9e6;
+    --c-on-ink: #1e1b5e;
+    --c-stamp-bg: var(--c-butter);
+    --c-stamp-fg: #1e1b5e;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --c-sleeve: #17143f;
+  --c-paper: #221e55;
+  --c-line: #38337f;
+  --c-backdrop: #0f0d2e;
+  --c-ink: #f1f0ff;
+  --c-soft: #a7a9e6;
+  --c-on-ink: #1e1b5e;
+  --c-stamp-bg: var(--c-butter);
+  --c-stamp-fg: #1e1b5e;
+}
+
+@theme inline {
+  --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --color-sleeve: var(--c-sleeve);
+  --color-paper: var(--c-paper);
+  --color-line: var(--c-line);
+  --color-backdrop: var(--c-backdrop);
+  --color-ink: var(--c-ink);
+  --color-soft: var(--c-soft);
+  --color-on-ink: var(--c-on-ink);
+  --color-pink: var(--c-pink);
+  --color-sky: var(--c-sky);
+  --color-butter: var(--c-butter);
+  --color-violet: var(--c-violet);
+  --color-blush: var(--c-blush);
+  --color-mint: var(--c-mint);
+  --color-peach: var(--c-peach);
+  --color-danger: var(--c-danger);
+  --color-common: var(--c-common);
+  --color-rare: var(--c-rare);
+  --color-legend: var(--c-legend);
+  --color-supreme: var(--c-supreme);
+  --color-stamp: var(--c-stamp-bg);
+  --color-on-stamp: var(--c-stamp-fg);
+  --color-navy: #1e1b5e; /* ink cố định, không đảo khi tối (chữ trên nền vàng) */
+
+  /* Cỡ chữ (px theo mockup 390pt) */
+  --text-display: 2.625rem; /* 42 — tên tháng */
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.09375rem;
+  --text-h1: 2.125rem; /* 34 — tiêu đề màn */
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: 1.375rem; /* 22 — tiêu đề sheet */
+  --text-h2--line-height: 1.2;
+  --text-h3: 0.9375rem; /* 15 — tiêu đề thẻ */
+  --text-h3--line-height: 1.3;
+  --text-body: 0.875rem; /* 14 */
+  --text-body--line-height: 1.4;
+  --text-meta: 0.75rem; /* 12 */
+  --text-meta--line-height: 1.35;
+  --text-micro: 0.6875rem; /* 11 — tab, thứ, chú thích */
+  --text-micro--line-height: 1.3;
+
+  /* Bo góc */
+  --radius-cell: 0.5rem; /* 8 — ô ngày */
+  --radius-tile: 0.5625rem; /* 9 — ảnh trong album */
+  --radius-field: 0.875rem; /* 14 — ô nhập, menu */
+  --radius-btn: 1rem; /* 16 — nút lớn */
+  --radius-card: 1.125rem; /* 18 — thẻ */
+  --radius-fab: 1.25rem; /* 20 */
+  --radius-sheet: 1.625rem; /* 26 — bottom sheet */
+
+  /* Đổ bóng */
+  --shadow-fab: 0 8px 20px rgb(255 46 136 / 0.45);
+  --shadow-device: 0 0 0 8px var(--c-device), 0 24px 50px rgb(20 18 63 / 0.35);
+  --shadow-chip: 0 1px 3px rgb(30 27 94 / 0.35);
+
+  /* Chuyển động */
+  --ease-sheet: cubic-bezier(0.2, 0.9, 0.3, 1);
+  --ease-pop: cubic-bezier(0.2, 1.5, 0.4, 1);
+
+  --animate-spin-slow: spin 5s linear infinite;
+  --animate-pulse-claim: pulse-claim 1.6s infinite;
+  --animate-blink: blink 1.2s infinite;
+
+  @keyframes pulse-claim {
+    50% {
+      box-shadow: 0 0 0 7px rgb(255 228 94 / 0.35);
+    }
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0.3;
+    }
+  }
+}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colentis – mockup 3 màn hình chính</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sleeve:#E6E9FF; --paper:#F7F8FF; --ink:#1E1B5E; --ink-soft:#5B5F9E;
+  --pink:#FF2E88; --sky:#4CC9FF; --butter:#FFE45E; --line:#C9CEF5;
+  --r-common:#8D94B8; --r-rare:#2F8CFF; --r-legend:#9B5CFF; --r-supreme:#FF2E88;
+  --font:'Be Vietnam Pro',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+body{background:#CBD0F7;font-family:var(--font);color:var(--ink);padding:24px 12px;
+  display:flex;flex-wrap:wrap;gap:28px;justify-content:center;align-items:flex-start}
+.cap{width:100%;text-align:center;font-size:13px;color:var(--ink-soft)}
+.wrap{display:flex;flex-direction:column;gap:10px;align-items:center}
+.wrap b{font-size:13px}
+.phone{width:390px;height:844px;background:var(--sleeve);border-radius:36px;overflow:hidden;position:relative;
+  box-shadow:0 0 0 8px #14123F,0 24px 50px rgba(20,18,63,.35);display:flex;flex-direction:column}
+.status{height:34px;flex:none}
+.tabs{margin-top:auto;display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 18px;background:var(--paper);border-top:2px solid var(--line)}
+.tabs span{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--ink-soft)}
+.tabs i{width:22px;height:22px;border-radius:7px;border:2px solid currentColor}
+.tabs .on{color:var(--pink);font-weight:700}.tabs .on i{background:var(--pink);border-color:var(--pink)}
+/* calendar */
+.head{padding:4px 16px 10px;display:flex;justify-content:space-between;align-items:flex-end}
+.head h1{font-size:44px;font-weight:900;line-height:1;letter-spacing:-1.5px}
+.head small{display:block;font-size:12px;font-weight:500;color:var(--ink-soft);letter-spacing:0}
+.streak{background:var(--ink);color:var(--butter);font-weight:900;font-size:15px;padding:8px 12px;border-radius:14px;transform:rotate(3deg)}
+.dow,.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:0 16px}
+.dow{font-size:11px;font-weight:700;color:var(--ink-soft);text-align:center;padding-bottom:4px}
+.c{aspect-ratio:3/4;border-radius:8px;background:var(--paper);border:1.5px solid var(--line);position:relative;
+  font-size:12px;font-weight:700;padding:4px 0 0 5px;overflow:hidden}
+.c.g{border:0;padding:0;color:transparent}
+.c.g::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 25%,rgba(255,255,255,.55) 0 14%,transparent 15%),linear-gradient(160deg,var(--a),var(--b))}
+.c.me::after{content:"";position:absolute;right:3px;bottom:3px;width:17px;height:22px;border-radius:4px;border:1.5px solid #fff;
+  background:linear-gradient(160deg,var(--a),var(--b));box-shadow:0 1px 3px rgba(30,27,94,.35)}
+.c.today{border:2.5px solid var(--pink);background:#fff;color:var(--pink)}
+.c.fut{color:var(--ink-soft);font-weight:500}
+.c.fut u{position:absolute;left:5px;bottom:5px;width:6px;height:6px;border-radius:50%;background:var(--sky);box-shadow:9px 0 0 var(--pink)}
+.c.sv{background:repeating-linear-gradient(135deg,var(--paper) 0 5px,var(--line) 5px 7px);color:var(--ink-soft)}
+.today-list{margin:14px 16px 0;background:var(--paper);border-radius:18px;padding:14px;border:1.5px solid var(--line)}
+.today-list h2{font-size:15px;font-weight:900;display:flex;justify-content:space-between}
+.today-list h2 em{font-style:normal;color:var(--pink)}
+.t{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1.5px dashed var(--line);font-size:14px;font-weight:500}
+.t:first-of-type{margin-top:8px}
+.t s{width:20px;height:20px;border-radius:6px;border:2px solid var(--ink);flex:none;position:relative}
+.t.d{color:var(--ink-soft);text-decoration:line-through}.t.d s{background:var(--ink)}
+.t.d s::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--butter);border-width:0 2.5px 2.5px 0;transform:rotate(40deg)}
+.t i{margin-left:auto;width:10px;height:10px;border-radius:50%}
+/* reveal */
+.rev{background:linear-gradient(170deg,#3A2BCB,var(--pink) 85%);color:#fff;align-items:center;text-align:center}
+.rev .status{color:#fff}
+.rev h2{font-size:30px;font-weight:900;margin-top:22px;letter-spacing:-.5px}
+.rev p{font-size:14px;opacity:.9;margin-top:6px}
+.card{width:250px;height:333px;border-radius:20px;margin-top:26px;position:relative;padding:5px;transform:rotate(-3deg);overflow:hidden;
+  box-shadow:0 20px 50px rgba(20,18,63,.55)}
+.card::before{content:"";position:absolute;inset:-60%;background:conic-gradient(#FF2E88,#FFE45E,#4CC9FF,#9B5CFF,#FF2E88);animation:spin 5s linear infinite}
+.card .ph{position:relative;height:100%;border-radius:16px;background:radial-gradient(circle at 68% 24%,rgba(255,255,255,.6) 0 11%,transparent 12%),linear-gradient(165deg,#7B61FF,#FF7AB8 60%,#FFE45E);
+  display:flex;align-items:flex-end;justify-content:center;padding:14px;color:#fff;font-weight:900;font-size:13px}
+.card .ph b{background:rgba(30,27,94,.75);padding:6px 12px;border-radius:99px}
+.spark{position:absolute;width:10px;height:10px;background:var(--butter);transform:rotate(45deg);animation:tw 1.8s ease-in-out infinite}
+.btn{margin-top:auto;margin-bottom:34px;background:var(--butter);color:var(--ink);font-weight:900;font-size:16px;padding:16px 34px;border-radius:99px;border:0;font-family:inherit}
+.chip-r{display:inline-block;margin-top:18px;background:#fff;color:var(--pink);font-weight:900;font-size:13px;padding:6px 14px;border-radius:99px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes tw{50%{transform:rotate(45deg) scale(.4);opacity:.4}}
+/* profile */
+.prof{text-align:center;padding:0 16px}
+.av{width:120px;height:120px;margin:10px auto 0;position:relative;border-radius:50%;padding:6px;overflow:hidden}
+.av::before{content:"";position:absolute;inset:-50%;background:conic-gradient(var(--pink),var(--butter),var(--sky),var(--r-legend),var(--pink));animation:spin 4s linear infinite}
+.av span{position:relative;display:block;width:100%;height:100%;border-radius:50%;background:linear-gradient(160deg,#9AA6FF,var(--sky));border:4px solid var(--sleeve)}
+.prof h1{font-size:26px;font-weight:900;margin-top:12px}
+.prof .un{font-size:13px;color:var(--ink-soft);font-weight:500}
+.title{display:inline-block;margin-top:10px;background:var(--ink);color:var(--butter);font-weight:700;font-size:13px;padding:6px 14px;border-radius:99px}
+.bio{font-size:13px;margin-top:10px;color:var(--ink-soft)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.stats div{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:10px 4px}
+.stats b{display:block;font-size:22px;font-weight:900}.stats small{font-size:11px;color:var(--ink-soft)}
+.seg{display:flex;gap:6px;margin-top:16px;justify-content:center}
+.seg span{font-size:12px;font-weight:700;padding:6px 14px;border-radius:99px;border:1.5px solid var(--line);color:var(--ink-soft)}
+.seg .on{background:var(--ink);border-color:var(--ink);color:#fff}
+.mini{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.mini i{aspect-ratio:3/4;border-radius:7px;border:2px solid var(--rc);background:linear-gradient(160deg,var(--a),var(--b))}
+.mini i.lk{background:var(--paper);border:2px dashed var(--line)}
+.badges{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.badges i{width:44px;height:44px;border-radius:50%;border:3px solid var(--rc);background:var(--paper)}
+@media (prefers-reduced-motion:reduce){.card::before,.av::before,.spark{animation:none}}
+@media (max-width:420px){.phone{width:100%;height:auto;min-height:780px;border-radius:24px}}
+</style>
+</head>
+<body>
+<p class="cap">Mockup tham chiếu cho Codex: ảnh dùng màu giữ chỗ, ảnh thật nằm trong bucket riêng tư. Tên danh hiệu, tên người dùng là dữ liệu mẫu.</p>
+
+<div class="wrap"><b>1. Lịch tháng</b>
+<div class="phone">
+  <div class="status"></div>
+  <div class="head"><div><small>Lịch nhóm · 3 người</small><h1>Tháng 10</h1></div><div class="streak">12 ngày liền</div></div>
+  <div class="dow"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+  <div class="grid" id="grid"></div>
+  <div class="today-list">
+    <h2>Việc hôm nay <em>2/3</em></h2>
+    <div class="t d"><s></s>Nộp báo cáo tuần<i style="background:var(--pink)"></i></div>
+    <div class="t d"><s></s>Gọi lại cho khách<i style="background:var(--sky)"></i></div>
+    <div class="t"><s></s>Mua quà sinh nhật<i style="background:var(--pink)"></i></div>
+  </div>
+  <div class="tabs"><span class="on"><i></i>Lịch</span><span><i></i>Hôm nay</span><span><i></i>Ảnh</span><span><i></i>Bạn bè</span><span><i></i>Hồ sơ</span></div>
+</div></div>
+
+<div class="wrap"><b>2. Nhận ảnh (màn quan trọng nhất)</b>
+<div class="phone rev">
+  <div class="status"></div>
+  <span class="chip-r">Bá khí</span>
+  <h2>Xong hết việc hôm nay!</h2>
+  <p>Bạn nhận một ảnh cá nhân mới</p>
+  <div class="card"><div class="ph"><b>ẢNH 41 / 79</b></div></div>
+  <span class="spark" style="left:36px;top:250px"></span><span class="spark" style="right:40px;top:200px;animation-delay:.5s"></span>
+  <span class="spark" style="left:70px;top:520px;animation-delay:1s"></span><span class="spark" style="right:56px;top:560px;animation-delay:.3s"></span>
+  <button class="btn">Thêm vào bộ sưu tập</button>
+</div></div>
+
+<div class="wrap"><b>3. Hồ sơ</b>
+<div class="phone">
+  <div class="status"></div>
+  <div class="prof">
+    <div class="av"><span></span></div>
+    <h1>Mai Linh</h1><div class="un">@mailinh_01</div>
+    <div class="title">Tên danh hiệu bạn đặt</div>
+    <p class="bio">Làm xong việc rồi mới được ngắm ảnh.</p>
+    <div class="stats"><div><b>12</b><small>Streak</small></div><div><b>30</b><small>Dài nhất</small></div><div><b>41/79</b><small>Ảnh đã có</small></div></div>
+    <div class="badges"><i style="--rc:var(--r-common)"></i><i style="--rc:var(--r-rare)"></i><i style="--rc:var(--r-legend)"></i><i style="--rc:var(--r-supreme)"></i></div>
+    <div class="seg"><span class="on">Ảnh cá nhân</span><span>Ảnh nhóm</span></div>
+    <div class="mini" id="mini"></div>
+  </div>
+  <div class="tabs"><span><i></i>Lịch</span><span><i></i>Hôm nay</span><span><i></i>Ảnh</span><span><i></i>Bạn bè</span><span class="on"><i></i>Hồ sơ</span></div>
+</div></div>
+
+<script>
+const pal=[['#7B61FF','#FF7AB8'],['#4CC9FF','#7B61FF'],['#FF7AB8','#FFE45E'],['#35D0A5','#4CC9FF'],['#FF9A5C','#FF2E88']];
+const g=document.getElementById('grid');
+const grp=[1,2,5,6,7,10,12],me=[3,4,8,11],sv=[9];
+for(let i=0;i<3;i++)g.append(document.createElement('div'));
+for(let d=1;d<=31;d++){
+  const c=document.createElement('div');c.className='c';c.textContent=d;
+  const p=pal[d%5];c.style.setProperty('--a',p[0]);c.style.setProperty('--b',p[1]);
+  if(grp.includes(d))c.classList.add('g');
+  else if(me.includes(d))c.classList.add('me');
+  else if(sv.includes(d))c.classList.add('sv');
+  else if(d===13)c.classList.add('today');
+  else if(d>13){c.classList.add('fut');if([15,16,20,21,27].includes(d))c.append(document.createElement('u'));}
+  g.append(c);
+}
+const m=document.getElementById('mini'),rc=['--r-common','--r-rare','--r-legend','--r-supreme'];
+for(let i=0;i<15;i++){const e=document.createElement('i');const p=pal[i%5];
+  e.style.setProperty('--a',p[0]);e.style.setProperty('--b',p[1]);e.style.setProperty('--rc','var('+rc[i<8?0:i<12?1:i<14?2:3]+')');
+  if(i>9)e.className='lk';m.append(e);}
+</script>
+</body>
+</html>

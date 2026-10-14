@@ -1,0 +1,97 @@
+<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Thẻ sinh nhật James · neon A–S–SS–SSS–AURA</title>
+<style>
+:root{--bg:#0d0924}
+*{box-sizing:border-box}html,body{overflow-x:hidden;overflow-x:clip}
+body{margin:0;min-height:100vh;background:radial-gradient(120% 70% at 50% 0,#2b1a63,#0d0924 62%);color:#f6f1ff;font-family:system-ui,"Segoe UI",sans-serif;display:flex;flex-direction:column;align-items:center;padding:24px 12px 80px;gap:14px}
+h1{font-size:18px;margin:0;text-align:center}p{margin:0;color:#c9bdf5;font-size:13px;text-align:center}
+h2{font-size:15px;margin:18px 0 0;color:#ffd23f}
+.btn{font:inherit;font-weight:800;padding:12px 24px;border-radius:999px;border:0;cursor:pointer;background:linear-gradient(90deg,#ff7bd0,#ffd23f);color:#2b1450;box-shadow:0 0 22px #ff7bd088}
+.row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;max-width:1200px}
+.cap{text-align:center;margin-top:-26px;font-size:12px;letter-spacing:.1em;color:#fff9;position:relative;z-index:6}
+/* ---------- thẻ ---------- */
+.stage{position:relative;margin:56px 50px 40px;--c:#ffcf33;--c2:#ff9d00;--glow:radial-gradient(closest-side,var(--c),transparent)}
+.land{width:min(440px,78vw)}.port{width:min(290px,64vw)}
+.t-A{--c:#ffd23f;--c2:#ffa800}.t-S{--c:#ff8a1f;--c2:#ff4d00}.t-SS{--c:#ff2d3d;--c2:#c40018}.t-SSS{--c:#ffc83a;--c2:#ff2d3d}.t-AURA{--c:#ff5db6;--c2:#4cd2ff}
+.glow{position:absolute;inset:-34px;border-radius:50px;filter:blur(30px);opacity:.75;z-index:0;background:linear-gradient(135deg,var(--c),var(--c2));animation:gl 2.4s ease-in-out infinite}
+.t-SSS .glow{background:linear-gradient(135deg,#ffd23f,#ff2d3d,#ffd23f)}
+.t-AURA .glow{background:conic-gradient(#ff5db6,#ffd23f,#5be584,#4cd2ff,#8a5bff,#ff5db6);animation:gl 2.4s ease-in-out infinite,hue 6s linear infinite}
+.frame{position:relative;z-index:2;border-radius:22px;padding:7px;overflow:hidden;background:linear-gradient(135deg,var(--c),var(--c2));
+ box-shadow:0 0 3px #fff,0 0 10px var(--c),0 0 26px var(--c),0 0 58px var(--c2);animation:neon 1.8s ease-in-out infinite}
+.t-SSS .frame::before,.t-AURA .frame::before{content:"";position:absolute;inset:-90%;background:conic-gradient(#ffd23f,#ff2d3d,#ffd23f,#ff7a2f,#ffd23f);animation:spin 3.2s linear infinite}
+.t-AURA .frame::before{background:conic-gradient(#ff5db6,#ffd23f,#5be584,#4cd2ff,#8a5bff,#ff5db6)}
+.t-AURA .frame{box-shadow:0 0 3px #fff,0 0 12px #ff5db6,0 0 30px #4cd2ff,0 0 64px #8a5bff;animation:neon 1.8s ease-in-out infinite,hue 6s linear infinite}
+.face{position:relative;z-index:1;border-radius:16px;overflow:hidden;background:#000;box-shadow:inset 0 0 0 2px #fff9,inset 0 0 22px #0008}
+.land .face{aspect-ratio:3/2}.port .face{aspect-ratio:2/3}.port.r34 .face{aspect-ratio:3/4}
+.face img{display:block;width:100%;height:100%;object-fit:cover}
+.tag{position:absolute;left:50%;top:-18px;transform:translateX(-50%);z-index:6;padding:5px 18px;border-radius:999px;font-weight:900;letter-spacing:.14em;font-size:15px;color:#fff;background:#14082f;border:2px solid var(--c);text-shadow:0 0 8px var(--c);box-shadow:0 0 10px var(--c),0 0 22px var(--c2)}
+.t-AURA .tag{border-color:#fff}
+/* bánh sinh nhật */
+.cake{position:absolute;right:-30px;bottom:-34px;width:96px;z-index:7;filter:drop-shadow(0 0 4px var(--c)) drop-shadow(0 0 12px var(--c2));animation:bob 2.6s ease-in-out infinite}
+.cake .fl{transform-box:fill-box;transform-origin:50% 100%;animation:flk .35s ease-in-out infinite alternate}
+.fx{position:absolute;inset:-70px;z-index:5;pointer-events:none}
+.rays{position:absolute;inset:-48%;z-index:0;pointer-events:none;opacity:.8;animation:spin 14s linear infinite;
+ -webkit-mask:radial-gradient(circle,transparent 24%,#000 34%,transparent 66%);mask:radial-gradient(circle,transparent 24%,#000 34%,transparent 66%)}
+.t-SSS .rays{background:repeating-conic-gradient(from 0deg,#ffc83a00 0 7deg,#ffb02ecc 7deg 10deg,#ff2d3dcc 10deg 11.5deg,#ffc83a00 11.5deg 20deg)}
+.t-AURA .rays{background:repeating-conic-gradient(from 0deg,#fff0 0 6deg,#ff5db6cc 6deg 8deg,#ffd23fcc 8deg 10deg,#5be584cc 10deg 12deg,#4cd2ffcc 12deg 14deg,#8a5bffcc 14deg 16deg,#fff0 16deg 22deg)}
+.aur{position:absolute;inset:-40px;z-index:0;pointer-events:none;filter:blur(24px);opacity:.7}
+.aur i{position:absolute;width:60%;height:50%;border-radius:50%;animation:drift 5s ease-in-out infinite alternate}
+.aur i:nth-child(1){left:-10%;top:-12%;background:#ff5db6}.aur i:nth-child(2){right:-10%;top:10%;background:#4cd2ff;animation-delay:-1.5s}.aur i:nth-child(3){left:20%;bottom:-14%;background:#5be584;animation-delay:-3s}.aur i:nth-child(4){right:0;bottom:-10%;background:#ffd23f;animation-delay:-2.2s}
+.ring{position:absolute;inset:0;border-radius:24px;border:3px solid var(--c);box-shadow:0 0 14px var(--c),inset 0 0 14px var(--c);z-index:1;animation:rip 2.6s ease-out infinite;opacity:0}
+.p{position:absolute;pointer-events:none;animation:fly var(--d) ease-out var(--dl) infinite;opacity:0}
+.p.spark{width:var(--s);height:var(--s);background:var(--pc);clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);filter:drop-shadow(0 0 4px var(--pc))}
+.p.ember{width:var(--s);height:var(--s);border-radius:50%;background:radial-gradient(circle,#fff,var(--pc) 45%,transparent 70%);box-shadow:0 0 8px var(--pc)}
+.p.conf{width:var(--s);height:calc(var(--s)*.55);background:var(--pc);border-radius:2px;box-shadow:0 0 6px var(--pc)}
+@keyframes fly{0%{transform:translate(0,0) scale(.3) rotate(0);opacity:0}15%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(var(--r,0deg));opacity:0}}
+@keyframes rip{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.38);opacity:0}}
+@keyframes neon{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
+@keyframes gl{0%,100%{opacity:.5;transform:scale(.97)}50%{opacity:.95;transform:scale(1.05)}}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes hue{to{filter:hue-rotate(360deg)}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+@keyframes flk{from{transform:scale(.9,1) rotate(-6deg)}to{transform:scale(1.1,.9) rotate(6deg)}}
+@keyframes drift{from{transform:translate(-8%,-6%) scale(.9)}to{transform:translate(8%,6%) scale(1.15)}}
+.reveal .stage{animation:pop .8s cubic-bezier(.2,1.4,.4,1) both}.reveal>div:nth-child(2) .stage{animation-delay:.4s}
+@keyframes pop{from{transform:scale(.3) rotateY(90deg);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.p{display:none}.ring{opacity:.5}}
+</style>
+<h1>Thẻ sinh nhật James · A – S – SS – SSS – AURA</h1>
+<p>Mỗi bậc một màu neon và một kiểu hiệu ứng tỏa ra riêng, đều có bánh sinh nhật ở góc.</p>
+<button class="btn" id="b">🎁 Rút 2 thẻ</button>
+<div class="row reveal" id="r"></div>
+<h2>Cả 5 thẻ</h2>
+<div class="row" id="all"></div>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="cake" viewBox="0 0 96 108">
+ <g class="fl"><path d="M48 6C40 16 41 24 48 28C55 24 56 16 48 6z" fill="#ffd23f" stroke="#fff" stroke-width="2"/><path d="M48 14C45 19 46 23 48 25C50 23 51 19 48 14z" fill="#ff7a2f"/></g>
+ <rect x="45" y="27" width="6" height="16" rx="2" fill="#ff7bd0" stroke="#fff" stroke-width="2"/>
+ <rect x="22" y="43" width="52" height="22" rx="8" fill="#fff4fa" stroke="#fff" stroke-width="3"/>
+ <path d="M22 52q6 9 10 0t10 0t10 0t10 0t10 0t10 0V47a8 8 0 0 0-8-4H30a8 8 0 0 0-8 4z" fill="#ff9ad0"/>
+ <rect x="10" y="62" width="76" height="34" rx="10" fill="#ffe0f0" stroke="#fff" stroke-width="3"/>
+ <path d="M10 72q9 12 15 0t15 0t15 0t15 0t15 0t13 0V70a10 10 0 0 0-10-8H20a10 10 0 0 0-10 8z" fill="#ff6fb5"/>
+ <circle cx="26" cy="86" r="3" fill="#ffd23f"/><circle cx="44" cy="88" r="3" fill="#6bd3ff"/><circle cx="62" cy="85" r="3" fill="#8aff9b"/><circle cx="78" cy="88" r="3" fill="#ffd23f"/>
+ <ellipse cx="48" cy="100" rx="42" ry="5" fill="#ffffff55"/>
+</symbol></defs></svg>
+<script>
+const C=[{t:'A',f:'A.jpeg',o:'port'},{t:'S',f:'S.jpeg',o:'land'},{t:'SS',f:'SS.jpeg',o:'land'},{t:'SSS',f:'SSS.jpeg',o:'port'},{t:'AURA',f:'AURA.jpg',o:'port r34'}];
+const R=(a,b)=>a+Math.random()*(b-a);
+const COL={A:['#ffe27a','#ffd23f','#fff3b0'],S:['#ff8a1f','#ffb347','#ff5a00'],SS:['#ff2d3d','#ff6b6b','#ffd0d0'],SSS:['#ffc83a','#ff2d3d','#ffe27a'],AURA:['#ff5db6','#ffd23f','#5be584','#4cd2ff','#8a5bff']};
+function edge(){const s=Math.floor(R(0,4)),t=R(0,100);return s==0?[t,0,0,-1]:s==1?[100,t,1,0]:s==2?[t,100,0,1]:[0,t,-1,0]}
+function P(fx,o){const e=document.createElement('i');e.className='p '+o.k;e.style.cssText=`left:${o.x}%;top:${o.y}%;--s:${o.s}px;--pc:${o.c};--dx:${o.dx}px;--dy:${o.dy}px;--d:${o.d}s;--dl:${-R(0,o.d)}s;--r:${o.r||0}deg`;fx.appendChild(e)}
+function fxFor(t,fx,stage){
+ const cols=COL[t];const pick=()=>cols[Math.floor(R(0,cols.length))];
+ const inset=v=>`calc(${v}% )`;
+ if(t==='A'){for(let i=0;i<18;i++){const[x,y,nx,ny]=edge();P(fx,{k:'spark',x:x*0.7+15,y:y*0.7+15,s:R(7,15),c:pick(),dx:nx*R(10,40)+R(-14,14),dy:ny*R(10,40)-R(10,40),d:R(2.4,4.2)})}
+  stage.insertAdjacentHTML('beforeend','<div class="ring" style="animation-duration:3.6s"></div>')}
+ if(t==='S'){for(let i=0;i<30;i++){P(fx,{k:'ember',x:R(14,86),y:R(60,92),s:R(5,12),c:pick(),dx:R(-34,34),dy:-R(90,220),d:R(1.8,3.4)})}
+  stage.insertAdjacentHTML('beforeend','<div class="ring" style="animation-duration:2.2s"></div>')}
+ if(t==='SS'){for(let i=0;i<20;i++){const[x,y,nx,ny]=edge();P(fx,{k:'spark',x:x*0.7+15,y:y*0.7+15,s:R(8,16),c:pick(),dx:nx*R(40,90),dy:ny*R(40,90),d:R(1.2,2.2)})}
+  stage.insertAdjacentHTML('beforeend','<div class="ring"></div><div class="ring" style="animation-delay:-.9s"></div><div class="ring" style="animation-delay:-1.8s"></div>')}
+ if(t==='SSS'){stage.insertAdjacentHTML('afterbegin','<div class="rays"></div>');for(let i=0;i<34;i++){const[x,y,nx,ny]=edge();P(fx,{k:'spark',x:x*0.7+15,y:y*0.7+15,s:R(9,19),c:pick(),dx:nx*R(60,150),dy:ny*R(60,150),d:R(1.4,2.8)})}
+  stage.insertAdjacentHTML('beforeend','<div class="ring"></div><div class="ring" style="animation-delay:-1.3s"></div>')}
+ if(t==='AURA'){stage.insertAdjacentHTML('afterbegin','<div class="rays"></div><div class="aur"><i></i><i></i><i></i><i></i></div>');for(let i=0;i<44;i++){const[x,y,nx,ny]=edge();P(fx,{k:i%3?'spark':'conf',x:x*0.7+15,y:y*0.7+15,s:R(8,18),c:pick(),dx:nx*R(40,120)+R(-30,30),dy:ny*R(30,100)-R(30,130),d:R(1.8,3.6),r:R(-200,200)})}
+  stage.insertAdjacentHTML('beforeend','<div class="ring" style="border-color:#fff"></div><div class="ring" style="animation-delay:-1.3s;border-color:#ffd23f"></div>')}
+}
+function card(c){const w=document.createElement('div');w.innerHTML=`<div class="stage ${c.o} t-${c.t}"><div class="glow"></div><div class="fx"></div><span class="tag">${c.t}</span><div class="frame"><div class="face"><img src="../../local-cards/event-birthday-james/${c.f}" alt=""></div></div><svg class="cake" viewBox="0 0 96 108"><use href="#cake"/></svg></div><div class="cap">THẺ ${c.t} · ${c.o.startsWith('land')?'NGANG':'DỌC'}</div>`;fxFor(c.t,w.querySelector('.fx'),w.querySelector('.stage'));return w}
+const all=document.getElementById('all');C.forEach(c=>all.appendChild(card(c)));
+function draw(){const r=document.getElementById('r');r.innerHTML='';[...C].sort(()=>Math.random()-.5).slice(0,2).forEach(c=>r.appendChild(card(c)))}
+document.getElementById('b').onclick=draw;draw();
+</script></html>
