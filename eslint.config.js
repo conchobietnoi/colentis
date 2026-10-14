@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist', 'dev-dist', 'local-cards', 'e2e', 'scripts', 'supabase', 'src/components', 'src/pages', 'src/styles', 'src/lib/calendar.ts', 'src/lib/cx.ts', 'src/lib/frames.ts', 'src/lib/motion.ts', 'src/lib/rarity.ts'] },
+  { ignores: ['dist', 'dev-dist', 'local-cards', 'e2e', 'scripts', 'supabase', 'src/components', 'src/pages', 'src/styles', 'src/lib/calendar.ts', 'src/lib/cx.ts', 'src/lib/frames.ts', 'src/lib/motion.ts', 'src/lib/rarity.ts', 'src/lib/time.ts'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['src/**/*.{ts,tsx}'],

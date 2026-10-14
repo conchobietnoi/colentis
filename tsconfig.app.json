@@ -20,5 +20,5 @@
     "noUncheckedSideEffectImports": true
   },
   "include": ["src"],
-  "exclude": ["src/components", "src/pages", "src/styles", "src/lib/calendar.ts", "src/lib/cx.ts", "src/lib/frames.ts", "src/lib/motion.ts", "src/lib/rarity.ts"]
+  "exclude": ["src/components", "src/pages", "src/styles", "src/lib/calendar.ts", "src/lib/cx.ts", "src/lib/frames.ts", "src/lib/motion.ts", "src/lib/rarity.ts", "src/lib/time.ts"]
 }
