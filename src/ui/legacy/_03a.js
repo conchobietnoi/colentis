@@ -106,7 +106,7 @@ function themePage(){const cols=['#1E1B5E','#FF2E88','#2F8CFF','#9B5CFF','#E0A80
   <div class="row" style="justify-content:space-between">Chế độ tối <button class="tog ${S.dark?'on':''}" data-act="tg" data-k="dark" aria-label="Chế độ tối"></button></div><button class="big" data-act="savetheme">Lưu giao diện</button></div>`)}
 /* ===== GACHA ===== */
 const STARC=['#cfd3ee','#4CC9FF','#9B5CFF','#FF2E88','#FFD75E'];
-function infoFor(it){if(it.type==='event'){const c=it.card,col={A:'#ffd23f',S:'#ff8a1f',SS:'#ff2d3d',SSS:'#ffc83a',AURA:'#ff5db6'}[c.tier];return {col,txt:c.tier,parts:{A:30,S:44,SS:56,SSS:80,AURA:110}[c.tier],rings:{A:1,S:2,SS:3,SSS:3,AURA:4}[c.tier],big:c.tier==='AURA'||c.tier==='SSS',ev:1,cols:ECOL[c.tier]}}
+function infoFor(it){if(it.type==='event'){const c0=it.card,c={...c0,tier:(c0.tier==='LTD'||c0.tier==='TAG')?'SSS':c0.tier},col={A:'#ffd23f',S:'#ff8a1f',SS:'#ff2d3d',SSS:'#ffc83a',AURA:'#ff5db6'}[c.tier];return {col,txt:c.tier,parts:{A:30,S:44,SS:56,SSS:80,AURA:110}[c.tier],rings:{A:1,S:2,SS:3,SSS:3,AURA:4}[c.tier],big:c.tier==='AURA'||c.tier==='SSS',ev:1,cols:ECOL[c.tier]}}
  if(it.type==='card'){const r=it.card.r,col=r==='supreme'?[ '#35e07a','#ffffff','#ffb02e','#ffc46b'][SUPFX.indexOf(it.card.fx)]:RCOL[r];return {col,txt:NAME[r],parts:{common:16,rare:34,legend:64,supreme:110}[r],rings:{common:1,rare:2,legend:3,supreme:4}[r],big:r==='legend'||r==='supreme',cols:r==='supreme'?[col,{s1:'#ff3b4e',s2:'#9fb0ff',s3:'#ff3d1f',s4:'#3a7bff'}[it.card.fx],'#fff']:[col,'#fff']}}
  if(it.type==='title')return {col:'#FFE45E',txt:'Danh hiệu mới!',parts:70,rings:3,big:true,cols:['#FFE45E','#ff5db6','#4cc9ff','#fff']};
  return {col:'#4CC9FF',txt:'Thẻ cứu streak',parts:30,rings:2,big:false,cols:['#4CC9FF','#fff']}}
@@ -122,7 +122,7 @@ function stageItem(){const g=$('#g'),G=GST,it=G.items[G.i];if(!it){summary();ret
  g.classList.remove('chg','shk');g.style.setProperty('--rc',inf.col);g.style.setProperty('--ch',0);
  $$('#g .gr').forEach(r=>r.style.opacity=0);
  $('#gcnt').textContent=`${G.i+1} / ${G.items.length}`;
- $('#gtit').innerHTML=it.type==='event'?`Quà sinh nhật James<small>14/10/2026 · thẻ sự kiện ${G.i+1}/${G.items.filter(x=>x.type==='event').length}</small>`:it.type==='title'?`Danh hiệu mới<small>Đã thêm vào Hồ sơ</small>`:it.type==='saver'?`Thẻ cứu streak<small>Cộng vào kho thẻ cứu</small>`:`Thẻ mới<small>${it.src||''}</small>`;
+ $('#gtit').innerHTML=it.type==='event'&&it.card.ev==='khai-mac-2026'?`Quà Khai Mạc<small>15—16/10/2026</small>`:it.type==='event'?`Quà sinh nhật James<small>14/10/2026 · thẻ sự kiện ${G.i+1}/${G.items.filter(x=>x.type==='event').length}</small>`:it.type==='title'?`Danh hiệu mới<small>Đã thêm vào Hồ sơ</small>`:it.type==='saver'?`Thẻ cứu streak<small>Cộng vào kho thẻ cứu</small>`:`Thẻ mới<small>${it.src||''}</small>`;
  $('#cw').innerHTML='';$('#cw').className='cardw';$('#rn').className='rname';$('#gi').className='ginfo';$('#gb').className='gbtns';$('#gb').innerHTML='';$('#cf').innerHTML='';$('#gs').className='gsum';
  const pk=$('#pkw');pk.style.display='';
  pk.innerHTML=`<div class="pack ${it.type==='event'?'ev':''}" id="pack" style="--gc:#a9a0ff"><div class="pin"><div class="half h1"></div><div class="half h2"></div><div class="shine"></div><div class="seal2"></div>${it.type==='event'?'<svg class="evi" viewBox="0 0 96 108"><use href="#cake"/></svg>':''}</div></div>`;

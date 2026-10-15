@@ -31,7 +31,7 @@ const lsGet=(k,d)=>{try{const v=localStorage.getItem('colentis:'+k);return v==nu
 const lsSet=(k,v)=>{try{localStorage.setItem('colentis:'+k,JSON.stringify(v))}catch(e){}};
 const curCal=()=>CALS[Math.min(S.calIdx||0,Math.max(0,CALS.length-1))]||{id:'',name:'Lịch',members:['me'],owner:'me',colors:{}};
 const mcol=(id,cal)=>{const c=CALS.find(x=>x.id===cal)||curCal();return (c.colors&&c.colors[id])||'#9AA6FF'};
-const SRCLBL={personal:'Hoàn thành cá nhân',group:'Thẻ nhóm',rescue:'Thẻ cứu',welcome:'Quà Tân binh',event:'Sự kiện sinh nhật James',admin:'Quà từ Admin'};
+const SRCLBL={personal:'Hoàn thành cá nhân',group:'Thẻ nhóm',rescue:'Thẻ cứu',welcome:'Quà Tân binh',event:'Quà sự kiện',admin:'Quà từ Admin'};
 function applySnapshot(sn){
  Object.assign(TODAY,sn.today);todayKey=key(TODAY.y,TODAY.m,TODAY.d);TODAY.iso=sn.today.iso;
  if(!S.mInit){S.mInit=1;S.month=[TODAY.y,TODAY.m]}
@@ -89,7 +89,7 @@ function titleFrame(id,text,h=56){const t=TMAP[id];if(!t)return `<span class="tf
  const W=t.tw;return `<span class="tf tn ${String(id).startsWith('limited-')?'lt':''}" style="--h:${h}px;--ar:${W/200};--l:${180/W*100}%"><img src="${frameImg(id,'title')}" alt="" loading="lazy"><span>${text||t.name}</span></span>`}
 /* ----- thẻ ảnh ----- */
 const CAKE='<svg class="cake" viewBox="0 0 96 108"><use href="#cake"/></svg>';
-function cardHTML(c,o={}){const cls=['pc'];
+function cardHTML(c,o={}){if(c.ev==='khai-mac-2026')return kmCardHTML(c,o);const cls=['pc'];
  if(c.r==='event'){cls.push('ev','t-'+c.tier)}else{cls.push('r-'+c.r);if(c.r==='supreme')cls.push('s',c.fx);if(c.r==='rare'||c.r==='legend')cls.push('comet')}
  if(o.thumb)cls.push('thumb');
  const tag=c.r==='event'?c.tier:TAG[c.r];

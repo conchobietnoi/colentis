@@ -49,8 +49,8 @@ let friendStreaks: Record<string, { at: number; v: number }> = {}
 function toUiCard(c: CardRow): UiCard {
   const w = c.width || 3, h = c.height || 4
   return {
-    id: c.id, r: RAR[c.rarity] ?? 'common', name: c.name, land: c.orientation === 'landscape' || w > h * 1.05,
-    ar: w / h, fx: c.effect && c.rarity === 'supreme' ? c.effect : '', tier: c.tier ?? '', ev: c.event_id ?? '', path: c.storage_path, thumb: c.thumb_path ?? c.storage_path, sort: c.sort,
+    id: c.id, r: RAR[c.rarity] ?? 'common', name: c.name, land: c.event_id === 'khai-mac-2026' ? false : c.orientation === 'landscape' || w > h * 1.05,
+    ar: c.event_id === 'khai-mac-2026' ? (c.tier === 'TAG' ? 0.8 : 232 / 330) : w / h, fx: c.effect && c.rarity === 'supreme' ? c.effect : '', tier: c.tier ?? '', ev: c.event_id ?? '', path: c.storage_path, thumb: c.thumb_path ?? c.storage_path, sort: c.sort,
   }
 }
 

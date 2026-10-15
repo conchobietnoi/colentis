@@ -312,7 +312,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-x]');if(!t
  }});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){const t=$('#tour'),m=$('#mile'),er=$('#errv');if(t&&t.classList.contains('on'))t.classList.remove('on');else if(m&&m.classList.contains('on'))m.classList.remove('on')}});
 /* ===== mặt sau thẻ theo độ hiếm ===== */
-function backHTML(c,o){const w=o.w;let cls;
+function backHTML(c,o){if(c.ev==='khai-mac-2026')return kmBackHTML(c,o);const w=o.w;let cls;
  if(c.r==='event')cls='pb-e pbe-'+c.tier;else if(c.r==='supreme')cls='pb-s pbs'+(String(c.fx).replace('s','')||1);else cls='pb-'+({legend:'l',rare:'r'}[c.r]||'c');
  const st=o.fill?`width:100%;height:100%;aspect-ratio:auto;--w:${w}px`:`--w:${w}px;--ar:${o.ar};width:${w}px;aspect-ratio:${o.ar}`;
  const inner=c.r==='event'?`<svg class="pbk" viewBox="0 0 96 108"><use href="#cake"/></svg><b class="pbt">${c.tier}</b>`:'';
