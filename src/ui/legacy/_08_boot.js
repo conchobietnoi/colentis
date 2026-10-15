@@ -22,3 +22,6 @@ window.addEventListener('offline',offlinePill);
   await go1()}
  else{const left=(S.reduce?500:1600)-(Date.now()-t0);if(left>0)await wait(left);authPane()}
 })();
+/* Bản mới tự áp dụng: khi service worker mới nhận quyền, tải lại một lần (trừ lúc đang mở quà) */
+if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let done=false;
+ navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||done)return;done=true;const go=()=>{if(GST||WZ)return void setTimeout(go,4000);location.reload()};go()})}

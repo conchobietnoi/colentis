@@ -40,12 +40,13 @@ function renderCal(){const [y,m]=S.month,first=new Date(y,m,1).getDay(),off=(fir
  <div class="grid" id="grid">${g}</div>
  <div class="legend"><span><i style="background:linear-gradient(135deg,#7B61FF,#FF7AB8);border-color:#fff"></i>Thẻ nhóm phủ ô</span><span><i style="width:9px;height:12px;border-color:#fff;background:#4CC9FF"></i>Thẻ cá nhân</span><span><i style="background:repeating-linear-gradient(135deg,var(--paper) 0 3px,var(--line) 3px 5px)"></i>Ngày cứu</span><span><i style="border-style:dashed"></i>Ngày trống</span><span><i style="border-color:var(--amber);background:rgba(255,176,46,.25)"></i>Có thể tick bù / nhận thẻ</span></div>
  <div class="legend" style="padding-top:6px">${cal.members.map(x=>`<span><i style="width:9px;height:9px;border:0;border-radius:50%;background:${mcol(x,cal.id)}"></i>${esc(MEMBERS[x]?MEMBERS[x].name:'?')}${x==='me'?' (bạn)':''}</span>`).join('')}</div>
+ ${calTasks()}
  <button class="fab" data-act="addtask" aria-label="Thêm việc">${ic('plus')}</button>`;
  }
 /* ----- danh sách việc ----- */
 function taskRow(t,lockedDay,canEdit){const mine=t.owner==='me',mm=MEMBERS[t.owner]||{name:'?',ini:'?'},lb=LABELS[t.label]||LABELS[0];
  const time=t.allday?'Cả ngày':(t.start+(t.end?'–'+t.end:''));
- return `<div class="t ${t.done?'d':''} ${mine?'':'oth'} ${lockedDay&&mine?'lockd':''}" data-id="${t.id}"><button class="ck" ${mine&&!lockedDay?`data-act="tick" data-id="${t.id}"`:'disabled'} aria-label="Hoàn thành"></button><span class="tt">${esc(t.t)}<small>${time}${t.cal!==curCal().id?' · '+esc((CALS.find(c=>c.id===t.cal)||{name:'Lịch khác'}).name):''}${t.pending?' · chờ đồng bộ':''}</small></span>${mine?'':`<span class="mem" style="background:${mcol(t.owner,t.cal)}" title="${esc(mm.name)}">${esc(mm.ini[0])}</span>`}<span class="lbl" style="background:${lb[1]}">${lb[0]}</span>${mine&&!lockedDay&&canEdit?`<button class="ed" data-act="edit" data-id="${t.id}" aria-label="Sửa">${ic('pencil')}</button>`:''}</div>`}
+ return `<div class="t ${t.done?'d':''} ${mine?'':'oth'} ${lockedDay&&mine?'lockd':''}" data-id="${t.id}"><button class="ck" ${mine&&!lockedDay?`data-act="tick" data-id="${t.id}"`:'disabled'} aria-label="Hoàn thành"></button><span class="tt">${esc(t.t)}${NOTEOPEN.has(t.id)?`<em class="tnote">${t.note?esc(t.note):'Chưa có ghi chú'}</em>`:''}<small>${time}${t.cal!==curCal().id?' · '+esc((CALS.find(c=>c.id===t.cal)||{name:'Lịch khác'}).name):''}${t.pending?' · chờ đồng bộ':''}</small></span>${mine?'':`<span class="mem" style="background:${mcol(t.owner,t.cal)}" title="${esc(mm.name)}">${esc(mm.ini[0])}</span>`}<span class="lbl" style="background:${lb[1]}">${lb[0]}</span><button class="tchev ${NOTEOPEN.has(t.id)?'on':''}" data-act="tnote" data-id="${t.id}" aria-label="Xem ghi chú" aria-expanded="${NOTEOPEN.has(t.id)}">${ic('down')}</button>${mine&&!lockedDay&&canEdit?`<button class="ed" data-act="edit" data-id="${t.id}" aria-label="Sửa">${ic('pencil')}</button>`:''}</div>`}
 const mine=k=>allOn(k).filter(t=>t.owner==='me');
 /* các lịch có từ 2 người: trạng thái nhóm hôm nay */
 function groupsToday(){const tdy=allOn(todayKey);
@@ -108,7 +109,7 @@ function renderFr(){const pf=S.friends,reqs=NOTIFS.filter(n=>n.kind==='req'),cal
  <div class="card-b"><h2>Thành viên “${esc(cal.name)}” <em>${cal.members.length}/${S.limits.members}</em></h2><div class="sub">${isOwner(cal)?'Bạn là chủ lịch.':'Chủ lịch: '+esc((MEMBERS[cal.owner]||{name:'?'}).name)+'.'} Chủ lịch quản lý thành viên. Không ai sửa hay tick việc của người khác.</div><div class="btnrow"><button class="btn-s ghost" data-x="cinv" data-i="${CALS.indexOf(cal)}">${ic('users')} Mời thêm</button><button class="btn-s" data-x="mcal" data-i="${CALS.indexOf(cal)}">${ic('gear')} Quản lý lịch</button></div></div>`}
 /* ----- hồ sơ ----- */
 function renderPro(){const eq=S.equip,un=S.unlocked,tot=TITLES.length;
- const wl=WELCOME.find(w=>un.has(w.id)),ord=[wl||WELCOME[0],...(un.has('birthday-james')&&TMAP['birthday-james']?[TMAP['birthday-james']]:[]),...[...TITLES].sort((a,b)=>(un.has(b.id)-un.has(a.id)))].filter(Boolean);
+ const wl=WELCOME.find(w=>un.has(w.id)),ord=[wl||WELCOME[0],...EVT.filter(t=>un.has(t.id)),...[...TITLES].sort((a,b)=>(un.has(b.id)-un.has(a.id)))].filter(Boolean);
  const ownN=Object.keys(S.own).filter(i=>CBY[i]&&CBY[i].r!=='event').length;
  $('#pro').innerHTML=`<div class="head"><div><small>Hồ sơ</small><h1>${esc(ME.name)}</h1></div><div class="hact"><button class="ibtn" data-act="mail" aria-label="Hòm thư">${ic('mail')}</button><button class="ibtn" data-act="set" aria-label="Cài đặt">${ic('gear')}</button></div></div>
  <div class="ctr"><div style="display:grid;place-items:center;position:relative"><button data-act="editprof" aria-label="Chỉnh sửa hồ sơ" style="border-radius:50%">${avatar(ME,148,eq)}</button></div><div class="un">@${esc(ME.un)}</div><button class="btn-s ghost" data-act="editprof" style="margin:8px auto 0">${ic('pencil')} Chỉnh sửa hồ sơ</button><div style="margin-top:8px">${titleFrame(eq,null,64)}</div><p class="sub" style="margin-top:8px">Làm xong việc rồi mới được ngắm ảnh.</p>
@@ -125,7 +126,7 @@ function renderPro(){const eq=S.equip,un=S.unlocked,tot=TITLES.length;
  <button class="menu" data-x="tour"><span class="l">${ic('book')}<span>Hướng dẫn nhanh<small>3 trang: tick, khóa ngày, chuỗi và thẻ cứu</small></span></span>${ic('right')}</button>
  ${ME.admin?`<button class="menu" data-x="admin"><span class="l">${ic('crown')}<span>Trang admin<small>Gửi thư và quà cho bạn bè</small></span></span>${ic('right')}</button>`:''}
  <button class="menu" data-x="signout"><span class="l">${ic('x')}<span>Đăng xuất</span></span></button></div>`}
-function renderAll(){renderCal();renderToday();renderCol();renderFr();renderPro();syncBadges()}
+function renderAll(){try{applyTheme()}catch(e){}renderCal();renderToday();renderCol();renderFr();renderPro();syncBadges()}
 function syncBadges(){const n=mailUnread();$$('.tabbadge').forEach(b=>{b.textContent=n;b.style.display=n?'grid':'none'});const t=$('#tdot');if(t){t.style.display=claimable()?'grid':'none'}}
 function go(id){S.tab=id;$$('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));({cal:renderCal,today:renderToday,col:renderCol,fr:renderFr,pro:renderPro})[id]();$('#'+id).scrollTop=0;observeCards()}
 function observeCards(){$$('.pc:not(.thumb)').forEach(liveCard)}

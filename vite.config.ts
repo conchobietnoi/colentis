@@ -40,7 +40,7 @@ export default defineConfig({
     react(),
     colentisUi(),
     VitePWA({
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
         name: 'Colentis',
@@ -63,6 +63,9 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,woff2,webp}'],
         maximumFileSizeToCacheInBytes: 3_000_000,
         navigateFallback: 'index.html',
+        skipWaiting: true,
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
         // Ảnh thẻ lấy từ Supabase Storage (URL ký có hạn): không cache trong precache.
         runtimeCaching: [
           {

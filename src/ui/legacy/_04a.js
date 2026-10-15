@@ -3,7 +3,7 @@ function openDay(d){daySheet(d)}
 const THEME_KEYS=['--cf','--cn','--wk','--mo','--cal-bg'];
 let THEME_DRAFT={};
 function applyTheme(){const app=$('#app');THEME_KEYS.forEach(k=>app.style.removeProperty(k));
- const th=(S.prefs&&S.prefs[curCal().id])||{};Object.entries(th).forEach(([k,v])=>{if(THEME_KEYS.includes(k)&&typeof v==='string'&&/^[#a-zA-Z0-9(),.%\- ]+$/.test(v))app.style.setProperty(k,v)})}
+ const th=(S.prefs&&S.prefs[curCal().id])||lsGet('theme:'+curCal().id,null)||{};Object.entries({...th,...THEME_DRAFT}).forEach(([k,v])=>{if(THEME_KEYS.includes(k)&&typeof v==='string'&&/^[#a-zA-Z0-9(),.%\- ]+$/.test(v))app.style.setProperty(k,v)})}
 async function claimAll(){const list=MAILS.filter(m=>m.gifts.length&&!m.claimed&&m.kind!=='welcome');if(!list.length)return;if(!API.online()){toast('Cần có mạng để nhận quà');return}
  const q=[];for(const m of list){try{q.push(...itemsFromResult(await API.claimMail(m.id)))}catch(e){apiFail(e);break}}
  closePage('pgLetter');closePage('pgMail');await API.reload();renderAll();runGacha(q,()=>{renderAll()})}
@@ -16,7 +16,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(
  case 'pickcal':S.calIdx=+d.i;lsSet('cal',curCal().id);applyTheme();closeSheet();renderAll();toast('Đang xem '+curCal().name);break;
  case 'mail':openMail();break;
  case 'evmail':{const em=evMail();openMail();if(em)openLetter(em.id);break}
- case 'back':closePage(d.p);if(d.p==='pgLetter')renderMailList();break;
+ case 'back':closePage(d.p);if(d.p==='pgTheme'){THEME_DRAFT={};applyTheme()}if(d.p==='pgLetter')renderMailList();break;
  case 'mf':mfilter=d.f;renderMailList();break;
  case 'letter':openLetter(d.id);break;
  case 'claimmail':claimMail(d.id);break;
@@ -49,7 +49,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(
  case 'install':installSheet();break;
  case 'swatch':$$('[data-k="'+d.k+'"]').forEach(x=>x.classList.toggle('on',x===t));THEME_DRAFT[d.k]=d.c;$('#app').style.setProperty(d.k,d.c);$('#pv').style.setProperty(d.k,d.c);break;
  case 'bg':THEME_DRAFT['--cal-bg']=d.b;$('#app').style.setProperty('--cal-bg',d.b);break;
- case 'savetheme':{const th={...((S.prefs&&S.prefs[curCal().id])||{}),...THEME_DRAFT};API.saveTheme(curCal().id,th).then(()=>{S.prefs[curCal().id]=th;THEME_DRAFT={};closePage('pgTheme');toast('Đã lưu giao diện cho '+curCal().name)}).catch(apiFail);break}
+ case 'savetheme':{const th={...((S.prefs&&S.prefs[curCal().id])||{}),...THEME_DRAFT};lsSet('theme:'+curCal().id,th);API.saveTheme(curCal().id,th).then(()=>{S.prefs[curCal().id]=th;THEME_DRAFT={};closePage('pgTheme');toast('Đã lưu giao diện cho '+curCal().name)}).catch(apiFail);break}
  case 'tgc':{const cs=$('#cs');cs.hidden=!cs.hidden;t.innerHTML=ic(cs.hidden?'unlock':'lock')+(cs.hidden?' Hiện thẻ':' Ẩn thẻ');break}
  }});
 document.addEventListener('click',e=>{if(e.target.id==='bd')closeSheet();const tb=e.target.closest('#tabs button');if(tb)go(tb.dataset.go)});

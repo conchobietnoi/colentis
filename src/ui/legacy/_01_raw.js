@@ -45,7 +45,7 @@ function applySnapshot(sn){
  /* danh hiệu */
  TITLES.length=0;WELCOME.length=0;EVT.length=0;Object.keys(TMAP).forEach(k=>delete TMAP[k]);
  sn.titles.forEach(t=>{const o={id:t.id,name:t.name,unlock:t.unlock,rarity:t.rarity,tw:t.tw};TMAP[t.id]=o;
-  if(t.id.startsWith('welcome-'))WELCOME.push(o);else if(t.id==='birthday-james'||t.id.startsWith('limited-'))EVT.push(o);else TITLES.push(o)});
+  if(t.id.startsWith('welcome-'))WELCOME.push(o);else if(t.id==='birthday-james'||t.id.startsWith('limited-')||t.id.startsWith('secret-'))EVT.push(o);else TITLES.push(o)});
  WELCOME.sort((a,b)=>a.id.localeCompare(b.id));
  /* thẻ */
  if(!ALLCARDS.length||ALLCARDS.length!==sn.cards.length){
@@ -84,7 +84,7 @@ const HERO=`${ASSETBASE}hero-auth.jpg`;
 
 /* ----- avatar + khung tròn / khung ngang ----- */
 function avatar(m,s=124,frameId){const f=frameId===undefined?m.frame:frameId;
- return `<div class="av ${f?'':'none'} ${String(f).startsWith('birthday-james')?'j':''} ${String(f).startsWith('limited-')?'lt':''}" style="--s:${s}px;--ca:${m.a};--cb:${m.b}"><div class="pt">${m.photo?`<img src="${m.photo}" alt="">`:m.photoPath?`<img ${AVA(m.photoPath)} alt="">`:m.ini}</div>${f?`<img class="fr" src="${frameImg(f,'avatar')}" alt="" loading="lazy">`:''}</div>`}
+ return `<div class="av ${f?'':'none'} ${String(f).startsWith('birthday-james')||String(f).startsWith('secret-')?'j':''} ${String(f).startsWith('limited-')?'lt':''}" style="--s:${s}px;--ca:${m.a};--cb:${m.b}"><div class="pt">${m.photo?`<img src="${m.photo}" alt="">`:m.photoPath?`<img ${AVA(m.photoPath)} alt="">`:m.ini}</div>${f?`<img class="fr" src="${frameImg(f,'avatar')}" alt="" loading="lazy">`:''}</div>`}
 function titleFrame(id,text,h=56){const t=TMAP[id];if(!t)return `<span class="tf none" style="--h:${h}px">Chưa đeo danh hiệu</span>`;
  const W=t.tw;return `<span class="tf tn ${String(id).startsWith('limited-')?'lt':''}" style="--h:${h}px;--ar:${W/200};--l:${180/W*100}%"><img src="${frameImg(id,'title')}" alt="" loading="lazy"><span>${text||t.name}</span></span>`}
 /* ----- thẻ ảnh ----- */

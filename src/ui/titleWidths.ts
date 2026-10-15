@@ -34,5 +34,10 @@ export const TITLE_WIDTH: Record<string, number> = {
  "limited-juhoon": 1036,
  "limited-keonho": 1036,
  "limited-martin": 1036,
- "limited-seonghyeon": 1036
+ "limited-seonghyeon": 1036,
+ "secret-james": 843,
+ "secret-juhoon": 843,
+ "secret-keonho": 843,
+ "secret-martin": 843,
+ "secret-seonghyeon": 843
 }
