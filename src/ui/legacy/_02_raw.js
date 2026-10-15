@@ -34,6 +34,7 @@ function renderCal(){const [y,m]=S.month,first=new Date(y,m,1).getDay(),off=(fir
  const unread=mailUnread(),em=evMail();
  $('#cal').innerHTML=`<div class="head"><div><small data-act="cals">${esc(cal.name)} ${ic('down')}</small><div class="mnav"><button class="ibtn" data-act="mprev" aria-label="Tháng trước">${ic('left')}</button><h1>Tháng ${m+1}${y!==TODAY.y?` · ${y}`:''}</h1><button class="ibtn" data-act="mnext" aria-label="Tháng sau">${ic('right')}</button></div></div>
  <div class="hact"><div class="streak ${S.wait?'wait':''}">${ic('flame')} ${S.wait?S.streakSaved:S.streak}</div>${bellBtn()}<button class="ibtn ${unread?'ring':''}" data-act="mail" aria-label="Hòm thư">${ic('mail')}${unread?`<span class="dot-n">${unread}</span>`:''}</button></div></div>
+ ${kmBanner()}
  ${em?`<button class="banner ev" data-act="evmail"><span class="bi">${ic('cake')}</span><span><b>${esc(em.t)}</b><small>Bạn có quà sự kiện. Mở thư để nhận.</small></span></button>`:''}
  <div class="dow" style="margin-top:10px"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
  <div class="grid" id="grid">${g}</div>
