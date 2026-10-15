@@ -29,5 +29,10 @@ export const TITLE_WIDTH: Record<string, number> = {
  "welcome-3": 843,
  "welcome-4": 843,
  "welcome-5": 843,
- "birthday-james": 843
+ "birthday-james": 843,
+ "limited-james": 1036,
+ "limited-juhoon": 1036,
+ "limited-keonho": 1036,
+ "limited-martin": 1036,
+ "limited-seonghyeon": 1036
 }

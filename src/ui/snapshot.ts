@@ -36,6 +36,7 @@ export interface UiCard {
   ar: number
   fx: string
   tier: string
+  ev: string
   path: string
   thumb: string
   sort: number
@@ -124,6 +125,13 @@ export interface UiSnapshot {
   grants: Record<string, { source: string; card: string; cal: string | null }[]>
   today_info: TodayInfo | null
   eventDone: Record<string, boolean>
+  km: KhaiMacState | null
   prefs: Record<string, any>                          // calId → theme
   limits: { calendars: number; members: number; rescuePerMonth: number }
+}
+
+export interface KhaiMacState {
+  event_id: string; starts_on: string; ends_on: string; today: string; active: boolean; done: number
+  claimed: { milestone: number; member: string }[]
+  pack: string | null
 }

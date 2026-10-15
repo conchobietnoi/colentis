@@ -50,7 +50,7 @@ function toUiCard(c: CardRow): UiCard {
   const w = c.width || 3, h = c.height || 4
   return {
     id: c.id, r: RAR[c.rarity] ?? 'common', name: c.name, land: c.orientation === 'landscape' || w > h * 1.05,
-    ar: w / h, fx: c.effect && c.rarity === 'supreme' ? c.effect : '', tier: c.tier ?? '', path: c.storage_path, thumb: c.thumb_path ?? c.storage_path, sort: c.sort,
+    ar: w / h, fx: c.effect && c.rarity === 'supreme' ? c.effect : '', tier: c.tier ?? '', ev: c.event_id ?? '', path: c.storage_path, thumb: c.thumb_path ?? c.storage_path, sort: c.sort,
   }
 }
 
@@ -151,7 +151,7 @@ export async function loadLite(prev: UiSnapshot, months: [number, number][]): Pr
     me: { ...prev.me, equip: p.equipped_title, favs: p.fav_cards ?? [], best: p.best_streak, welcomeMember: p.welcome_member },
     streak: meRes.streak, rescueMonthlyLeft: meRes.rescue_monthly_left, rescueBonus: meRes.rescue_bonus, taskTotal: meRes.tasks_done_total, catchup: meRes.catchup_days,
     members, tasks: { ...prev.tasks, ...clearRange(prev.tasks, from, to), ...mapTaskList(tasks, myId) }, locks: { ...prev.locks, ...lockMap }, grants: grantMap, own,
-    unlocked: userTitles.map((u) => u.title_id), today_info: todayInfo,
+    unlocked: userTitles.map((u) => u.title_id), today_info: todayInfo, km: await api.khaiMacState().catch(() => prev.km),
     streakIfSaved: meRes.streak_if_saved ?? meRes.streak,
   } as UiSnapshot
 }
@@ -267,7 +267,7 @@ export async function loadSnapshot(opts: { months: [number, number][] }): Promis
     catchup: meRes.catchup_days,
     members, cals, tasks: taskMap, cards: cardsCache, own, titles: titlesCache,
     unlocked: userTitles.map((u) => u.title_id),
-    mails: mapMails(mails, recs, eventsCache), notifs: nlist, friends, locks: lockMap, grants: grantMap, today_info: todayInfo, eventDone,
+    mails: mapMails(mails, recs, eventsCache), notifs: nlist, friends, locks: lockMap, grants: grantMap, today_info: todayInfo, eventDone, km: await api.khaiMacState().catch(() => null),
     prefs: Object.fromEntries(prefs.map((x) => [x.calendar_id, x.theme])),
     limits: { calendars: info?.max_calendars ?? 4, members: info?.max_members ?? 6, rescuePerMonth: rescueCfg },
     streakIfSaved: meRes.streak_if_saved ?? meRes.streak,

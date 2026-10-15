@@ -37,7 +37,7 @@ async function claimMail(id){const m=MAILS.find(x=>x.id===id);if(!m||m.claimed)r
 /* ===== viewer thẻ ===== */
 function openViewer(cid){const c=CBY[cid],o=S.own[cid];if(!c)return;if(o&&o.fresh){o.fresh=false;const k='seen:'+ME.uid,a=new Set(lsGet(k,[]));a.add(cid);lsSet(k,[...a])}
  const w=c.land?300:Math.min(250,Math.round(240*Math.min(1,c.ar*1.3)));
- const col=c.r==='event'?'Sự kiện '+c.tier:NAME[c.r];
+ const col=c.r==='event'?(c.tier==='LTD'?'Khai Mạc · Limited':c.tier==='TAG'?'Khai Mạc · Tag 1Y':'Sự kiện '+c.tier):NAME[c.r];
  $('#pgView').innerHTML=`<div class="ptop" style="color:#fff"><button class="ibtn" style="background:rgba(255,255,255,.14);border-color:transparent;color:#fff" data-act="back" data-p="pgView" aria-label="Quay lại">${ic('left')}</button><h1 style="color:#fff">${esc(c.name)}</h1></div>
  <div class="stagev" id="sv"><div class="tiltable" id="tv"><div class="flipper" id="fp" style="width:${w}px">${cardHTML(c,{w:w})}<div class="bkface" style="--w:${w}px">${backHTML(c,{w:w,fill:1})}</div></div></div></div>
  <div class="info2"><h2 style="color:${c.r==='event'?'#ffd23f':RCOL[c.r]};text-shadow:0 0 16px ${c.r==='event'?'#ffd23f':RCOL[c.r]}">${col}${c.r==='event'?'':''}</h2><p>${c.land?'Thẻ ngang':'Thẻ dọc'} · đã có ×${o?o.n:0}${o?` · nhận lần đầu ${esc(o.date)} (${esc(o.src)})`:''}</p>

@@ -33,6 +33,9 @@ export const api = {
 
   // ----- hồ sơ -----
   me: () => rpc<Me>('me'),
+  khaiMacState: () => rpc<any>('khai_mac_state'),
+  claimKhaiMac: (m: number) => rpc<any>('claim_khai_mac', { m }),
+  claimKhaiMacPack: (member: string) => rpc<any>('claim_khai_mac_pack', { member }),
   appInfo: () => rpc<any>('app_info'),
   updateProfile: (p: Record<string, unknown>) => rpc<Me>('update_profile', { p }),
   setEquipped: (tid: string | null) => rpc<Me>('set_equipped_title', { tid }),

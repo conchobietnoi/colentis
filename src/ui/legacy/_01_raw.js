@@ -45,13 +45,13 @@ function applySnapshot(sn){
  /* danh hiệu */
  TITLES.length=0;WELCOME.length=0;EVT.length=0;Object.keys(TMAP).forEach(k=>delete TMAP[k]);
  sn.titles.forEach(t=>{const o={id:t.id,name:t.name,unlock:t.unlock,rarity:t.rarity,tw:t.tw};TMAP[t.id]=o;
-  if(t.id.startsWith('welcome-'))WELCOME.push(o);else if(t.id==='birthday-james')EVT.push(o);else TITLES.push(o)});
+  if(t.id.startsWith('welcome-'))WELCOME.push(o);else if(t.id==='birthday-james'||t.id.startsWith('limited-'))EVT.push(o);else TITLES.push(o)});
  WELCOME.sort((a,b)=>a.id.localeCompare(b.id));
  /* thẻ */
  if(!ALLCARDS.length||ALLCARDS.length!==sn.cards.length){
   ['common','rare','legend','supreme'].forEach(r=>{CARDS[r].length=0});EV.length=0;ALLCARDS.length=0;Object.keys(CBY).forEach(k=>delete CBY[k]);
   sn.cards.forEach(c=>{const o={...c,pos:'50% 50%',z:1};CBY[c.id]=o;ALLCARDS.push(o);if(c.r==='event')EV.push(o);else CARDS[c.r].push(o)});
-  EV.sort((a,b)=>['A','S','SS','SSS','AURA'].indexOf(a.tier)-['A','S','SS','SSS','AURA'].indexOf(b.tier));
+  const TO=['A','S','SS','SSS','AURA','LTD','TAG'];EV.sort((a,b)=>(a.ev===b.ev?0:(a.ev<b.ev?-1:1))||TO.indexOf(a.tier)-TO.indexOf(b.tier)||a.sort-b.sort);
   Object.keys(TOTAL).forEach(r=>TOTAL[r]=CARDS[r].length);TOTALN=Object.values(TOTAL).reduce((a,b)=>a+b,0)}
  const seen=new Set(lsGet('seen:'+m.uid,null)||[]);const first=lsGet('seen:'+m.uid,null)===null;
  Object.keys(S.own).forEach(k=>delete S.own[k]);
@@ -67,7 +67,7 @@ function applySnapshot(sn){
  S.priv.album=m.album;S.priv.find=m.findable;S.priv.notif=m.notif;S.priv.cheer=m.cheer;S.priv.bdshow=m.showBd;
  S.prefs=sn.prefs;
  S.claimed=!!S.locks[TODAY.iso]||(S.grants[TODAY.iso]||[]).some(g=>g.source==='personal'||g.source==='rescue');
- S.eventGot=Object.values(sn.eventDone).every(Boolean)&&Object.keys(sn.eventDone).length>0;
+ S.km=sn.km||null;S.eventGot=Object.values(sn.eventDone).every(Boolean)&&Object.keys(sn.eventDone).length>0;
  S.todayCards=(S.grants[TODAY.iso]||[]).map(g=>CBY[g.card]).filter(Boolean);
  S.groupReady=(S.tinfo?S.tinfo.groups:[]).some(g=>g.claimed);
  MAILS.length=0;sn.mails.forEach(x=>MAILS.push(x));
@@ -84,17 +84,18 @@ const HERO=`${ASSETBASE}hero-auth.jpg`;
 
 /* ----- avatar + khung tròn / khung ngang ----- */
 function avatar(m,s=124,frameId){const f=frameId===undefined?m.frame:frameId;
- return `<div class="av ${f?'':'none'} ${String(f).startsWith('birthday-james')?'j':''}" style="--s:${s}px;--ca:${m.a};--cb:${m.b}"><div class="pt">${m.photo?`<img src="${m.photo}" alt="">`:m.photoPath?`<img ${AVA(m.photoPath)} alt="">`:m.ini}</div>${f?`<img class="fr" src="${frameImg(f,'avatar')}" alt="" loading="lazy">`:''}</div>`}
+ return `<div class="av ${f?'':'none'} ${String(f).startsWith('birthday-james')?'j':''} ${String(f).startsWith('limited-')?'lt':''}" style="--s:${s}px;--ca:${m.a};--cb:${m.b}"><div class="pt">${m.photo?`<img src="${m.photo}" alt="">`:m.photoPath?`<img ${AVA(m.photoPath)} alt="">`:m.ini}</div>${f?`<img class="fr" src="${frameImg(f,'avatar')}" alt="" loading="lazy">`:''}</div>`}
 function titleFrame(id,text,h=56){const t=TMAP[id];if(!t)return `<span class="tf none" style="--h:${h}px">Chưa đeo danh hiệu</span>`;
- const W=t.tw;return `<span class="tf tn" style="--h:${h}px;--ar:${W/200};--l:${180/W*100}%"><img src="${frameImg(id,'title')}" alt="" loading="lazy"><span>${text||t.name}</span></span>`}
+ const W=t.tw;return `<span class="tf tn ${String(id).startsWith('limited-')?'lt':''}" style="--h:${h}px;--ar:${W/200};--l:${180/W*100}%"><img src="${frameImg(id,'title')}" alt="" loading="lazy"><span>${text||t.name}</span></span>`}
 /* ----- thẻ ảnh ----- */
 const CAKE='<svg class="cake" viewBox="0 0 96 108"><use href="#cake"/></svg>';
 function cardHTML(c,o={}){const cls=['pc'];
  if(c.r==='event'){cls.push('ev','t-'+c.tier)}else{cls.push('r-'+c.r);if(c.r==='supreme')cls.push('s',c.fx);if(c.r==='rare'||c.r==='legend')cls.push('comet')}
  if(o.thumb)cls.push('thumb');
  const tag=c.r==='event'?c.tier:TAG[c.r];
- const st=`--w:${typeof o.w==='string'?o.w:(o.w||200)+'px'};--ar:${c.ar}${c.r==='legend'?';--ch:#fff6c8;--ct:2s':''}`;
- return `<div class="${cls.join(' ')}" style="${st}" data-cid="${c.id}"><div class="pc-glow"></div><div class="pc-fx"></div><span class="pc-tag">${tag}</span><div class="pc-frame"><div class="pc-face"><img ${IMGA(c,o.thumb)} alt="" style="object-position:${c.pos};${c.z>1?`transform:scale(${c.z})`:''}">${c.r==='common'&&!o.thumb?'<div class="pc-holo"></div>':''}</div></div>${c.r==='event'?CAKE:''}</div>`}
+ const kc=(c.ev==='khai-mac-2026'&&KM_COL[String(c.id).replace('khaimac-1y-','').replace('khaimac-','')])||null;
+ const st=`--w:${typeof o.w==='string'?o.w:(o.w||200)+'px'};--ar:${c.ar}${kc?`;--c:${kc[0]};--c2:${kc[1]}`:''}${c.r==='legend'?';--ch:#fff6c8;--ct:2s':''}`;
+ return `<div class="${cls.join(' ')}" style="${st}" data-cid="${c.id}"><div class="pc-glow"></div><div class="pc-fx"></div><span class="pc-tag">${tag}</span><div class="pc-frame"><div class="pc-face"><img ${IMGA(c,o.thumb)} alt="" style="object-position:${c.pos};${c.z>1?`transform:scale(${c.z})`:''}">${c.r==='common'&&!o.thumb?'<div class="pc-holo"></div>':''}</div></div>${c.r==='event'&&!String(c.ev||'').startsWith('khai')?CAKE:''}</div>`}
 /* hạt cho hiệu ứng (hiệu ứng chỉ chạy khi thẻ đang hiện trên màn hình) */
 function edge(){const s=Math.floor(R(0,4)),t=R(0,100);return s==0?[t,0,0,-1]:s==1?[100,t,1,0]:s==2?[t,100,0,1]:[0,t,-1,0]}
 const ECOL={A:['#ffe27a','#ffd23f','#fff3b0'],S:['#ff8a1f','#ffb347','#ff5a00'],SS:['#ff2d3d','#ff6b6b','#ffd0d0'],SSS:['#ffc83a','#ff2d3d','#ffe27a'],AURA:['#ff5db6','#ffd23f','#5be584','#4cd2ff','#8a5bff']};

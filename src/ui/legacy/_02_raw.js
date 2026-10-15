@@ -69,6 +69,7 @@ function renderToday(){const k=todayKey,mt=mine(k),done=mt.filter(t=>t.done).len
  $('#today').innerHTML=`<div class="head"><div><small>${WD[wd]}, ${TODAY.d}/${TODAY.m+1}/${TODAY.y}</small><h1>Hôm nay</h1></div><div class="hact">${bellBtn()}<button class="ibtn ${unread?'ring':''}" data-act="mail" aria-label="Hòm thư">${ic('mail')}${unread?`<span class="dot-n">${unread}</span>`:''}</button></div></div>
  <div class="hero">${ic('flame','f fl2')}<small>Chuỗi hiện tại</small><h2>${S.wait?S.streakSaved:S.streak} ngày liền</h2><small>Dài nhất ${Math.max(S.best||0,S.streak)} · Thẻ cứu còn ${S.rescueMonthly}/${S.limits.rescuePerMonth} tháng này${S.rescueBonus?` · +${S.rescueBonus} quà tặng`:''}</small><div class="wk">${weekStrip()}</div></div>
  ${em?`<button class="banner ev" data-act="evmail"><span class="bi">${ic('cake')}</span><span><b>${esc(em.t)}</b><small>Quà sự kiện đang chờ bạn. Mở thư để nhận.</small></span></button>`:''}
+ ${kmBanner()}
  ${evCard()}
  ${S.catchup.map(iso=>`<div class="banner warn" style="cursor:default"><span class="bi">${ic('clock')}</span><span><b>${dmOf(iso)} chưa xong, chuỗi đang chờ nối</b><small>Còn ${fmtLeft(iso)} để tick bù hoặc dùng thẻ cứu.</small><div class="btnrow"><button class="btn-s" data-act="catch" data-iso="${iso}">Tick bù</button><button class="btn-s ghost" data-act="saver" data-iso="${iso}">${ic('shield')} Dùng thẻ cứu</button></div></span></div>`).join('')}
  <div class="card-b"><div style="display:flex;gap:14px;align-items:center"><div class="ring-p" style="--p:${pct}"><i>${done}/${mt.length}</i></div><div style="flex:1;min-width:0"><h2 style="display:block;font-size:16px">${S.claimed&&!cl?'Hôm nay hoàn thành':all?'Hoàn thành hết rồi!':mt.length?'Việc của bạn':'Chưa có việc hôm nay'}</h2><div class="sub" style="margin-top:3px">${S.claimed&&!cl?'Ngày đã khóa, chỉ xem lại.':all?'Xác nhận để nhận thẻ hôm nay.':mt.length?`Còn ${mt.length-done} việc nữa để nhận thẻ.`:'Thêm việc đầu tiên để bắt đầu.'}</div></div></div>
@@ -80,14 +81,17 @@ function renderToday(){const k=todayKey,mt=mine(k),done=mt.filter(t=>t.done).len
  <div class="btnrow" style="padding:0 14px;margin-top:12px"><button class="btn-s" data-act="addtask">${ic('plus')} Thêm việc</button></div>`}
 /* ----- bộ sưu tập ----- */
 let colFilter='all';
-function renderCol(){const rs=['common','rare','legend','supreme'];const have=r=>CARDS[r].filter(c=>S.own[c.id]).length,evHave=EV.filter(c=>S.own[c.id]).length;
+function renderCol(){const rs=['common','rare','legend','supreme'];const have=r=>CARDS[r].filter(c=>S.own[c.id]).length;
  const fl=[['all','Tất cả'],...rs.map(r=>[r,NAME[r]]),['event','Sự kiện']];
  const sec=(r,list,title,colr)=>{const owned=list.filter(c=>S.own[c.id]).length;let shown=list;if(colFilter==='all'&&list.length>9)shown=list.slice(0,9);
   return `<div class="sec" style="--rc:${colr}"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:${colr};box-shadow:0 0 8px ${colr}"></i>${title}</span><small>${owned}/${list.length}${colFilter==='all'&&list.length>9?' · 9 thẻ đầu':''}</small></div><div class="gal">${shown.map(c=>slotHTML(c)).join('')}</div>${colFilter==='all'&&list.length>9?`<div style="text-align:center"><button class="chip" data-act="colf" data-f="${r}">Xem tất cả ${list.length} thẻ ${NAME[r]}</button></div>`:''}`};
  let body='';
  const show=colFilter==='all'?rs:colFilter==='event'?[]:[colFilter];
  show.forEach(r=>body+=sec(r,CARDS[r],NAME[r],RCOL[r]));
- if((colFilter==='all'||colFilter==='event')&&EV.length)body+=`<div class="sec"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,#ffd23f,#ff5db6,#4cd2ff)"></i>Sinh nhật James 2026</span><small>${evHave}/${EV.length} · Sự kiện</small></div><div class="gal">${EV.map(c=>slotHTML(c)).join('')}</div><div class="sub" style="padding:0 16px 6px">Thẻ sự kiện có nhãn riêng, không tính vào “đủ bộ”. Mỗi năm 14/10 là bộ thẻ mới.</div>`;
+ if((colFilter==='all'||colFilter==='event')&&EV.length){const grp=[['birthday-james-2026','Sinh nhật James 2026'],['khai-mac-2026','Khai Mạc · Limited & Tag 1Y']];
+  grp.forEach(([eid,nm])=>{const l=EV.filter(c=>c.ev===eid);if(!l.length)return;const h=l.filter(c=>S.own[c.id]).length;
+   body+=`<div class="sec"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,#ffd23f,#ff5db6,#4cd2ff)"></i>${nm}</span><small>${h}/${l.length} · Sự kiện</small></div><div class="gal">${l.map(c=>slotHTML(c)).join('')}</div>`});
+  body+=`<div class="sub" style="padding:0 16px 6px">Thẻ sự kiện có nhãn riêng, không tính vào “đủ bộ”. Thẻ chưa sở hữu được ẩn cho đến khi bạn nhận.</div>`}
  $('#col').innerHTML=`<div class="head"><div><small>Bộ sưu tập của bạn</small><h1>Thẻ ảnh</h1></div><div class="hact"><button class="ibtn" data-x="dup" aria-label="Thẻ trùng">${ic('copy')}</button><button class="ibtn" data-act="mail" aria-label="Hòm thư">${ic('mail')}</button></div></div>
  <div class="rbar">${rs.map(r=>`<div style="--rc:${RCOL[r]}"><b>${have(r)}/${TOTAL[r]}</b>${NAME[r]}<div class="bar"><i style="width:${TOTAL[r]?have(r)/TOTAL[r]*100:0}%"></i></div></div>`).join('')}</div>
  <div class="fl">${fl.map(f=>`<button class="chip ${colFilter===f[0]?'on':''}" data-act="colf" data-f="${f[0]}">${f[1]}</button>`).join('')}</div>${body}`}
