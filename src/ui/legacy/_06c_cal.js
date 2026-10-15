@@ -1,7 +1,7 @@
 /* ===== Tab Lịch: việc của bạn + ghi chú gập/mở + chọn màu nền ===== */
 const NOTEOPEN=new Set();
 const slogo=(c='')=>`<i class="slogo ${c}" aria-hidden="true"></i>`;
-function calTasks(){const sel=S.sel||todayKey,p=sel.split('-').map(Number);if(p.length<3||p.some(isNaN))return '';const [y,m,d]=p,iso=isoOf(y,m,d),st=dayStat(y,m,d);
+function calTasks(){const sel=S.sel||todayKey,p=sel.split('-').map(Number);if(p.length<3||p.some(isNaN))return '';const y=p[0],m=p[1]-1,d=p[2],iso=isoOf(y,m,d),st=dayStat(y,m,d);
  const all=tasksOf(y,m,d),isToday=iso===TODAY.iso,fut=st.k==='fut',locked=st.k==='p'||st.k==='rs';
  const canTick=!locked&&tickable(iso),canEdit=(fut||isToday)&&!locked,mt=all.filter(t=>t.owner==='me'),others=all.filter(t=>t.owner!=='me');
  const lbl=isToday?'Hôm nay':`${d}/${m+1}`;
