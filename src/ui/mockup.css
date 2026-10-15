@@ -926,7 +926,7 @@ body.pdark .stagewrap{background:radial-gradient(900px 600px at 15% 0,#2a2468,tr
 .t .tchev{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:var(--soft);flex:none;transition:transform .2s}
 .t .tchev.on{transform:rotate(180deg);color:var(--ink)}
 .t .tnote{display:block;font-style:normal;font-weight:600;font-size:12.5px;line-height:1.45;color:var(--soft);margin-top:4px;padding:8px 10px;border-radius:10px;background:var(--sleeve);white-space:pre-wrap;word-break:break-word}
-.caltk{margin:12px 14px 90px}
+.caltk{margin:12px 14px 0}
 .bgpick{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:4px 10px 4px 4px;border-radius:99px;border:2px solid var(--line);cursor:pointer}
 .bgpick input{width:26px;height:26px;border:0;padding:0;background:none;border-radius:50%;cursor:pointer}
 
@@ -938,3 +938,8 @@ body.pdark .stagewrap{background:radial-gradient(900px 600px at 15% 0,#2a2468,tr
 .agc small{font-size:10.5px;font-weight:700;line-height:1.2}
 .agth{display:block;width:100%}
 .agav{display:grid;place-items:center}.agtf{display:grid;place-items:center;margin-top:-4px}
+.slogo{display:inline-block;width:1.15em;height:1.15em;flex:none;background:currentColor;-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat;vertical-align:middle}
+.streak .slogo{width:18px;height:18px}
+.hero .slogo.fl2{position:absolute;right:-14px;top:-10px;width:120px;height:120px;color:rgba(255,255,255,.14)}
+
+.mlf .slogo{position:static;bottom:auto;border-radius:0;animation:none;width:72px;height:72px;background:currentColor;color:#fff}

@@ -33,7 +33,7 @@ function renderCal(){const [y,m]=S.month,first=new Date(y,m,1).getDay(),off=(fir
  const cal=curCal();let g='';for(let i=0;i<off;i++)g+='<div class="c e"></div>';for(let d=1;d<=nd;d++)g+=cellHTML(y,m,d);
  const unread=mailUnread(),em=evMail();
  $('#cal').innerHTML=`<div class="head"><div><small data-act="cals">${esc(cal.name)} ${ic('down')}</small><div class="mnav"><button class="ibtn" data-act="mprev" aria-label="Tháng trước">${ic('left')}</button><h1>Tháng ${m+1}${y!==TODAY.y?` · ${y}`:''}</h1><button class="ibtn" data-act="mnext" aria-label="Tháng sau">${ic('right')}</button></div></div>
- <div class="hact"><div class="streak ${S.wait?'wait':''}">${ic('flame')} ${S.wait?S.streakSaved:S.streak}</div>${bellBtn()}<button class="ibtn ${unread?'ring':''}" data-act="mail" aria-label="Hòm thư">${ic('mail')}${unread?`<span class="dot-n">${unread}</span>`:''}</button></div></div>
+ <div class="hact"><div class="streak ${S.wait?'wait':''}">${slogo()} ${S.wait?S.streakSaved:S.streak}</div>${bellBtn()}<button class="ibtn ${unread?'ring':''}" data-act="mail" aria-label="Hòm thư">${ic('mail')}${unread?`<span class="dot-n">${unread}</span>`:''}</button></div></div>
  ${kmBanner()}
  ${em?`<button class="banner ev" data-act="evmail"><span class="bi">${ic('cake')}</span><span><b>${esc(em.t)}</b><small>Bạn có quà sự kiện. Mở thư để nhận.</small></span></button>`:''}
  <div class="dow" style="margin-top:10px"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
@@ -69,7 +69,7 @@ function renderToday(){const k=todayKey,mt=mine(k),done=mt.filter(t=>t.done).len
  const others=allOn(k).filter(t=>t.owner!=='me');
  const wd=new Date(TODAY.y,TODAY.m,TODAY.d).getDay();
  $('#today').innerHTML=`<div class="head"><div><small>${WD[wd]}, ${TODAY.d}/${TODAY.m+1}/${TODAY.y}</small><h1>Hôm nay</h1></div><div class="hact">${bellBtn()}<button class="ibtn ${unread?'ring':''}" data-act="mail" aria-label="Hòm thư">${ic('mail')}${unread?`<span class="dot-n">${unread}</span>`:''}</button></div></div>
- <div class="hero">${ic('flame','f fl2')}<small>Chuỗi hiện tại</small><h2>${S.wait?S.streakSaved:S.streak} ngày liền</h2><small>Dài nhất ${Math.max(S.best||0,S.streak)} · Thẻ cứu còn ${S.rescueMonthly}/${S.limits.rescuePerMonth} tháng này${S.rescueBonus?` · +${S.rescueBonus} quà tặng`:''}</small><div class="wk">${weekStrip()}</div></div>
+ <div class="hero">${slogo('fl2')}<small>Chuỗi hiện tại</small><h2>${S.wait?S.streakSaved:S.streak} ngày liền</h2><small>Dài nhất ${Math.max(S.best||0,S.streak)} · Thẻ cứu còn ${S.rescueMonthly}/${S.limits.rescuePerMonth} tháng này${S.rescueBonus?` · +${S.rescueBonus} quà tặng`:''}</small><div class="wk">${weekStrip()}</div></div>
  ${em?`<button class="banner ev" data-act="evmail"><span class="bi">${ic('cake')}</span><span><b>${esc(em.t)}</b><small>Quà sự kiện đang chờ bạn. Mở thư để nhận.</small></span></button>`:''}
  ${kmBanner()}
  ${evCard()}
@@ -78,8 +78,6 @@ function renderToday(){const k=todayKey,mt=mine(k),done=mt.filter(t=>t.done).len
   ${grp.map(g=>`<div style="margin-top:12px"><div class="sub" style="font-weight:800;display:flex;gap:6px;align-items:center">${ic('users')} ${esc(g.cal.name)}</div><div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">${g.others.map(o=>`<span class="chip" style="display:flex;gap:6px;align-items:center;padding:5px 11px 5px 5px"><span class="mem" style="background:${mcol(o.id,g.cal.id)};width:20px;height:20px">${esc(o.m.ini[0])}</span>${esc(o.m.name)} ${o.d}/${o.n}${o.ok?' ✓':''}</span>`).join('')}</div><div class="sub" style="margin-top:6px">${g.claimed?'Bạn đã nhận thẻ nhóm hôm nay.':g.eligible?'Cả nhóm đủ điều kiện: có thẻ nhóm hôm nay.':'Khi cả nhóm xong, thẻ nhóm phủ ô ngày của bạn.'}</div>${cheerRow(g)}</div>`).join('')||`<div class="sub" style="margin-top:8px;display:flex;gap:6px;align-items:center">${ic('users')} Mời bạn vào một lịch để cùng nhận thẻ nhóm.</div>`}</div>
  ${cl?`<button class="claimcta" data-act="claim">${ic('gift')} Nhận thẻ hôm nay</button>`:''}
  ${S.claimed?`<div class="card-b"><h2>Thẻ đã nhận hôm nay <em>${S.todayCards.length}</em></h2><div class="lock-banner">${ic('lock')}<span>Việc của bạn trong ngày đã khóa. Thẻ chỉ để xem lại.</span></div><div class="cstrip">${S.todayCards.map(c=>cardHTML(c,{w:c.land?150:104,thumb:1})).join('')}</div></div>`:''}
- ${Object.keys(byCal).map(cid=>`<div class="card-b"><h2>${esc((CALS.find(c=>c.id===cid)||{name:'Lịch khác'}).name)} <em>${byCal[cid].filter(t=>t.done).length}/${byCal[cid].length}</em></h2><div style="margin-top:4px">${byCal[cid].map(t=>taskRow(t,S.claimed,1)).join('')}</div></div>`).join('')}
- ${others.length?`<div class="card-b"><h2>Việc của bạn bè</h2><div class="sub">Chỉ xem. Mỗi người tự hoàn thành việc của mình.</div><div style="margin-top:4px">${others.map(t=>taskRow(t,0,0)).join('')}</div></div>`:''}
  <div class="btnrow" style="padding:0 14px;margin-top:12px"><button class="btn-s" data-act="addtask">${ic('plus')} Thêm việc</button></div>`}
 /* ----- bộ sưu tập ----- */
 let colFilter='all';

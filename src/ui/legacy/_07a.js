@@ -227,7 +227,7 @@ function cheerSheet(id){const m=MEMBERS[id];if(!m)return;openSheet(`<h2>Cổ vũ
 /* ===== mốc streak ===== */
 const MILES=[3,7,14,30,60,100,365];
 function showMile(n){const t=TMAP['streak-'+n];sfx('legend');vib([40,40,40,40,120]);const o=$('#mile');
- o.innerHTML=`<div class="mlbg"></div><div class="mlc"><div class="mlf">${ic('flame')}<i></i><i></i><i></i></div><small>CHUỖI LIÊN TIẾP</small><h2><b id="mln">0</b> ngày</h2><p>${n>=100?'Một trăm ngày không bỏ cuộc. Quá đỉnh!':n>=30?'Cả tháng liền! Bạn đang tạo thói quen thật sự.':n>=7?'Một tuần liền! Giữ nhịp này nhé.':'Ngọn lửa đầu tiên đã cháy.'}</p>
+ o.innerHTML=`<div class="mlbg"></div><div class="mlc"><div class="mlf">${slogo()}<i></i><i></i><i></i></div><small>CHUỖI LIÊN TIẾP</small><h2><b id="mln">0</b> ngày</h2><p>${n>=100?'Một trăm ngày không bỏ cuộc. Quá đỉnh!':n>=30?'Cả tháng liền! Bạn đang tạo thói quen thật sự.':n>=7?'Một tuần liền! Giữ nhịp này nhé.':'Ngọn lửa đầu tiên đã cháy.'}</p>
  ${t?`<div class="mlt"><small>Danh hiệu ${S.unlocked.has('streak-'+n)?'đã mở':'mới'}</small>${titleFrame('streak-'+n,null,58)}</div>`:''}
  <button class="big" data-x="mlx">Tiếp tục</button>${t?`<button class="big gh" data-x="mlt" data-n="${n}">Xem danh hiệu</button>`:''}</div><div class="confetti" id="mlcf"></div>`;o.classList.add('on');
  const cf=$('#mlcf');cf.innerHTML=Array.from({length:46},()=>`<i style="left:${R(0,100)}%;background:${pickOne(CONF)};--d:${R(2.4,4.4).toFixed(2)}s;--l:${R(0,2.2).toFixed(2)}s;transform:rotate(${R(0,360)}deg)"></i>`).join('');
