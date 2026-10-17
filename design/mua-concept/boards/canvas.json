@@ -1,0 +1,215 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "AppBuild.dc.html": {
+      "h": 904,
+      "is_interactive": true,
+      "page": "page-mwvfhq",
+      "title": "Bản dựng đầy đủ Mùa Concept",
+      "w": 1170,
+      "x": 900,
+      "y": 0
+    },
+    "Backs.dc.html": {
+      "h": 2380,
+      "title": "Mặt sau thẻ · 3 hạng",
+      "w": 1572,
+      "x": 2490,
+      "y": 1100
+    },
+    "BannerStates.dc.html": {
+      "h": 1260,
+      "title": "Banner · 5 trạng thái",
+      "w": 390,
+      "x": 1080,
+      "y": 1100
+    },
+    "ColGrid.dc.html": {
+      "h": 940,
+      "title": "Lưới 3 cột (kiểu hiện tại)",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "Frames.dc.html": {
+      "h": 1100,
+      "title": "Khung thẻ thường & Holo",
+      "w": 1000,
+      "x": 0,
+      "y": 1200
+    },
+    "Hub.dc.html": {
+      "h": 2520,
+      "title": "Trang Mùa Concept",
+      "w": 390,
+      "x": 2020,
+      "y": 1100
+    },
+    "Main.dc.html": {
+      "h": 940,
+      "title": "Hàng 5 thẻ (đề xuất)",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "PackFlow.dc.html": {
+      "h": 780,
+      "title": "Luồng mở pack",
+      "w": 1360,
+      "x": 0,
+      "y": 2300
+    },
+    "Pano.dc.html": {
+      "h": 960,
+      "title": "Ô panorama · 3 trạng thái",
+      "w": 560,
+      "x": 940,
+      "y": 0
+    },
+    "Play.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Chơi thử · bấm được",
+      "w": 390,
+      "x": 1580,
+      "y": 0
+    },
+    "Rewards.dc.html": {
+      "h": 820,
+      "title": "Khung tròn, danh hiệu, thẻ Ultra",
+      "w": 1280,
+      "x": 0,
+      "y": 3200
+    },
+    "Specimen.dc.html": {
+      "h": 3900,
+      "title": "Bảng mẫu · toàn bộ thiết kế",
+      "w": 1560,
+      "x": -1700,
+      "y": 0
+    },
+    "UltraSong.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Ultra · chọn đĩa & nghe nhạc",
+      "w": 390,
+      "x": 4140,
+      "y": 1100
+    },
+    "Upcoming.dc.html": {
+      "h": 760,
+      "title": "Sự kiện sắp tới",
+      "w": 390,
+      "x": 1550,
+      "y": 1100
+    },
+    "IdCard.dc.html": {
+      "h": 904,
+      "is_interactive": true,
+      "page": "page-mwvfhq",
+      "title": "Thẻ ID Colentis · 2 mặt",
+      "w": 1170,
+      "x": 2200,
+      "y": 0
+    },
+    "IdFrames.dc.html": {
+      "h": 904,
+      "is_interactive": true,
+      "page": "page-mwvfhq",
+      "title": "Khung tròn & danh hiệu thẻ ID",
+      "w": 1170,
+      "x": 3500,
+      "y": 0
+    },
+    "MailMock.dc.html": {
+      "h": 960,
+      "page": "page-mwvfhq",
+      "title": "Thư sự kiện kèm thẻ ID",
+      "w": 1760,
+      "x": 4800,
+      "y": 0
+    },
+    "MailPlay.dc.html": {
+      "h": 980,
+      "is_interactive": true,
+      "page": "page-mwvfhq",
+      "title": "Chạy thử nhận thư · thẻ ID · Hồ sơ",
+      "w": 470,
+      "x": 6700,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-15T13:50:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "n1": {
+      "fill": "purple",
+      "text": "Ô panorama giữ đúng tỉ lệ ảnh gốc của từng concept. Mảnh chưa có thì tối đen, có rồi thì sáng lên. Gom đủ 5 thẻ thường là mở nguyên tấm, chạm để xem toàn màn hình và xoay điện thoại.",
+      "w": 560,
+      "x": 940,
+      "y": 1020
+    },
+    "n2": {
+      "kind": "title1",
+      "maxW": 1500,
+      "text": "Bộ thiết kế Mùa Concept: khung thẻ, banner, trang sự kiện, mở pack, phần thưởng",
+      "w": 240,
+      "x": -30,
+      "y": 940
+    },
+    "t1": {
+      "kind": "title1",
+      "maxW": 1500,
+      "text": "Bộ sưu tập · khối Concept",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t3": {
+      "kind": "title1",
+      "maxW": 1500,
+      "text": "Bảng mẫu: toàn bộ thẻ, panorama, pack, khung, Ultra",
+      "w": 240,
+      "x": -1700,
+      "y": -393
+    }
+  },
+  "order": [
+    "AppBuild.dc.html",
+    "IdCard.dc.html",
+    "IdFrames.dc.html",
+    "MailMock.dc.html",
+    "MailPlay.dc.html",
+    "Specimen.dc.html",
+    "Frames.dc.html",
+    "BannerStates.dc.html",
+    "Upcoming.dc.html",
+    "Hub.dc.html",
+    "PackFlow.dc.html",
+    "Rewards.dc.html",
+    "Backs.dc.html",
+    "UltraSong.dc.html",
+    "Main.dc.html",
+    "ColGrid.dc.html",
+    "Pano.dc.html",
+    "Play.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "Page 1"
+    },
+    {
+      "id": "page-mwvfhq",
+      "name": "Page 2"
+    }
+  ],
+  "title": "Bộ sưu tập Concept"
+}

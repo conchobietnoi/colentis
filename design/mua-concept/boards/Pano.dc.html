@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Ô panorama · các trạng thái</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700;800;900&display=swap">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+.lbl{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:7px}
+.lbl b{font-size:13px;font-weight:900;color:#F1F0FF}
+.lbl span{font-size:11px;font-weight:800;color:#A7A9E6;letter-spacing:.06em}
+.band{position:absolute;top:0;bottom:0;width:20%;background:rgba(10,8,30,.93);display:grid;place-items:center;border-right:1px solid rgba(54,48,120,.9)}
+.band i{display:block;width:15px;height:15px;border-radius:3px;background:#363078;transform:rotate(45deg)}
+.shot{position:relative;border-radius:10px;overflow:hidden}
+.shot img{width:100%;display:block}
+</style>
+</helmet>
+
+<div style="width: 560px; height: 960px; box-sizing: border-box; background: #15123B; color: #F1F0FF; padding: 24px 20px; display: flex; flex-direction: column; gap: 18px; overflow: hidden">
+
+  <div>
+    <h1 style="margin: 0; font-size: 19px; font-weight: 900; letter-spacing: -.3px">Ô panorama · 4 trạng thái</h1>
+    <p style="margin: 5px 0 0; font-size: 12px; font-weight: 600; color: #A7A9E6; line-height: 1.45">Ô này nằm cuối mỗi khối concept, rộng hết chiều ngang, giữ đúng tỉ lệ 6:1 của ảnh gốc.</p>
+  </div>
+
+  <div>
+    <div class="lbl"><b>Chưa có thẻ nào</b><span>0/5 MẢNH</span></div>
+    <div style="border-radius: 12px; padding: 2px; background: #363078">
+      <div class="shot">
+        <img src="/_blob/f730f2dd4f477387495cedf54a3913b2" alt="Panorama còn khóa hoàn toàn">
+        <span class="band" style="left: 0"><i></i></span>
+        <span class="band" style="left: 20%"><i></i></span>
+        <span class="band" style="left: 40%"><i></i></span>
+        <span class="band" style="left: 60%"><i></i></span>
+        <span class="band" style="left: 80%"><i></i></span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lbl"><b>Đang thu thập</b><span>3/5 MẢNH</span></div>
+    <div style="border-radius: 12px; padding: 2px; background: #363078">
+      <div class="shot">
+        <img src="/_blob/f730f2dd4f477387495cedf54a3913b2" alt="Panorama đã mở 3 trên 5 mảnh">
+        <span class="band" style="left: 40%"><i></i></span>
+        <span class="band" style="left: 80%"><i></i></span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lbl"><b>Đủ 5 thẻ thường</b><span>ĐÃ MỞ</span></div>
+    <div style="border-radius: 12px; padding: 2px; background: linear-gradient(100deg, #fff, {{accent}}, #4CC9FF, #fff); box-shadow: 0 0 24px rgba(255,176,46,.4)">
+      <div class="shot">
+        <img src="/_blob/f730f2dd4f477387495cedf54a3913b2" alt="Panorama đã mở hoàn toàn">
+        <span style="position: absolute; left: 10px; bottom: 9px; padding: 4px 9px; border-radius: 5px; background: rgba(8,7,22,.78); font-size: 10px; font-weight: 800; letter-spacing: .14em">URICHINGUCHANA · 360°</span>
+        <span style="position: absolute; right: 10px; bottom: 9px; font-size: 10px; font-weight: 800; letter-spacing: .1em; color: rgba(255,255,255,.85)">VUỐT NGANG →</span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lbl"><b>Đủ cả 10 thẻ, có holo</b><span>BẢN ÁNH KIM</span></div>
+    <div style="border-radius: 12px; padding: 2px; background: linear-gradient(100deg, #fff, #FF2E88, #FFE45E, #35D0A5, #4CC9FF, #fff); box-shadow: 0 0 30px rgba(123,97,255,.55)">
+      <div class="shot">
+        <img src="/_blob/f730f2dd4f477387495cedf54a3913b2" alt="Panorama bản ánh kim">
+        <span style="position: absolute; inset: 0; mix-blend-mode: color-dodge; opacity: .5; background: linear-gradient(115deg, transparent 18%, rgba(255,0,150,.55) 30%, rgba(255,230,90,.55) 40%, rgba(60,255,190,.55) 49%, rgba(70,170,255,.55) 58%, rgba(150,90,255,.55) 67%, transparent 80%)"></span>
+        <span style="position: absolute; left: 10px; bottom: 9px; padding: 4px 9px; border-radius: 5px; background: rgba(8,7,22,.8); font-size: 10px; font-weight: 800; letter-spacing: .14em">URICHINGUCHANA · HOLO</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#FFB02E","options":["#FFB02E","#FF2E88","#4CC9FF","#35D0A5"],"section":"Màu concept"},"$preview":{"width":560,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#FFB02E' };
+  }
+}
+</script>
+</body>
+</html>

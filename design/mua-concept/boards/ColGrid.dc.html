@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Bộ sưu tập · lưới 3 cột</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700;800;900&display=swap">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+.gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.cd{position:relative;aspect-ratio:3/4;border-radius:12px;padding:3px;overflow:hidden}
+.cd img{width:100%;height:100%;object-fit:cover;border-radius:9px;display:block}
+.foil{position:absolute;inset:3px;border-radius:9px;pointer-events:none;mix-blend-mode:color-dodge;opacity:.62;background:linear-gradient(115deg,transparent 18%,rgba(255,0,150,.55) 30%,rgba(255,230,90,.55) 40%,rgba(60,255,190,.55) 49%,rgba(70,170,255,.55) 58%,rgba(150,90,255,.55) 67%,transparent 80%)}
+.lk{aspect-ratio:3/4;border-radius:12px;border:2px dashed #363078;background:#201C52;display:grid;place-items:center}
+.lk i{display:block;width:22px;height:22px;border-radius:4px;background:#363078;transform:rotate(45deg)}
+.sub{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:800;color:#A7A9E6;letter-spacing:.06em;padding:0 2px 7px}
+</style>
+</helmet>
+
+<div style="width: 390px; height: 940px; box-sizing: border-box; background: #15123B; color: #F1F0FF; display: flex; flex-direction: column; padding: 20px 0 20px; overflow: hidden">
+
+  <div style="padding: 0 14px">
+    <div style="font-size: 11.5px; font-weight: 700; color: #A7A9E6">Bộ sưu tập của bạn</div>
+    <h1 style="margin: 2px 0 0; font-size: 23px; font-weight: 900; letter-spacing: -.5px">Thẻ ảnh</h1>
+  </div>
+
+  <div style="display: flex; gap: 6px; padding: 12px 14px 6px; overflow: hidden">
+    <span style="padding: 6px 12px; border-radius: 99px; border: 2px solid #363078; font-size: 11.5px; font-weight: 800; color: #A7A9E6">Tất cả</span>
+    <span style="padding: 6px 12px; border-radius: 99px; border: 2px solid #363078; font-size: 11.5px; font-weight: 800; color: #A7A9E6">Thường</span>
+    <span style="padding: 6px 12px; border-radius: 99px; border: 2px solid #363078; font-size: 11.5px; font-weight: 800; color: #A7A9E6">Hiếm</span>
+    <span style="padding: 6px 12px; border-radius: 99px; border: 2px solid #F1F0FF; background: #F1F0FF; color: #15123B; font-size: 11.5px; font-weight: 800">Sự kiện</span>
+  </div>
+
+  <div style="padding: 10px 14px 0; display: flex; justify-content: space-between; align-items: center">
+    <span style="display: flex; gap: 8px; align-items: center; font-size: 15px; font-weight: 900">
+      <i style="width: 11px; height: 11px; border-radius: 50%; background: {{accent}}; box-shadow: 0 0 9px {{accent}}"></i>Concept 1 · Urichinguchana
+    </span>
+    <span style="font-size: 11px; font-weight: 800; color: {{accent}}">8/10</span>
+  </div>
+
+  <div style="padding: 11px 14px 0">
+    <div class="sub"><span>THƯỜNG</span><span>5/5</span></div>
+    <div class="gal">
+      <div class="cd" style="background: linear-gradient(140deg, #FFD9A0, {{accent}})"><img src="/_blob/9b3657bf78f9debc45654b412d45e46e" alt="Thẻ thường 1"></div>
+      <div class="cd" style="background: linear-gradient(140deg, #FFD9A0, {{accent}})"><img src="/_blob/7f3a0d5d84f7f9d4291ccd84d6269872" alt="Thẻ thường 2"></div>
+      <div class="cd" style="background: linear-gradient(140deg, #FFD9A0, {{accent}})"><img src="/_blob/e6664c8ce73f1683c62d87f9355da480" alt="Thẻ thường 3"></div>
+      <div class="cd" style="background: linear-gradient(140deg, #FFD9A0, {{accent}})"><img src="/_blob/6910cde8e984b316e9ab26144bcacfb9" alt="Thẻ thường 4"></div>
+      <div class="cd" style="background: linear-gradient(140deg, #FFD9A0, {{accent}})"><img src="/_blob/e8bc69d2a0ef3c5809440db91f604866" alt="Thẻ thường 5"></div>
+    </div>
+  </div>
+
+  <div style="padding: 13px 14px 0">
+    <div class="sub"><span>HOLO · ÁNH KIM</span><span>3/5</span></div>
+    <div class="gal">
+      <div class="cd" style="background: linear-gradient(140deg, #fff, {{accent}}, #4CC9FF)"><img src="/_blob/9b3657bf78f9debc45654b412d45e46e" alt="Thẻ holo 1"><span class="foil"></span></div>
+      <div class="lk"><i></i></div>
+      <div class="cd" style="background: linear-gradient(140deg, #fff, {{accent}}, #4CC9FF)"><img src="/_blob/e6664c8ce73f1683c62d87f9355da480" alt="Thẻ holo 3"><span class="foil"></span></div>
+      <div class="cd" style="background: linear-gradient(140deg, #fff, {{accent}}, #4CC9FF)"><img src="/_blob/6910cde8e984b316e9ab26144bcacfb9" alt="Thẻ holo 4"><span class="foil"></span></div>
+      <div class="lk"><i></i></div>
+    </div>
+  </div>
+
+  <div style="padding: 14px 14px 0">
+    <div class="sub"><span>PANORAMA</span><span>ĐÃ MỞ</span></div>
+    <div style="position: relative; border-radius: 10px; padding: 2px; background: linear-gradient(100deg, #fff, {{accent}}, #4CC9FF, #fff); box-shadow: 0 0 22px rgba(255,176,46,.35)">
+      <img src="/_blob/f730f2dd4f477387495cedf54a3913b2" alt="Panorama concept Urichinguchana, đã mở khóa" style="width: 100%; display: block; border-radius: 8px">
+      <span style="position: absolute; left: 8px; bottom: 7px; padding: 3px 8px; border-radius: 5px; background: rgba(8,7,22,.78); font-size: 9px; font-weight: 800; letter-spacing: .14em">URICHINGUCHANA · 360°</span>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#FFB02E","options":["#FFB02E","#FF2E88","#4CC9FF","#35D0A5"],"section":"Màu concept"},"$preview":{"width":390,"height":940}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#FFB02E' };
+  }
+}
+</script>
+</body>
+</html>
