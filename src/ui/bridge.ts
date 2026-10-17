@@ -248,6 +248,21 @@ export const bridge = {
   dayStatus: (d: string) => wrap(api.dayStatus(d)),
   claimMail: (id: string) => wrap(api.claimMail(id)),
   khaiMacState: () => wrap(api.khaiMacState()),
+  idCardChoose: (m: string) => wrap(api.idCardChoose(m)),
+  idCardSave: (h: string, p: string | null, c: { z: number; x: number; y: number }) => wrap(api.idCardSave(h, p, c)),
+  async uploadIdPhoto(dataUrl: string) {
+    const blob = await (await fetch(dataUrl)).blob()
+    const old = last?.idc?.photo_path
+    const path = `${myId}/idcard-${Date.now()}.jpg`
+    const { error } = await supabase.storage.from('avatars').upload(path, blob, { contentType: 'image/jpeg', upsert: false })
+    if (error) throw Object.assign(error, { app: toAppError(error) })
+    if (old && old !== path) supabase.storage.from('avatars').remove([old]).catch(() => undefined)
+    return path
+  },
+  async idPhotoUrl(path: string) {
+    const { data } = await supabase.storage.from('avatars').createSignedUrl(path, 3600)
+    return data?.signedUrl ?? ''
+  },
   claimKhaiMac: (m: number) => wrap(api.claimKhaiMac(m)),
   claimKhaiMacPack: (member: string) => wrap(api.claimKhaiMacPack(member)),
   markMailRead: (id: string) => { api.markMailRead(id).catch(() => undefined) },

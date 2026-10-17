@@ -85,7 +85,7 @@ function renderCol(){const rs=['common','rare','legend','supreme'];const have=r=
  const fl=[['all','Tất cả'],...rs.map(r=>[r,NAME[r]]),['event','Sự kiện']];
  const sec=(r,list,title,colr)=>{const owned=list.filter(c=>S.own[c.id]).length;let shown=list;if(colFilter==='all'&&list.length>9)shown=list.slice(0,9);
   return `<div class="sec" style="--rc:${colr}"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:${colr};box-shadow:0 0 8px ${colr}"></i>${title}</span><small>${owned}/${list.length}${colFilter==='all'&&list.length>9?' · 9 thẻ đầu':''}</small></div><div class="gal">${shown.map(c=>slotHTML(c)).join('')}</div>${colFilter==='all'&&list.length>9?`<div style="text-align:center"><button class="chip" data-act="colf" data-f="${r}">Xem tất cả ${list.length} thẻ ${NAME[r]}</button></div>`:''}`};
- let body='';
+ let body=idColTile();
  const show=colFilter==='all'?rs:colFilter==='event'?[]:[colFilter];
  show.forEach(r=>body+=sec(r,CARDS[r],NAME[r],RCOL[r]));
  if((colFilter==='all'||colFilter==='event')&&EV.length){const grp=[['birthday-james-2026','Sinh nhật James 2026'],['khai-mac-2026','Khai Mạc · Limited & Tag 1Y']];
@@ -116,6 +116,7 @@ function renderPro(){const eq=S.equip,un=S.unlocked,tot=TITLES.length;
  ${favHTML()}
  <div style="text-align:left;margin-top:16px;display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-size:16px">Danh hiệu và khung</h2><span class="sub">Chạm để xem và đeo</span></div>
  <div class="ach">${ord.map(a=>`<button class="${un.has(a.id)?'':'lk'} ${eq===a.id?'eq':''}" data-act="ach" data-id="${a.id}">${avatar(ME,62,a.id)}<span class="nm">${a.id.startsWith('welcome-')&&!un.has(a.id)?'Tân binh':esc(a.name)}</span></button>`).join('')}</div>
+ ${idProMenu()}
  <button class="menu" data-x="recap"><span class="l">${ic('chart')}<span>Tổng kết tháng ${TODAY.m+1}<small>Số việc, thẻ hiếm nhất, ảnh để chia sẻ</small></span></span>${ic('right')}</button>
  <button class="menu" data-x="events"><span class="l">${ic('cake')}<span>Sự kiện sắp tới<small>Ngày sinh các thành viên, đếm ngược</small></span></span>${ic('right')}</button>
  <button class="menu" data-act="theme"><span class="l">${ic('image')}<span>Giao diện lịch<small>Màu, nền, chế độ tối</small></span></span>${ic('right')}</button>

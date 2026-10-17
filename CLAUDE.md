@@ -42,3 +42,6 @@ Nguồn sự thật: `PLAN.md` (kế hoạch final, mới nhất). Mọi quy t�
 - Thay đổi logic thưởng/streak/khóa ngày: sửa ở `supabase/migrations/*.sql`, chạy `bash supabase/tests/run.sh ...` (xem `README.md` mục Kiểm thử) rồi `npm run setup-sql` để tạo lại `supabase/setup-all.sql`. Migration đã chạy trên Supabase thật thì thêm tệp migration mới, không sửa tệp cũ.
 - Kiểm thử giao diện: `e2e/build.sh`, `e2e/shim.sh reset`, `e2e/all.sh` (cần Postgres cục bộ và Chromium cho Playwright).
 - Không có khóa bí mật trong repo. Khóa `anon` là công khai (đặt trong biến Actions và `.env.local`). Khóa `service_role` chỉ dùng tạm trong PowerShell của chủ dự án nếu muốn chạy `npm run upload-cards`.
+
+## Mùa Concept (giai đoạn 1)
+- Thẻ ID + khung thành viên: `src/ui/legacy/_06e_idcard.js`, `supabase/migrations/009_mua_concept.sql`, thiết kế ở `design/mua-concept/`. Chưa có mở gói/thẻ concept. Chi tiết ở cuối `PLAN.md`.

@@ -57,6 +57,9 @@ export type UiGift =
   | { k: 'event' }
   | { k: 'frame' }
   | { k: 'pack' }
+  | { k: 'idcard' }
+  | { k: 'idframe' }
+  | { k: 'stash'; id: string }
 
 export interface UiMail {
   id: string
@@ -70,6 +73,7 @@ export interface UiMail {
   read: boolean
   claimed: boolean
   result: any
+  eid: string | null
 }
 
 export interface UiNotif {
@@ -126,6 +130,8 @@ export interface UiSnapshot {
   today_info: TodayInfo | null
   eventDone: Record<string, boolean>
   km: KhaiMacState | null
+  idc: any | null
+  stash: any[]
   prefs: Record<string, any>                          // calId → theme
   limits: { calendars: number; members: number; rescuePerMonth: number }
 }

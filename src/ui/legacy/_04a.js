@@ -4,7 +4,7 @@ const THEME_KEYS=['--cf','--cn','--wk','--mo','--cal-bg'];
 let THEME_DRAFT={};
 function applyTheme(){const app=$('#app');THEME_KEYS.forEach(k=>app.style.removeProperty(k));
  const th=(S.prefs&&S.prefs[curCal().id])||lsGet('theme:'+curCal().id,null)||{};Object.entries({...th,...THEME_DRAFT}).forEach(([k,v])=>{if(THEME_KEYS.includes(k)&&typeof v==='string'&&/^[#a-zA-Z0-9(),.%\- ]+$/.test(v))app.style.setProperty(k,v)})}
-async function claimAll(){const list=MAILS.filter(m=>m.gifts.length&&!m.claimed&&m.kind!=='welcome');if(!list.length)return;if(!API.online()){toast('Cần có mạng để nhận quà');return}
+async function claimAll(){const list=MAILS.filter(m=>m.gifts.length&&!m.claimed&&m.kind!=='welcome'&&m.eid!=='mua-concept-2026');if(!list.length)return;if(!API.online()){toast('Cần có mạng để nhận quà');return}
  const q=[];for(const m of list){try{q.push(...itemsFromResult(await API.claimMail(m.id)))}catch(e){apiFail(e);break}}
  closePage('pgLetter');closePage('pgMail');await API.reload();renderAll();runGacha(q,()=>{renderAll()})}
 const PRIVMAP={notif:'notif_enabled',cheer:'cheer_enabled',album:'album_public',find:'findable',bdshow:'show_birthday'};

@@ -382,3 +382,9 @@ Mọi mục "chờ quyết" ở trên đã được chốt như sau. Phần này
 - Lớp dữ liệu có kiểu: `src/lib/api.ts` (bọc RPC/bảng) → `src/ui/loader.ts` (snapshot) → `src/ui/bridge.ts` (đăng nhập, hàng đợi offline có `op_id`, realtime kèm thăm dò, ảnh riêng tư qua `storage.download` + Cache Storage).
 - Offline: tick và thêm việc được xếp hàng trong `localStorage` (`colentis:queue:<uid>`) và đẩy lên khi có mạng; sửa/xóa việc cần mạng.
 - Kiểm thử: 8 bộ test SQL (`supabase/tests`) và 5 kịch bản trình duyệt (`e2e/`) chạy trên máy chủ giả lập Supabase.
+
+## Mùa Concept 18–26/10/2026 (giai đoạn 1, 17/10/2026)
+- Đã làm: thư poster giới thiệu (gửi từ 17/10), quà thẻ ID Fan + khung thành viên + 1 gói lưu vào Sự kiện (`event_stash`, mở từ 18/10), chọn thành viên một lần, chỉnh thẻ (ảnh, phóng/kéo, tên chủ thẻ, mã Spotify tĩnh), khung tròn và danh hiệu `idcard-<thành viên>` mở khi có thành viên, ảnh và tên.
+- Ảnh thẻ ID lưu bucket `avatars`, đường dẫn `<uid>/idcard-<ts>.jpg`. Chữ ký và mã Spotify là PNG tĩnh ở `public/assets/idcard/`.
+- Chưa làm (giai đoạn sau): mở gói, thẻ concept, gói mỗi ngày, panorama, 2 thẻ Ultra Limited.
+- Thiết kế gốc: `design/mua-concept/`. Backend: `supabase/migrations/009_mua_concept.sql`. Test giao diện: `e2e/s6_mua_concept.mjs`.
