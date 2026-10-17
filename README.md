@@ -1,88 +1,252 @@
-# Colentis
+Colentis
 
-Lịch chung gamified cho fan CORTIS: tick việc mỗi ngày để nhận thẻ ảnh, giữ streak, lập lịch nhóm với bạn bè.
-React + TypeScript + Vite, chạy trên GitHub Pages; dữ liệu ở Supabase (gói Free). Chi phí: 0 đồng.
+A little space for CORTIS fans to show up, collect memories, and grow together.
 
-- Kế hoạch và quy tắc sản phẩm: `PLAN.md`. Quy ước cho Claude Code: `CLAUDE.md`.
-- Backend (SQL, RLS, hàm RPC, test): `supabase/`. Giao diện: `src/`. Kiểm thử trình duyệt: `e2e/`.
+Colentis is a gamified shared calendar for CORTIS fans. Turn everyday tasks into small wins, collect photo cards, keep your streak alive, and make plans with friends.
 
-## 1. Chạy trên máy (Windows PowerShell)
+Built for the fandom. Designed for the everyday.
 
-```powershell
+Features
+
+- Daily tasks — Complete your daily checklist and earn rewards.
+- Photo card collection — Unlock cards across different rarities.
+- Streak system — Keep your momentum going, day after day.
+- Shared calendars — Plan activities and complete tasks with friends.
+- Social features — Connect with other fans and explore shared albums.
+- Gift letters — Receive rewards and messages from the admin.
+- Offline support — Keep working through temporary connection issues.
+
+Tech Stack
+
+Layer| Technology
+Frontend| React, TypeScript, Vite
+Backend| Supabase, PostgreSQL
+Authentication| Supabase Auth
+Storage| Supabase Storage
+Deployment| GitHub Pages
+Testing| Playwright, SQL tests
+
+Cost target: Free-tier infrastructure, with no paid hosting required.
+
+Getting Started
+
+Requirements
+
+- Node.js and npm
+- A Supabase project
+- Git and GitHub (for deployment)
+
+1. Install
+
+Run the following commands in Windows PowerShell:
+
 cd C:\Projects\colentis
 npm install
-copy .env.example .env.local     # rồi điền 2 giá trị ở mục 2
-npm run dev                      # mở http://localhost:5173
-```
+Copy-Item .env.example .env.local
 
-Kiểm tra trước khi đẩy lên: `npm run typecheck`, `npm run lint`, `npm run build`.
+Add your Supabase credentials to ".env.local":
 
-## 2. Tạo Supabase (làm một lần)
+VITE_SUPABASE_URL=your-project-url
+VITE_SUPABASE_ANON_KEY=your-anon-key
 
-1. Vào https://supabase.com → **New project** (gói Free). Đặt mật khẩu database, ghi lại ở nơi riêng tư.
-2. **SQL Editor → New query** → dán toàn bộ `supabase/setup-all.sql` → **Run**. Chạy một lần duy nhất. Tệp này tạo bảng, quyền (RLS), hàm thưởng/streak/thư, dữ liệu danh hiệu và kho thẻ, hai bucket riêng tư `cards` và `avatars`.
-3. **Project Settings → API**: chép `Project URL` và khóa **anon public** vào `.env.local` (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`).
-   Không bao giờ dùng khóa `service_role` trong ứng dụng, trong repo hay gửi cho ai.
-4. **Authentication → Providers → Email**: bật. Khuyến nghị **tắt "Confirm email"** (gói Free chỉ gửi được vài email mỗi giờ, bật xác nhận sẽ nghẽn khi nhiều người đăng ký cùng lúc). Quên mật khẩu vẫn dùng email nhưng ít khi xảy ra.
-5. **Authentication → URL Configuration**: `Site URL` = địa chỉ GitHub Pages của bạn (mục 4); thêm `http://localhost:5173` vào **Redirect URLs**.
-6. Đặt mình làm admin (để gửi thư quà): đăng ký tài khoản trong app trước, rồi ở SQL Editor chạy
-   `update public.profiles set is_admin = true where username = 'ten_dang_nhap_cua_ban';`
+Start the development server:
 
-Giới hạn đăng ký: 50 tài khoản (hằng số `signup_cap` trong bảng `app_config`, server tự chặn). Đổi bằng
-`update public.app_config set value = '80' where key = 'signup_cap';`
+npm run dev
 
-## 3. Ảnh thẻ (nằm ở Storage riêng tư, không đưa lên GitHub)
+Open "http://localhost:5173" in your browser.
 
-Ảnh đã xử lý nằm ở `local-cards/_ready/` (có `manifest.json`). Thư mục `local-cards/` đã được `.gitignore`.
+2. Set Up Supabase
 
-```powershell
-npm run thumbs        # tạo local-cards/_ready/thumbs/<id>.webp (ảnh nhỏ cho lưới thẻ)
-```
+1. Create a project at "Supabase" (https://supabase.com).
+2. Open SQL Editor → New query.
+3. Paste the contents of "supabase/setup-all.sql" and run it once.
+4. Under Project Settings → API, copy your Project URL and "anon" public key into ".env.local".
+5. Under Authentication → Providers → Email, enable email authentication.
+6. Under Authentication → URL Configuration, configure your local redirect URL and production Site URL.
 
-Tải lên bucket **cards** (chọn một trong hai):
-- **Dashboard (dễ nhất):** Storage → `cards` → Upload folder: tải các thư mục `common`, `rare`, `legendary`, `supreme`, `event-birthday-james` và `thumbs` trong `local-cards/_ready/` lên **gốc** bucket. Kết quả phải là `cards/common/common-01.webp`, `cards/thumbs/common-01.webp`, ...
-- **Script:** trong PowerShell
-  ```powershell
-  $env:SUPABASE_URL="https://xxxx.supabase.co"; $env:SUPABASE_SERVICE_ROLE_KEY="(khóa service_role)"; npm run upload-cards
-  ```
-  Khóa chỉ tồn tại trong cửa sổ PowerShell đó. Đóng cửa sổ là mất. Không dán vào file hay chat.
+For a small fan project, disabling email confirmation can reduce signup friction. Do this only if it fits your intended account-security requirements.
 
-Người chơi chỉ tải được ảnh của thẻ mình sở hữu (hoặc thẻ yêu thích / album công khai của bạn bè), do chính sách Storage trong `006_storage.sql`.
+Admin setup
 
-## 4. Đưa lên GitHub Pages
+Register your account through the app first. Then run the following query in the Supabase SQL Editor, replacing the username with your own:
 
-1. Tạo repo trên GitHub. **Lưu ý:** gói GitHub Free chỉ cho phép Pages với repo **public**. Repo này không chứa bí mật nào (khóa anon vốn công khai, ảnh thẻ ở Storage riêng), nên public là an toàn. Muốn giữ repo private thì cần GitHub Pro, hoặc dùng Cloudflare Pages (miễn phí, cùng lệnh build).
-2. Repo → **Settings → Secrets and variables → Actions → Variables** → thêm `VITE_SUPABASE_URL` và `VITE_SUPABASE_ANON_KEY` (cùng giá trị như `.env.local`).
-3. Repo → **Settings → Pages → Source: GitHub Actions**.
-4. Tệp workflow nằm ở `scripts/deploy.yml` (công cụ chép tệp không ghi được vào thư mục `.github`). Tạo thư mục `.github\workflows` rồi chép vào: `mkdir .github\workflows; copy scripts\deploy.yml .github\workflows\deploy.yml`.
-5. Đẩy code lên nhánh `main`. Workflow tự typecheck, lint, build và deploy. Địa chỉ: `https://<tài-khoản>.github.io/<tên-repo>/`.
+UPDATE public.profiles
+SET is_admin = TRUE
+WHERE username = 'your_username';
 
-```powershell
+Signup limit
+
+The default signup cap is 50 accounts. To change it to 80:
+
+UPDATE public.app_config
+SET value = '80'
+WHERE key = 'signup_cap';
+
+Photo Card Assets
+
+Card assets are stored in private Supabase Storage, not in the GitHub repository.
+
+Processed assets live in "local-cards/_ready/", including "manifest.json". The "local-cards/" directory is excluded from Git.
+
+Generate card thumbnails:
+
+npm run thumbs
+
+Thumbnails are generated under "local-cards/_ready/thumbs/".
+
+Upload cards
+
+Option A: Supabase Dashboard
+
+Open Storage → cards and upload the folders below from "local-cards/_ready/" to the bucket root:
+
+- "common/"
+- "rare/"
+- "legendary/"
+- "supreme/"
+- "event-birthday-james/"
+- "thumbs/"
+
+Preserve the directory structure. For example:
+
+cards/
+├── common/
+│   └── common-01.webp
+└── thumbs/
+    └── common-01.webp
+
+Option B: Upload script
+
+Run in PowerShell:
+
+$env:SUPABASE_URL = "https://your-project.supabase.co"
+$env:SUPABASE_SERVICE_ROLE_KEY = "your-service-role-key"
+npm run upload-cards
+
+Keep the service role key in the current shell session only. Never commit it, put it in frontend environment variables, or share it publicly. Close the PowerShell window when you're done.
+
+Storage access is governed by the policies in "supabase/migrations/006_storage.sql". Users should only be able to access cards they own, their favorites, or cards exposed through a friend's public album, as permitted by the configured policies.
+
+Deployment
+
+Colentis can be deployed to GitHub Pages using GitHub Actions.
+
+1. Create a repository
+
+Create a GitHub repository for the project. GitHub Pages on the Free plan requires a public repository.
+
+The frontend contains the Supabase URL and anon public key, which are intended for client-side use. Keep private assets and privileged credentials outside the repository.
+
+2. Configure repository variables
+
+Navigate to:
+
+Settings → Secrets and variables → Actions → Variables
+
+Add:
+
+- "VITE_SUPABASE_URL"
+- "VITE_SUPABASE_ANON_KEY"
+
+Use the same values as your local environment.
+
+3. Enable GitHub Pages
+
+Under Settings → Pages, set the deployment source to GitHub Actions.
+
+The deployment workflow is currently located at "scripts/deploy.yml". Move a copy into GitHub's expected workflow directory:
+
+New-Item -ItemType Directory -Force .github\workflows
+Copy-Item scripts\deploy.yml .github\workflows\deploy.yml
+
+4. Push to GitHub
+
 git init -b main
 git add .
-git commit -m "Colentis: bản đầu"
-git remote add origin https://github.com/<tài-khoản>/<tên-repo>.git
+git commit -m "Initial commit"
+git remote add origin https://github.com/<account>/<repository>.git
 git push -u origin main
-```
 
-## 5. Kiểm thử
+The workflow runs type checking, linting, building, and deployment.
 
-- `supabase/tests/`: 8 bộ test SQL (thưởng, streak, khóa ngày, thư, quyền, Storage). Chạy trên Postgres thường: `bash supabase/tests/run.sh supabase/tests/10_helpers.sql ...` (cần Postgres cục bộ).
-- `e2e/`: máy chủ giả lập Supabase (`e2e/shim/server.mjs`) + bài test Playwright qua giao diện thật: đăng ký, quà Tân binh, thêm/tick việc, nhận thẻ, kết bạn, lịch chung và thẻ nhóm, offline, tick bù và thẻ cứu, thư admin, hồ sơ. Chỉ dùng để phát triển, không liên quan bản chạy thật.
+Your site will be available at:
 
-## 6. Dọn dẹp tùy chọn
+"https://<account>.github.io/<repository>/"
 
-Các thư mục `src/components`, `src/pages`, `src/styles` và các tệp `src/lib/{calendar,cx,frames,motion,rarity}.ts` là phần cũ của giai đoạn dựng styleguide, giao diện hiện tại không dùng. Chúng đã được loại khỏi typecheck và lint. Có thể xóa nếu không cần tham khảo:
-`Remove-Item -Recurse src\components, src\pages, src\styles, src\lib\calendar.ts, src\lib\cx.ts, src\lib\frames.ts, src\lib\motion.ts, src\lib\rarity.ts`
+Make sure the Vite base path is configured correctly for the repository URL.
 
-## 7. Cấu trúc
+Development
 
-```
-supabase/migrations/   001 bảng · 002 hàm lõi · 003 RPC · 004 RLS · 005 dữ liệu gốc · 006 Storage
-supabase/setup-all.sql gộp 6 tệp trên (npm run setup-sql để tạo lại)
-src/lib/               supabase client, api (bọc RPC/bảng), lỗi tiếng Việt, kiểu dữ liệu
-src/ui/loader.ts       đọc dữ liệu server → snapshot cho giao diện
-src/ui/bridge.ts       cầu nối: đăng nhập, hàng đợi offline, realtime, ảnh riêng tư
-src/ui/legacy/*.js     giao diện (bám sát mockup đã duyệt), ghép bằng plugin Vite thành một module
-src/ui/shell.html      khung HTML tĩnh · src/ui/mockup.css: toàn bộ kiểu dáng
-```
+Run the following checks before pushing changes:
+
+npm run typecheck
+npm run lint
+npm run build
+
+SQL tests
+
+The SQL test suite lives in "supabase/tests/" and covers helpers, rewards, streaks, date locking, letters, permissions, and Storage policies.
+
+Run the relevant tests against a local PostgreSQL instance:
+
+bash supabase/tests/run.sh supabase/tests/10_helpers.sql
+
+Pass additional test files as needed. See "supabase/tests/" for the available suites.
+
+End-to-end tests
+
+The "e2e/" directory contains Playwright tests that exercise the UI against a simulated Supabase backend.
+
+Coverage includes:
+
+- Registration and starter rewards
+- Tasks and photo card rewards
+- Friends and shared calendars
+- Group rewards
+- Offline behavior and missed-day recovery
+- Admin letters and user profiles
+
+These tests are intended for development and do not interact with the production backend.
+
+Project Structure
+
+colentis/
+├── supabase/
+│   ├── migrations/       # Database schema, RPCs, RLS and Storage
+│   ├── tests/            # SQL test suites
+│   └── setup-all.sql     # Combined database setup
+├── src/
+│   ├── lib/              # Supabase client, API and types
+│   └── ui/
+│       ├── loader.ts     # Server data → UI snapshot
+│       ├── bridge.ts     # Auth, offline queue, realtime and private images
+│       ├── legacy/       # UI modules assembled by the Vite plugin
+│       ├── shell.html    # Static HTML shell
+│       └── mockup.css    # Main UI styles
+├── local-cards/          # Local card assets (gitignored)
+├── e2e/                  # Playwright tests and Supabase shim
+├── scripts/              # Build and deployment scripts
+├── PLAN.md               # Product plan and rules
+├── CLAUDE.md             # Claude Code conventions
+└── README.md
+
+Some legacy styleguide files under "src/components/", "src/pages/", "src/styles/", and selected "src/lib/" modules are no longer used by the current interface. They have been excluded from type checking and linting and may be removed if they are no longer needed for reference.
+
+Project Notes
+
+- "PLAN.md" contains product requirements and gameplay rules.
+- "CLAUDE.md" defines conventions for working with Claude Code.
+- "supabase/" contains backend SQL, policies, RPCs, and tests.
+- "src/" contains application code and the current interface.
+- "e2e/" contains browser tests using a simulated backend.
+
+Security
+
+- Never expose the Supabase "service_role" key in frontend code, Git history, or public files.
+- The "anon" key is designed for public clients, but database and Storage security must be enforced through correctly configured RLS policies.
+- Keep private card assets in Supabase Storage.
+- Review authentication, access policies, and upload permissions before opening registration to the public.
+
+---
+
+Colentis · Small tasks, shared moments, collected memories.
