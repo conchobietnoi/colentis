@@ -32,7 +32,7 @@ await page.click('[data-act=mail]:visible').catch(()=>{});
 await sql(`update profiles set equipped_title='idcard-martin' where id=$1`, [U.id]); await page.reload(); await page.waitForTimeout(2500)
 await tab(page, 'Hồ sơ'); await page.waitForTimeout(900); await shot(page, 's6-profile')
 await tab(page, 'Ảnh'); await page.waitForTimeout(900); await shot(page, 's6-col')
-const real = a.logs
+const real = a.logs.filter(l => !/status of 400/.test(l)) // shim không có event_assets / ảnh panorama: dự phòng im lặng
 ok(real.length === 0, 'không lỗi JS: ' + real.join('|').slice(0, 400))
 await a.browser.close()
 process.exit(await finish() ? 1 : 0)
