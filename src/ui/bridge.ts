@@ -248,6 +248,7 @@ export const bridge = {
   dayStatus: (d: string) => wrap(api.dayStatus(d)),
   claimMail: (id: string) => wrap(api.claimMail(id)),
   khaiMacState: () => wrap(api.khaiMacState()),
+  eventAsset: (id: string) => api.eventAsset(id).catch(() => null),
   idCardChoose: (m: string) => wrap(api.idCardChoose(m)),
   idCardSave: (h: string, p: string | null, c: { z: number; x: number; y: number }) => wrap(api.idCardSave(h, p, c)),
   async uploadIdPhoto(dataUrl: string) {

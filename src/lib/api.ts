@@ -37,6 +37,7 @@ export const api = {
   myIdCard: () => rpc<any>('my_id_card'),
   idCardChoose: (m: string) => rpc<any>('id_card_choose', { m }),
   idCardSave: (p_holder: string, p_photo: string | null, p_crop: { z: number; x: number; y: number }) => rpc<any>('id_card_save', { p_holder, p_photo, p_crop }),
+  eventAsset: (id: string) => q<any[]>(supabase.from('event_assets').select('mime,data').eq('id', id)).then((r) => r[0] ?? null),
   eventStash: () => q<any[]>(supabase.from('event_stash').select('*')),
   claimKhaiMac: (m: number) => rpc<any>('claim_khai_mac', { m }),
   claimKhaiMacPack: (member: string) => rpc<any>('claim_khai_mac_pack', { member }),

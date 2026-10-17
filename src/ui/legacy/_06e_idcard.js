@@ -63,7 +63,9 @@ function idPoster(m){
  ${gf('ic1','THẺ','Thẻ ID Fan','Thêm ảnh, tên, mã Spotify',got)}${gf('ic2','KHUNG','Khung thành viên','Mở khi thẻ có ảnh và tên',got)}${gf('ic3','GÓI','1 gói Mùa Concept','Lưu vào Sự kiện, mở từ 18/10',got)}</div>`;
  const fab=got?`<button class="mpfab" data-id-act="open">Mở thẻ ID của bạn</button>`:`<button class="mpfab" data-id-act="claim" data-id="${m.id}">Nhận quà</button>`;
  $('#pgLetter').innerHTML=`<div class="ptop"><button class="ibtn" data-act="back" data-p="pgLetter" aria-label="Quay lại">${ic('left')}</button><h1>Thư sự kiện</h1></div><div class="pbody" style="padding:0">${hero}${stats}${secs}${ultra}${how}${gifts}</div>${fab}`;
- openPage('pgLetter');renderMailList();syncBadges()}
+ openPage('pgLetter');renderMailList();syncBadges();idLoadPanos()}
+const IDPANO={};
+function idLoadPanos(){[1,2,3].forEach(async n=>{const k='mc-pano-'+n;if(!(k in IDPANO))IDPANO[k]=await API.eventAsset(k);const a=IDPANO[k];if(!a)return;const el=document.querySelector(`#pgLetter .mpphs i:nth-child(${n})`);if(el)el.style.backgroundImage=`url(data:${a.mime};base64,${a.data})`})}
 
 /* ----- nhận quà: thẻ -> gói -> chọn thành viên ----- */
 async function idClaim(id){const m=MAILS.find(x=>x.id===id);if(!m||m.claimed||IDS.busy)return;if(!API.online()){toast('Cần có mạng để nhận quà');return}
