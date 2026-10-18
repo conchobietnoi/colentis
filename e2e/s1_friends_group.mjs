@@ -1,5 +1,6 @@
 import { CTL, launch, login, tab, addTaskUi, claimUi, mkUser, sql, ok, finish, shot } from './helpers.mjs'
 console.log('S1: kết bạn, lịch chung, thẻ nhóm')
+await CTL('now', { iso: '2026-10-14T10:00:00+07:00' })
 const A = await mkUser('Ánh Dương'), B = await mkUser('Bình Minh')
 const a = await launch(), b = await launch()
 await login(a.page, A.email)
@@ -31,9 +32,9 @@ for (const [p, n] of [[a.page, 'A'], [b.page, 'B']]) {
   await p.click('#savet'); await p.waitForTimeout(1800)
 }
 ok((await sql(`select count(*)::int n from tasks where calendar_id=$1`, [cal]))[0].n === 2, 'hai việc nằm trong lịch chung')
-for (const p of [a.page, b.page]) { await p.waitForTimeout(300); const cks = await p.$$('.t:not(.oth) .ck:visible'); for (const c of cks) { await c.click(); await p.waitForTimeout(1000) } }
+for (const p of [a.page, b.page]) { await tab(p, 'Lịch'); await p.click('[data-act=cals]'); await p.waitForTimeout(500); await p.click('.mid[data-act=pickcal]:has-text("Nhóm học")'); await p.waitForTimeout(900); const cks = await p.$$('.t:not(.oth) .ck:visible'); for (const c of cks) { await c.click(); await p.waitForTimeout(1000) } }
 ok((await sql(`select count(*)::int n from tasks where calendar_id=$1 and done`, [cal]))[0].n === 2, 'cả hai tick xong')
-await claimUi(a.page); await claimUi(b.page)
+await tab(a.page, 'Hôm nay'); await claimUi(a.page); await tab(b.page, 'Hôm nay'); await claimUi(b.page)
 const g = await sql(`select user_id, card_id from reward_grants where source='group' and calendar_id=$1`, [cal])
 ok(g.length === 2 && g[0].card_id === g[1].card_id, 'cả nhóm nhận cùng một thẻ nhóm: ' + g.map((x) => x.card_id).join(','))
 ok((await sql(`select count(*)::int n from reward_grants where source='personal' and user_id in ($1,$2)`, [A.id, B.id]))[0].n === 2, 'mỗi người một thẻ cá nhân')

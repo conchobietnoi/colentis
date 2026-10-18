@@ -205,6 +205,20 @@ Coverage includes:
 - Group rewards
 - Offline behavior and missed-day recovery
 - Admin letters and user profiles
+- Mua Concept season: daily task and packs, concept collection, panorama, profile frames, Ultra cards, gifting and asking for cards
+
+The Mua Concept scenarios (s7, s8) need the real concept media so the shim can serve them: set CONCEPT_DIR to a folder with c1-0.webp .. c3-4.webp, pano-1..3.webp, ultra-1/2.mp4 + .webp and songs/0..6.mp4 (the shim maps songs/N.m4a to songs/N.mp4), then run: CONCEPT_DIR=... bash e2e/all.sh
+
+Mua Concept media (private Storage bucket "concept")
+
+Migration 013 creates the private bucket "concept". Upload these files from the Dashboard (Storage -> concept); they are never committed to the repository:
+
+- c1-0.webp .. c3-4.webp (15 concept cards: c{concept 1-3}-{slot 0-4})
+- pano-1.webp, pano-2.webp, pano-3.webp (panorama, shown under cover bands)
+- ultra-1.webp, ultra-2.webp, ultra-1.mp4, ultra-2.mp4 (Ultra Limited card art and video)
+- songs/0.m4a .. songs/6.m4a (the 7 songs; audio/mp4)
+
+Videos and songs are only readable after a user has unlocked all 3 concepts.
 
 These tests are intended for development and do not interact with the production backend.
 

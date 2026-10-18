@@ -43,5 +43,8 @@ Nguồn sự thật: `PLAN.md` (kế hoạch final, mới nhất). Mọi quy t�
 - Kiểm thử giao diện: `e2e/build.sh`, `e2e/shim.sh reset`, `e2e/all.sh` (cần Postgres cục bộ và Chromium cho Playwright).
 - Không có khóa bí mật trong repo. Khóa `anon` là công khai (đặt trong biến Actions và `.env.local`). Khóa `service_role` chỉ dùng tạm trong PowerShell của chủ dự án nếu muốn chạy `npm run upload-cards`.
 
-## Mùa Concept (giai đoạn 1)
-- Thẻ ID + khung thành viên: `src/ui/legacy/_06e_idcard.js`, `supabase/migrations/009_mua_concept.sql`, thiết kế ở `design/mua-concept/`. Chưa có mở gói/thẻ concept. Chi tiết ở cuối `PLAN.md`.
+## Mùa Concept (giai đoạn 1 và 2)
+- Giai đoạn 1: thẻ ID + khung thành viên: `src/ui/legacy/_06e_idcard.js`, `supabase/migrations/009_mua_concept.sql`, thiết kế ở `design/mua-concept/`.
+- Giai đoạn 2 (nhiệm vụ ngày, pack, thẻ concept, panorama, Ultra, tặng/xin thẻ): `src/ui/legacy/_06f_cx_core.js` + `_06g_cx_tpl.js` (sinh sẵn từ `design/mua-concept/boards/AppBuild.dc.html`), `src/ui/concept.css`, `supabase/migrations/013_mua_concept_p2.sql`. Bám đúng thiết kế đã duyệt, không tự vẽ lại; chi tiết luật và bucket `concept` ở cuối `PLAN.md`.
+- Ảnh/video/nhạc concept ở bucket riêng `concept` (không commit vào repo). Hiệu ứng mở Ultra đã chốt là "2 sao xoắn" (variant 3).
+- Test: `bash e2e/all.sh` (đặt `CONCEPT_DIR` để chạy cả s7, s8). Nếu build bằng `npm run build` thì phải `bash e2e/build.sh` lại trước khi chạy e2e.

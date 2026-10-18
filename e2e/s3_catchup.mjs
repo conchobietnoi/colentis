@@ -1,7 +1,9 @@
 import { CTL, launch, login, tab, mkUser, sql, ok, finish, shot } from './helpers.mjs'
 console.log('S3: lỡ ngày, tick bù, thẻ cứu')
 const D1 = '2026-10-14', NOW1 = '2026-10-14T10:00:00+07:00', NOW2 = '2026-10-15T10:00:00+07:00'
+await CTL('now', { iso: '2026-10-13T10:00:00+07:00' })
 const R = await mkUser('Rescue'), T = await mkUser('TickBu')
+await sql(`update profiles set created_at = $1 where id in ($2,$3)`, ['2026-10-13T10:00:00+07:00', R.id, T.id])
 await CTL('now', { iso: NOW1 })
 for (const u of [R, T]) { const cal = (await u.table('calendars', 'GET')).body[0].id; const r = await u.table('tasks', 'POST', { calendar_id: cal, day: D1, title: 'Việc hôm qua' }); if (!r.ok) throw new Error(JSON.stringify(r.body)) }
 await CTL('now', { iso: NOW2 })

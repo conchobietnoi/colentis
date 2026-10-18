@@ -388,3 +388,25 @@ Mọi mục "chờ quyết" ở trên đã được chốt như sau. Phần này
 - Ảnh thẻ ID lưu bucket `avatars`, đường dẫn `<uid>/idcard-<ts>.jpg`. Chữ ký và mã Spotify là PNG tĩnh ở `public/assets/idcard/`.
 - Chưa làm (giai đoạn sau): mở gói, thẻ concept, gói mỗi ngày, panorama, 2 thẻ Ultra Limited.
 - Thiết kế gốc: `design/mua-concept/`. Backend: `supabase/migrations/009_mua_concept.sql`. Test giao diện: `e2e/s6_mua_concept.mjs`.
+
+## Mùa Concept — giai đoạn 2 (18/10/2026)
+Thiết kế gốc: `design/mua-concept/boards/AppBuild.dc.html`. Giao diện chuyển nguyên văn từ thiết kế (mẫu → hàm sinh HTML, CSS giữ nguyên), không tự vẽ lại.
+
+### Luật
+- 9 ngày: ngày 1–3 Urichinguchana, 4–6 Aniyaaa, 7–9 Poyoyoi (`event_days`, 18/10–26/10). Mỗi ngày một nhiệm vụ (tự tick, tính theo lòng tin): xong thì nhận **2 pack** của concept ngày đó. Chỉ tick được đúng trong ngày (`concept_tick`, lỗi `OUT_OF_EVENT`/`ALREADY_DONE`).
+- Pack concept = 5 thẻ, server rút: thường 16% mỗi thẻ (5 thẻ), holo 4% mỗi thẻ (5 thẻ). Mở pack cũ nhất trước (`concept_open_pack`).
+- Đủ 5 thẻ **thường** của một concept: mở khóa panorama, khung tròn + danh hiệu `concept-N` (tự đeo, đổi được ở Hồ sơ), 1 pack thưởng = 5 thẻ app (trọng số `daily_weights`).
+- Đủ cả 3 concept: 2 thẻ Ultra Limited, mỗi thẻ chọn 2 trong 7 bài CORTIS, khóa rồi không đổi (`concept_ultra_lock`, lỗi `NEED_ALL_CONCEPTS`/`ALREADY_LOCKED`). Hiệu ứng mở là "2 sao xoắn" (variant 3).
+- Thẻ trùng tặng được cho bạn bè hoặc người chung lịch, luôn giữ lại ít nhất 1 bản (`concept_give`); xin thẻ còn thiếu (`concept_ask`, tối đa 60 yêu cầu chờ); người nhận mở "Quà từ bạn bè" ở tab Hôm nay hoặc Hòm thư (`concept_claim_gifts`, mỗi quà một lần).
+- Thư: 18/10 (poster, quà thẻ ID + khung + 1 pack concept 1), 21/10 Aniyaaa, 24/10 Poyoyoi, 18/10 sự kiện bí mật 01/11 (thư phát chung `broadcast_at`, giao cả cho người vào sau). Quà thư `concept_pack` chỉ nhận một lần; pack lưu chờ cũ (`event_stash`) đã quy đổi thành pack concept 1.
+
+### Backend
+- Migration `013_mua_concept_p2.sql`: bảng `concept_ticks/packs/cards/unlocks/ultra/gifts/requests` (RLS chỉ cho đọc phần của mình; ghi qua hàm), cột `mails.tag/tag_color/summary/broadcast_at`, bucket riêng tư `concept`, 3 danh hiệu `concept-1..3`.
+- Bucket `concept` (chủ dự án tải lên bằng Dashboard): `c{1-3}-{0-4}.webp`, `ultra-{1,2}.webp` và `pano-{1-3}.webp` ai đăng nhập cũng đọc được (ảnh nằm dưới dải che); `ultra-{1,2}.mp4` và `songs/{0-6}.m4a` chỉ đọc được khi đã mở khóa đủ 3 concept (`private.can_read_concept`). Thẻ chưa có thì giao diện không hiện ảnh (ô trống nét đứt).
+- Test SQL: `supabase/tests/65_mua_concept.sql`, `70_concept_p2.sql`.
+
+### Giao diện
+- Lõi: `src/ui/legacy/_06f_cx_core.js` (trình biên dịch mẫu, trạng thái `CX`, hàm xử lý `CX.H`, âm thanh Ultra, panorama theo cảm biến); mẫu sinh sẵn `_06g_cx_tpl.js`; CSS `src/ui/concept.css` (chỉ các luật không trùng `mockup.css`; góc quay của app đổi tên thành `--ra` để biến `--a` của thiết kế là màu).
+- Gắn vào tab cũ: banner + nhiệm vụ + mở pack + quà bạn bè ở Hôm nay, chấm concept ở Lịch, hàng chip concept ở Ảnh (mặc định vẫn là "Thẻ app"), "Phần thưởng Mùa Concept" ở Hồ sơ, thư kiểu thiết kế ở Hòm thư. Mọi gọi server qua `API.cx*` trong `bridge.ts`; nếu 013 chưa áp (`concept_state` lỗi) thì toàn bộ giao diện concept tự ẩn.
+- Ảnh/video/nhạc lấy bằng URL ký từ bucket riêng tư; ảnh chưa tải được hiện chỗ trống rồi tự điền khi tới.
+- Test: `e2e/s7_concept_p2.mjs` (nhiệm vụ, pack, bộ sưu tập, panorama, khung), `e2e/s8_concept_flows.mjs` (pack thưởng, Ultra, tặng/xin thẻ giữa hai tài khoản). Cả hai cần `CONCEPT_DIR` trỏ tới thư mục chứa ảnh/video/nhạc thật để shim phát lại.

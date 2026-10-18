@@ -1,0 +1,55 @@
+import { launch, login, tab, mkUser, sql, CTL, ok, finish, shot, clearG } from './helpers.mjs'
+console.log('S8: Mùa Concept — pack thưởng, Ultra, tặng/xin thẻ giữa bạn bè')
+await CTL('now', { iso: '2026-10-22T09:00:00+07:00' })
+await CTL('seed-concept', { dir: process.env.CONCEPT_DIR })
+const A = await mkUser('An Ultra'), B = await mkUser('Bảo Bạn')
+await sql(`insert into friendships(requester, addressee, status) values ($1,$2,'accepted')`, [A.id, B.id])
+// A: đủ 15 thẻ thường, riêng c1-0 có 3 bản; mở khóa cả 3 concept
+await sql(`insert into concept_cards(user_id,con,slot,holo,count) select $1,c,s,false,case when c=1 and s=0 then 3 else 1 end from generate_series(1,3) c, generate_series(0,4) s`, [A.id])
+const unl = await sql(`select private.concept_check_unlock($1::uuid) r`, [A.id]); console.log('  unlock →', JSON.stringify(unl))
+ok((await sql(`select count(*)::int n from concept_packs where user_id=$1 and kind='bonus'`, [A.id]))[0].n === 3, '3 pack thưởng thẻ app')
+const a = await launch(); const { page } = a
+await login(page, A.email); await tab(page, 'Hôm nay'); await page.waitForTimeout(1500)
+await shot(page, 's8-today')
+// mở pack thưởng: thẻ app thật
+await page.click('#today .claimcta:has-text("Mở pack Mùa Concept")'); await page.waitForTimeout(900)
+await page.click('.tr'); await page.waitForTimeout(3600); await shot(page, 's8-bonus-reveal')
+for (let i = 0; i < 5; i++) { await page.click('.kmok'); await page.waitForTimeout(700) }
+await page.waitForTimeout(1500); await shot(page, 's8-after-bonus')
+ok((await sql(`select count(*)::int n from concept_packs where user_id=$1 and kind='bonus' and opened_at is not null`, [A.id]))[0].n === 1, 'pack thưởng đã mở ở server')
+const app = await sql(`select count(*)::int n from user_cards where user_id=$1`, [A.id]); ok(app[0].n >= 1, 'đã nhận thẻ app từ pack thưởng: ' + app[0].n)
+await clearG(page)
+// Ultra
+await page.click('#col [data-cx=setTab]:has-text("Ultra")'); await page.waitForTimeout(900); await shot(page, 's8-ultra-tab')
+await page.click('#col [data-cx=startU] >> nth=0'); await page.waitForTimeout(1500); await clearG(page); await shot(page, 's8-songs')
+const songs = await page.$$('[data-cx=pickSong]'); ok(songs.length === 7, '7 bài hát để chọn: ' + songs.length)
+await page.click('[data-cx=pickSong] >> nth=1'); await page.click('[data-cx=pickSong] >> nth=5'); await page.waitForTimeout(400); await shot(page, 's8-songs-picked')
+await page.click('[data-cx=lock]'); await page.waitForTimeout(2500)
+const ul = await sql(`select n, songs from concept_ultra where user_id=$1`, [A.id]); ok(ul.length === 1 && ul[0].n === 1 && ul[0].songs.join() === '1,5', 'khóa 2 bài vào thẻ Ultra 1: ' + JSON.stringify(ul))
+await shot(page, 's8-ultra-locked')
+await page.click('.ucard, [data-cx=playA]', { force: true }).catch(() => {}); await page.waitForTimeout(1500); await shot(page, 's8-ultra-play')
+ok(!!(await page.$('video, audio')), 'thẻ Ultra có video/nhạc phát')
+await page.click('[data-cx=closeU]'); await page.waitForTimeout(600)
+// tặng thẻ trùng cho bạn
+await page.click('#col [data-cx=setTab] >> nth=0'); await page.waitForTimeout(900)
+await page.click('#col .slot:not(.lk) >> nth=0'); await page.waitForTimeout(900); await shot(page, 's8-detail')
+await page.click('[data-cx=dtGiveF]'); await page.waitForTimeout(900); await shot(page, 's8-who-give')
+await page.click('[data-cx=whoTog] >> nth=0'); await page.waitForTimeout(400); await page.click('[data-cx=whoGo]'); await page.waitForTimeout(1500); await shot(page, 's8-gave')
+const gf = await sql(`select con, slot, holo, claimed_at from concept_gifts where from_user=$1 and to_user=$2`, [A.id, B.id]); ok(gf.length === 1 && gf[0].claimed_at === null, 'tặng thẻ trùng cho B: ' + JSON.stringify(gf))
+ok((await sql(`select count from concept_cards where user_id=$1 and con=1 and slot=0 and not holo`, [A.id]))[0].count === 2, 'A còn 2 bản sau khi tặng')
+await a.browser.close()
+// B: nhận quà
+const b = await launch(); await login(b.page, B.email); await tab(b.page, 'Hôm nay'); await b.page.waitForTimeout(1200); await shot(b.page, 's8-b-today')
+await b.page.click('#today [data-cx=giftOpen]'); await b.page.waitForTimeout(3500); await shot(b.page, 's8-b-gift')
+for (let i = 0; i < 3; i++) { const k = await b.page.$('.kmok'); if (k) { await k.click(); await b.page.waitForTimeout(700) } }
+ok((await sql(`select count from concept_cards where user_id=$1 and con=1 and slot=0 and not holo`, [B.id]))[0]?.count === 1, 'B nhận được thẻ')
+// B xin thẻ còn thiếu từ A
+await b.page.click('#tabs >> text=Ảnh'); await b.page.waitForTimeout(600); await clearG(b.page)
+await b.page.click('#col [data-cx=setTab] >> nth=0'); await b.page.waitForTimeout(900)
+await b.page.click('#col .slot.lk >> nth=0'); await b.page.waitForTimeout(900)
+await b.page.click('[data-cx=dtAskF]'); await b.page.waitForTimeout(900); await shot(b.page, 's8-b-ask')
+await b.page.click('[data-cx=whoTog] >> nth=0'); await b.page.waitForTimeout(400); await b.page.click('[data-cx=whoGo]'); await b.page.waitForTimeout(1500)
+ok((await sql(`select count(*)::int n from concept_requests where from_user=$1 and to_user=$2`, [B.id, A.id]))[0].n === 1, 'B xin thẻ từ A')
+const rb = b.logs.filter(l => !/status of 400/.test(l)); ok(rb.length === 0, 'B không lỗi JS: ' + rb.join('|').slice(0, 400))
+await b.browser.close()
+process.exit(await finish() ? 1 : 0)

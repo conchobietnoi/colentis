@@ -10,7 +10,7 @@ await page.click('[data-act=addtask]:visible'); await page.waitForTimeout(500); 
 const toast = await page.evaluate(() => document.getElementById('toast')?.textContent ?? '')
 ok(/chờ đồng bộ/.test(toast), 'thêm việc offline báo "chờ đồng bộ": ' + toast)
 ok((await sql(`select count(*)::int n from tasks where owner_id=$1`, [U.id]))[0].n === 1, 'server chưa có việc offline')
-await page.click('.t:has-text("Online1") .ck'); await page.waitForTimeout(1000)
+await tab(page, 'Lịch'); await page.click('.t:has-text("Online1") .ck'); await page.waitForTimeout(1000)
 ok((await sql(`select done from tasks where title='Online1' and owner_id=$1`, [U.id]))[0].done === false, 'tick offline chưa lên server')
 await a.page.screenshot({ path: 'e2e/out/s2-offline.png' })
 await ctx.setOffline(false); await page.waitForTimeout(5000)

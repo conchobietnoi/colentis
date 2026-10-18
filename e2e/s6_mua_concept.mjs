@@ -12,8 +12,8 @@ await page.click('[data-id-act=claim]', { force: true }); await page.waitForSele
 await shot(page, 's6-reveal1')
 await page.click('[data-id-act=rev2]', { force: true }); await page.waitForTimeout(900); await shot(page, 's6-reveal2')
 await page.click('[data-id-act=rev3]', { force: true }); await page.waitForTimeout(800); await shot(page, 's6-members')
-const st = (await sql(`select (select count(*)::int from id_cards where user_id=$1) c,(select count(*)::int from event_stash where user_id=$1) s`, [U.id]))[0]
-ok(st.c === 1 && st.s === 1, 'nhận thẻ ID và gói vào kho sự kiện: ' + JSON.stringify(st))
+const st = (await sql(`select (select count(*)::int from id_cards where user_id=$1) c,(select count(*)::int from concept_packs where user_id=$1 and opened_at is null) s`, [U.id]))[0]
+ok(st.c === 1 && st.s === 1, 'nhận thẻ ID và 1 pack concept: ' + JSON.stringify(st))
 await page.click('[data-id-act=pick][data-m=martin]'); await page.waitForTimeout(300)
 await page.click('[data-id-act=confirm]'); await page.waitForSelector('#pgId.on', { timeout: 8000 }); await page.waitForTimeout(1000)
 await shot(page, 's6-card')
