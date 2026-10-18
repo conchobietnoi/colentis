@@ -19,11 +19,8 @@ begin
   raise notice 'STATE %', r;
   perform t.ok((r->'task'->>'need')::int = 1 and (r->'task'->>'have')::int = 0, 'ngày 1 cần 1, chưa có');
   perform t.expect_err('TASK_NOT_MET', 'select concept_tick()');
-  -- ngày 1: xong lúc 9h30 chưa đủ, 8h40 thì đủ
-  perform t.as_super(); perform t.mk_done(a, cal, '2026-10-18', 'Muộn', null, '2026-10-18 09:30+07'); perform t.now_is('2026-10-18 10:00+07'); perform t.as_user(a);
-  perform t.expect_err('TASK_NOT_MET', 'select concept_tick()');
-  perform t.as_super();
-  perform t.mk_done(a, cal, '2026-10-18', 'Sớm', null, '2026-10-18 08:40+07'); perform t.now_is('2026-10-18 10:00+07'); perform t.as_user(a);
+  -- ngày 1: xong 1 việc bất kỳ trong hôm nay (kể cả buổi tối)
+  perform t.as_super(); perform t.mk_done(a, cal, '2026-10-18', 'Việc tối', null, '2026-10-18 19:30+07'); perform t.now_is('2026-10-18 20:00+07'); perform t.as_user(a);
   perform t.ok((public.concept_state()->'task'->>'have')::int = 1, 'ngày 1 đã đủ');
   r := concept_tick();
   perform t.ok(jsonb_array_length(r->'packs') = 2, 'đủ điều kiện → 2 pack');

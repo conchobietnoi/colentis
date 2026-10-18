@@ -413,5 +413,5 @@ Thiết kế gốc: `design/mua-concept/boards/AppBuild.dc.html`. Giao diện ch
 
 ### Nhiệm vụ Mùa Concept do server xác minh (migration 015)
 - Tick không còn là tự khai: `concept_tick()` chỉ phát 2 pack khi `private.concept_task_have(uid, ngày) >= need`, nếu không báo `TASK_NOT_MET`. `concept_state().task` = `{need, have}`.
-- Điều kiện (giờ VN, trong hôm nay): 1 xong 1 việc trước 9h · 2 và 7 xong 1 việc nhãn "Việc nhà" · 3 tạo hôm nay 1 việc cho ngày mai · 4 xong 1 việc nhãn "Cho người khác" · 5 gắn giờ (tạo/sửa hôm nay) cho 1 việc không cả ngày · 6 xong 1 việc sau 21h · 8 xong 3 việc · 9 xong 1 việc ở lịch chung có ≥2 thành viên.
+- Điều kiện (giờ VN, trong hôm nay): 1 xong 1 việc bất kỳ trong hôm nay (016) · 2 và 7 xong 1 việc nhãn "Việc nhà" · 3 tạo hôm nay 1 việc cho ngày mai · 4 xong 1 việc nhãn "Cho người khác" · 5 gắn giờ (tạo/sửa hôm nay) cho 1 việc không cả ngày · 6 xong 1 việc sau 21h · 8 xong 3 việc · 9 xong 1 việc ở lịch chung có ≥2 thành viên.
 - Thêm 2 nhãn mới vào app: "Việc nhà", "Cho người khác". Test: `supabase/tests/75_concept_task.sql`.

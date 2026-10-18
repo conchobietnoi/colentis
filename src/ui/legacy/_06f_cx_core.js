@@ -6,7 +6,7 @@ const CXN={
  2:{n:'Aniyaaa',a:'#FF2E88',b:'#FFC1DB',ar:3200/534,week:'CHẶNG 2 · 21–23/10',open:'21/10'},
  3:{n:'Poyoyoi',a:'#4CC9FF',b:'#C7EEFF',ar:3200/1023,week:'CHẶNG 3 · 24–26/10',open:'24/10'}};
 const CXTASKS=[null,
- {t:'Rạng Sáng',d:'Tick xong 1 việc trước 9 giờ sáng.'},{t:'Nhà Của Mình',d:'Hoàn thành 1 việc nhà.'},
+ {t:'Rạng Sáng',d:'Hoàn thành 1 việc bất kỳ trong hôm nay.'},{t:'Nhà Của Mình',d:'Hoàn thành 1 việc nhà.'},
  {t:'Khởi Động Tuần',d:'Lên lịch ít nhất 1 việc cho ngày mai.'},{t:'Gửi Yêu Thương',d:'Hoàn thành 1 việc dành cho người khác.'},
  {t:'Xếp Hình Giờ Giấc',d:'Gắn giờ cho 1 việc bất kỳ.'},{t:'Cú Đêm',d:'Hoàn thành 1 việc sau 21 giờ.'},
  {t:'Dọn Nhà Cuối Tuần',d:'Hoàn thành 1 việc nhà.'},{t:'Chốt Sổ',d:'Hoàn thành 3 việc trong hôm nay.'},
