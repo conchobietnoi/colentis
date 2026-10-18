@@ -166,7 +166,7 @@ EXTRA='''
 .rapp .igo.off{opacity:.4;pointer-events:none}
 .rapp .phone{overflow:hidden}
 '''
-MEM=[('JAMES','Triệu Vũ Phàm','14/10','Young Crew','#FFB02E','JM'),('JUHOON','Kim Chu Huân','03/01','TNT','#FF2E88','JH'),('MARTIN','Phan Mạnh Tiến','20/03','Blue Lips','#4CC9FF','MT'),('SEONGHYEON','Nghiêm Sơn Hoàng','13/01','ACAI','#35D0A5','SH'),('KEONHO','An Kiến Huy','04/02','Wassup','#8B5CFF','KH')]
+MEM=[('JAMES','Triệu Vũ Phàm','14/10','Young Crew','#FFB02E','JM'),('JUHOON','Kim Chu Huân','03/01','TNT','#FF2E88','JH'),('MARTIN','Phan Mạnh Tiến','20/03','Blue Lips','#4CC9FF','MT'),('SEONGHYEON','Nghiêm Sơn Hoàng','13/01','ACAI','#35D0A5','SH'),('KEONHO','An Kiến Huy','14/02','Wassup','#8B5CFF','KH')]
 js='''var MEM=%s;
 class Component extends DCLogic {
   renderVals() {

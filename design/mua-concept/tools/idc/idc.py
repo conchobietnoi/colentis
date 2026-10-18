@@ -40,7 +40,7 @@ members=[
  dict(id='jh',s='JUHOON',ko='주훈',full='KIM JU-HOON',han='김주훈',dob='03/01/2008',blood='O',nat='Hàn Quốc',ac='#FF2E88',cd='JH'),
  dict(id='mt',s='MARTIN',ko='마틴',full='PARK WOO-JOO',han='박우주',dob='20/03/2008',blood='O',nat='Hàn – Canada',ac='#4CC9FF',cd='MT'),
  dict(id='sh',s='SEONGHYEON',ko='성현',full='EOM SEONG-HYEON',han='엄성현',dob='13/01/2009',blood='A',nat='Hàn Quốc',ac='#35D0A5',cd='SH'),
- dict(id='kh',s='KEONHO',ko='건호',full='AHN KEON-HO',han='안건호',dob='04/02/2009',blood='O',nat='Hàn Quốc',ac='#8B5CFF',cd='KH'),
+ dict(id='kh',s='KEONHO',ko='건호',full='AHN KEON-HO',han='안건호',dob='14/02/2009',blood='O',nat='Hàn Quốc',ac='#8B5CFF',cd='KH'),
 ]
 for _m in members:
     _m['sg']=_d('assets/sg_%s.png'%_m['id']); _m['sp']=_d('assets/spS_%s.png'%_m['id']); _m['song']=SONG[_m['id']]

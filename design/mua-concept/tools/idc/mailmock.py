@@ -47,7 +47,7 @@ letter_end=f'''<div class="page on">{top("Thư")}<div class="pbody"><div class="
 <button class="igo" style="background:linear-gradient(100deg,#FFB02E,#FF2E88)">Nhận tất cả quà</button>
 </div></div></div>'''
 # ---- 4. chọn thành viên
-mem=[('JAMES','Triệu Vũ Phàm','14/10','Young Crew','#FFB02E','JM'),('JUHOON','Kim Chu Huân','03/01','TNT','#FF2E88','JH'),('MARTIN','Phan Mạnh Tiến','20/03','Blue Lips','#4CC9FF','MT'),('SEONGHYEON','Nghiêm Sơn Hoàng','13/01','ACAI','#35D0A5','SH'),('KEONHO','An Kiến Huy','04/02','Wassup','#8B5CFF','KH')]
+mem=[('JAMES','Triệu Vũ Phàm','14/10','Young Crew','#FFB02E','JM'),('JUHOON','Kim Chu Huân','03/01','TNT','#FF2E88','JH'),('MARTIN','Phan Mạnh Tiến','20/03','Blue Lips','#4CC9FF','MT'),('SEONGHYEON','Nghiêm Sơn Hoàng','13/01','ACAI','#35D0A5','SH'),('KEONHO','An Kiến Huy','14/02','Wassup','#8B5CFF','KH')]
 rows=''.join(f'<button class="wr {"on" if n=="JUHOON" else ""}"><span class="wav" style="--a:{c}">{ini}</span><span class="wnm"><b>{n.capitalize()} · {vn}</b><small>Sinh {d} · Bài đại diện: {s}</small></span><span class="wck">{"✓" if n=="JUHOON" else ""}</span></button>' for n,vn,d,s,c,ini in mem)
 sheet=f'''<div class="page on">{top("Thư")}<div class="pbody"><div class="mqb" style="padding-top:6px"><div class="mqs">QUÀ ĐÍNH KÈM · 2</div><div class="mqg"><div class="mqgc">{H['blank']}</div></div></div></div></div>
 <div class="bd on"></div><div class="sheet on" style="visibility:visible;transform:none;max-height:94%"><h3 style="font-size:19px;margin:6px 0 4px">Gán thẻ ID cho ai?</h3><p class="sub" style="margin:0 0 10px">Chọn một thành viên. Chọn xong là khóa, không đổi được.</p>

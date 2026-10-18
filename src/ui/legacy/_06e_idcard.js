@@ -3,7 +3,7 @@ const MC_EID='mua-concept-2026';
 const IDM={
  james:{f:'jm',n:'JAMES',ac:'#FFB02E',fc:'#FFDBA1',ko:'제임스',han:'赵雨凡',full:'CHAO YUFAN',dob:'14/10/2005',blood:'A',nat:'Thái – Hoa',cd:'JM',song:'Young Crew',vn:'Triệu Vũ Phàm',ang:150.97,day:14},
  juhoon:{f:'jh',n:'JUHOON',ac:'#FF2E88',fc:'#FFA1C9',ko:'주훈',han:'김주훈',full:'KIM JU-HOON',dob:'03/01/2008',blood:'O',nat:'Hàn Quốc',cd:'JH',song:'TNT',vn:'Kim Chu Huân',ang:23.23,day:3},
- keonho:{f:'kh',n:'KEONHO',ac:'#8B5CFF',fc:'#CBB6FF',ko:'건호',han:'안건호',full:'AHN KEON-HO',dob:'04/02/2009',blood:'O',nat:'Hàn Quốc',cd:'KH',song:'Wassup',vn:'An Kiến Huy',ang:34.84,day:4},
+ keonho:{f:'kh',n:'KEONHO',ac:'#8B5CFF',fc:'#CBB6FF',ko:'건호',han:'안건호',full:'AHN KEON-HO',dob:'14/02/2009',blood:'O',nat:'Hàn Quốc',cd:'KH',song:'Wassup',vn:'An Kiến Huy',ang:34.84,day:4},
  martin:{f:'mt',n:'MARTIN',ac:'#4CC9FF',fc:'#AEE7FF',ko:'마틴',han:'박우주',full:'PARK WOO-JOO',dob:'20/03/2008',blood:'O',nat:'Hàn – Canada',cd:'MT',song:'Blue Lips',vn:'Phan Mạnh Tiến',ang:220.65,day:20},
  seonghyeon:{f:'sh',n:'SEONGHYEON',ac:'#35D0A5',fc:'#A4EAD6',ko:'성현',han:'엄성현',full:'EOM SEONG-HYEON',dob:'13/01/2009',blood:'A',nat:'Hàn Quốc',cd:'SH',song:'ACAI',vn:'Nghiêm Sơn Hoàng',ang:139.35,day:13}
 };
