@@ -152,11 +152,12 @@ function cxBuild(){
  H.bnGo=()=>{if(cxDay()<1){cxFlash('Sự kiện bắt đầu 18/10');return}cxSet({pg:'hub',fx:'',sheet:''})};
 
  /* ---- nhiệm vụ / Hôm nay ---- */
- V.dayA=dayA;V.evTask=live;V.tkOn=taskDone?'d':'';V.taskT=task.t;V.taskD=task.d;
+ V.dayA=dayA;V.evTask=live;V.tkOn=taskDone?'d':'';const tk=CX.s.task||{need:1,have:0},tkOk=tk.have>=tk.need;V.taskT=task.t;V.taskD=taskDone?task.d:task.d+(tkOk?' · Đã đủ, chạm để nhận thưởng':' · Tiến độ '+tk.have+'/'+tk.need+' (làm thật trong Lịch rồi quay lại nhận)');
  V.hasPacks=pn>0;V.packN=pn;V.celN=celN;
  H.tick=async()=>{
   if(!live){cxFlash('Ngoài thời gian sự kiện');return}
   if(taskDone){cxFlash('Hôm nay đã xong rồi');return}
+  if(!tkOk){cxFlash('Chưa đủ: '+task.d+' ('+tk.have+'/'+tk.need+')');return}
   if(CX.busy)return;CX.busy=true;
   const r=await cxCall(API.cxTick());CX.busy=false;
   if(r){CX.s=r;cxTouch();cxFlash('Xong nhiệm vụ · nhận 2 pack')}};

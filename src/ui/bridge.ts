@@ -52,7 +52,7 @@ async function overlayQueue(sn: UiSnapshot) {
       const r = op.row as any
       const k = keyOfIso(r.day)
       if (!(sn.tasks[k] ?? []).some((x) => x.id === op.id)) {
-        ;(sn.tasks[k] ??= []).push({ id: op.id, t: r.title, owner: 'me', cal: r.calendar_id, label: Math.max(0, ['Công việc', 'Học tập', 'Cá nhân', 'Sức khỏe'].indexOf(r.label ?? '')), allday: !!r.all_day, start: r.start_time ?? '09:00', end: r.end_time ?? '', note: r.note ?? '', done: false, version: 1, pending: true })
+        ;(sn.tasks[k] ??= []).push({ id: op.id, t: r.title, owner: 'me', cal: r.calendar_id, label: Math.max(0, ['Công việc', 'Học tập', 'Cá nhân', 'Sức khỏe', 'Việc nhà', 'Cho người khác'].indexOf(r.label ?? '')), allday: !!r.all_day, start: r.start_time ?? '09:00', end: r.end_time ?? '', note: r.note ?? '', done: false, version: 1, pending: true })
       }
     }
   }

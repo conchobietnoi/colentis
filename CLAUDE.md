@@ -48,3 +48,5 @@ Nguồn sự thật: `PLAN.md` (kế hoạch final, mới nhất). Mọi quy t�
 - Giai đoạn 2 (nhiệm vụ ngày, pack, thẻ concept, panorama, Ultra, tặng/xin thẻ): `src/ui/legacy/_06f_cx_core.js` + `_06g_cx_tpl.js` (sinh sẵn từ `design/mua-concept/boards/AppBuild.dc.html`), `src/ui/concept.css`, `supabase/migrations/013_mua_concept_p2.sql`. Bám đúng thiết kế đã duyệt, không tự vẽ lại; chi tiết luật và bucket `concept` ở cuối `PLAN.md`.
 - Ảnh/video/nhạc concept ở bucket riêng `concept` (không commit vào repo). Hiệu ứng mở Ultra đã chốt là "2 sao xoắn" (variant 3).
 - Test: `bash e2e/all.sh` (đặt `CONCEPT_DIR` để chạy cả s7, s8). Nếu build bằng `npm run build` thì phải `bash e2e/build.sh` lại trước khi chạy e2e.
+
+- Nhiệm vụ ngày Mùa Concept do server xác minh (`supabase/migrations/015_concept_task_check.sql`, test `75_concept_task.sql`); nhãn `Việc nhà` và `Cho người khác` dùng cho ngày 2/4/7. Chi tiết cuối `PLAN.md`.

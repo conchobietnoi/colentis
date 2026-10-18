@@ -44,6 +44,7 @@ const MAP: Record<string, string> = {
   NOT_FOUND: 'Không tìm thấy.',
   OUT_OF_EVENT: 'Hiện chưa trong thời gian Mùa Concept.',
   ALREADY_DONE: 'Hôm nay bạn đã xong nhiệm vụ rồi.',
+  TASK_NOT_MET: 'Bạn chưa làm xong nhiệm vụ hôm nay.',
   NO_PACK: 'Bạn chưa có pack nào để mở.',
   NOT_ENOUGH_SPARE: 'Chỉ còn 1 bản nên chưa tặng được.',
   INVALID_RECIPIENTS: 'Người nhận chưa hợp lệ.',

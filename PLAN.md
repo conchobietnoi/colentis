@@ -410,3 +410,8 @@ Thiết kế gốc: `design/mua-concept/boards/AppBuild.dc.html`. Giao diện ch
 - Gắn vào tab cũ: banner + nhiệm vụ + mở pack + quà bạn bè ở Hôm nay, chấm concept ở Lịch, hàng chip concept ở Ảnh (mặc định vẫn là "Thẻ app"), "Phần thưởng Mùa Concept" ở Hồ sơ, thư kiểu thiết kế ở Hòm thư. Mọi gọi server qua `API.cx*` trong `bridge.ts`; nếu 013 chưa áp (`concept_state` lỗi) thì toàn bộ giao diện concept tự ẩn.
 - Ảnh/video/nhạc lấy bằng URL ký từ bucket riêng tư; ảnh chưa tải được hiện chỗ trống rồi tự điền khi tới.
 - Test: `e2e/s7_concept_p2.mjs` (nhiệm vụ, pack, bộ sưu tập, panorama, khung), `e2e/s8_concept_flows.mjs` (pack thưởng, Ultra, tặng/xin thẻ giữa hai tài khoản). Cả hai cần `CONCEPT_DIR` trỏ tới thư mục chứa ảnh/video/nhạc thật để shim phát lại.
+
+### Nhiệm vụ Mùa Concept do server xác minh (migration 015)
+- Tick không còn là tự khai: `concept_tick()` chỉ phát 2 pack khi `private.concept_task_have(uid, ngày) >= need`, nếu không báo `TASK_NOT_MET`. `concept_state().task` = `{need, have}`.
+- Điều kiện (giờ VN, trong hôm nay): 1 xong 1 việc trước 9h · 2 và 7 xong 1 việc nhãn "Việc nhà" · 3 tạo hôm nay 1 việc cho ngày mai · 4 xong 1 việc nhãn "Cho người khác" · 5 gắn giờ (tạo/sửa hôm nay) cho 1 việc không cả ngày · 6 xong 1 việc sau 21h · 8 xong 3 việc · 9 xong 1 việc ở lịch chung có ≥2 thành viên.
+- Thêm 2 nhãn mới vào app: "Việc nhà", "Cho người khác". Test: `supabase/tests/75_concept_task.sql`.

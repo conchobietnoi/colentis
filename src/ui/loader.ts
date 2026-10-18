@@ -13,7 +13,7 @@ export const initials = (n: string) => {
   const p = String(n).trim().split(/\s+/).filter(Boolean)
   return (p.length > 1 ? p[0][0] + p[p.length - 1][0] : (p[0] || '?').slice(0, 2)).toUpperCase()
 }
-const LABELS = ['Công việc', 'Học tập', 'Cá nhân', 'Sức khỏe']
+const LABELS = ['Công việc', 'Học tập', 'Cá nhân', 'Sức khỏe', 'Việc nhà', 'Cho người khác']
 const SRC: Record<string, string> = { personal: 'Cá nhân', group: 'Nhóm', rescue: 'Thẻ cứu', welcome: 'Quà Tân binh', event: 'Sự kiện', admin: 'Quà từ Admin' }
 const RAR: Record<string, UiCard['r']> = { common: 'common', rare: 'rare', legendary: 'legend', supreme: 'supreme', event: 'event' }
 

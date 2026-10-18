@@ -17,7 +17,7 @@ let todayKey=key(TODAY.y,TODAY.m,TODAY.d);
 const ME={id:'me',uid:'',name:'',un:'',ini:'?',a:'#9AA6FF',b:'#4CC9FF',bd:'',admin:false,photoPath:null,photo:null};
 const MEMBERS={me:ME};
 const CALS=[];
-const LABELS=[['Công việc','#FF2E88'],['Học tập','#4CC9FF'],['Cá nhân','#35D0A5'],['Sức khỏe','#FF9A5C']];
+const LABELS=[['Công việc','#FF2E88'],['Học tập','#4CC9FF'],['Cá nhân','#35D0A5'],['Sức khỏe','#FF9A5C'],['Việc nhà','#8B5CFF'],['Cho người khác','#FFB02E']];
 const TITLES=[],WELCOME=[],EVT=[],TMAP={};
 const CARDS={common:[],rare:[],legend:[],supreme:[]},EV=[],ALLCARDS=[],CBY={},TOTAL={common:0,rare:0,legend:0,supreme:0};
 let TOTALN=0;
