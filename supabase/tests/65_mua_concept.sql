@@ -1,19 +1,19 @@
 -- Mùa Concept: thư giới thiệu, nhận thẻ ID, gán thành viên, ảnh + tên mở khung, pack lưu chờ mở
-select t.now_is('2026-10-17 15:00+07');
+select t.now_is('2026-10-18 09:00+07');
 do $$
 declare a uuid := t.id('alice'); b uuid := t.id('bob'); mid uuid; r jsonb; c jsonb;
 begin
   perform t.as_user(a);
   perform public.ensure_login_events();
-  select id into mid from mails where event_id = 'mua-concept-2026';
+  select id into mid from mails where event_id = 'mua-concept-2026' and kind = 'event';
   perform t.ok(mid is not null, 'có thư Mùa Concept');
   perform t.ok(exists (select 1 from mail_recipients where mail_id = mid and user_id = a), 'alice nhận được thư');
   perform t.expect_err('NO_ID_CARD', 'select id_card_choose(''juhoon'')');
   r := claim_mail(mid);
   perform t.ok(exists (select 1 from id_cards where user_id = a), 'có thẻ ID trống');
-  perform t.ok(exists (select 1 from event_stash where user_id = a and event_id = 'mua-concept-2026' and opens_on = '2026-10-18' and opened_at is null), 'pack lưu vào sự kiện, mở 18/10');
+  perform t.ok(exists (select 1 from concept_packs where user_id = a and con = 1 and kind = 'daily' and opened_at is null), 'quà thư: 1 pack concept 1 chưa mở');
   r := claim_mail(mid);
-  perform t.ok((select count(*) from event_stash where user_id = a) = 1, 'nhận lại thư không nhân đôi pack');
+  perform t.ok((select count(*) from concept_packs where user_id = a) = 1, 'nhận lại thư không nhân đôi pack');
   perform t.expect_err('INVALID_MEMBER', 'select id_card_choose(''abc'')');
   c := id_card_choose('juhoon');
   perform t.ok(c->>'member' = 'juhoon' and (c->>'locked')::boolean and not (c->>'frame')::boolean, 'gán Juhoon, khung chưa mở');
