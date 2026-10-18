@@ -211,6 +211,15 @@ function multipartFile(buf, ctype) {
   return found ?? { buf, type: ctype }
 }
 async function storage(req, res, url, uid) {
+  const sg = /^\/storage\/v1\/object\/sign\/([^/]+)\/(.+)$/.exec(url.pathname)
+  if (sg && req.method === 'POST') return send(res, 200, { signedURL: `/object/sign/${sg[1]}/${sg[2]}?token=shim` })
+  if (sg && req.method === 'GET') {
+    const o = objects.get(sg[1] + '/' + decodeURIComponent(sg[2]))
+    if (!o) return send(res, 404, { message: 'not found' })
+    const range = /bytes=(\d+)-(\d*)/.exec(req.headers.range ?? '')
+    if (range) { const a0 = +range[1], b0 = range[2] ? +range[2] : o.buf.length - 1; res.writeHead(206, { 'content-type': o.type, 'accept-ranges': 'bytes', 'content-range': `bytes ${a0}-${b0}/${o.buf.length}`, 'content-length': b0 - a0 + 1 }); return res.end(o.buf.slice(a0, b0 + 1)) }
+    res.writeHead(200, { 'content-type': o.type, 'accept-ranges': 'bytes', 'content-length': o.buf.length }); return res.end(o.buf)
+  }
   const m = /^\/storage\/v1\/object\/(?:(?:authenticated|public)\/)?([^/]+)\/(.+)$/.exec(url.pathname)
   if (req.method === 'DELETE') {
     const b = JSON.parse((await readBody(req)).toString() || '{}'); const bucket = url.pathname.split('/').pop()
@@ -249,6 +258,14 @@ async function ctl(req, res, url) {
   if (url.pathname === '/__ctl/seed-objects') {
     const r = await pool.query(`insert into storage.objects(bucket_id,name) select 'cards', p from (select storage_path p from public.cards union select thumb_path from public.cards where thumb_path is not null) x on conflict do nothing returning 1`)
     return send(res, 200, { n: r.rowCount })
+  }
+  if (url.pathname === '/__ctl/seed-concept') {
+    // Nạp ảnh/video/nhạc thật cho bucket `concept` từ một thư mục trên máy (body.dir); nhạc .mp4 → songs/N.m4a
+    const dir = body.dir, mime = { webp: 'image/webp', mp4: 'video/mp4' }; let n = 0
+    const put = async (name, file, type) => { objects.set('concept/' + name, { buf: fs.readFileSync(file), type }); await pool.query(`insert into storage.objects(bucket_id,name) values ('concept',$1) on conflict do nothing`, [name]); n++ }
+    for (const f of fs.readdirSync(dir)) { const e = f.split('.').pop(); if (mime[e]) await put(f, path.join(dir, f), mime[e]) }
+    if (fs.existsSync(path.join(dir, 'songs'))) for (const f of fs.readdirSync(path.join(dir, 'songs'))) await put('songs/' + f.replace(/\.mp4$/, '.m4a'), path.join(dir, 'songs', f), 'audio/mp4')
+    return send(res, 200, { n })
   }
   return send(res, 404, {})
 }

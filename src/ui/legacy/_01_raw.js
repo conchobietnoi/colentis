@@ -45,7 +45,7 @@ function applySnapshot(sn){
  /* danh hiệu */
  TITLES.length=0;WELCOME.length=0;EVT.length=0;Object.keys(TMAP).forEach(k=>delete TMAP[k]);
  sn.titles.forEach(t=>{const o={id:t.id,name:t.name,unlock:t.unlock,rarity:t.rarity,tw:t.tw};TMAP[t.id]=o;
-  if(t.id.startsWith('welcome-'))WELCOME.push(o);else if(t.id==='birthday-james'||t.id.startsWith('limited-')||t.id.startsWith('secret-')||t.id.startsWith('idcard-'))EVT.push(o);else TITLES.push(o)});
+  if(t.id.startsWith('welcome-'))WELCOME.push(o);else if(t.id==='birthday-james'||t.id.startsWith('limited-')||t.id.startsWith('secret-')||t.id.startsWith('idcard-')||t.id.startsWith('concept-'))EVT.push(o);else TITLES.push(o)});
  WELCOME.sort((a,b)=>a.id.localeCompare(b.id));
  /* thẻ */
  if(!ALLCARDS.length||ALLCARDS.length!==sn.cards.length){
@@ -67,7 +67,7 @@ function applySnapshot(sn){
  S.priv.album=m.album;S.priv.find=m.findable;S.priv.notif=m.notif;S.priv.cheer=m.cheer;S.priv.bdshow=m.showBd;
  S.prefs=sn.prefs;
  S.claimed=!!S.locks[TODAY.iso]||(S.grants[TODAY.iso]||[]).some(g=>g.source==='personal'||g.source==='rescue');
- S.km=sn.km||null;S.idc=sn.idc||null;S.stash=sn.stash||[];S.eventGot=Object.values(sn.eventDone).every(Boolean)&&Object.keys(sn.eventDone).length>0;
+ S.km=sn.km||null;S.idc=sn.idc||null;cxApply(sn);S.stash=sn.stash||[];S.eventGot=Object.values(sn.eventDone).every(Boolean)&&Object.keys(sn.eventDone).length>0;
  S.todayCards=(S.grants[TODAY.iso]||[]).map(g=>CBY[g.card]).filter(Boolean);
  S.groupReady=(S.tinfo?S.tinfo.groups:[]).some(g=>g.claimed);
  MAILS.length=0;sn.mails.forEach(x=>MAILS.push(x));
@@ -84,9 +84,10 @@ const HERO=`${ASSETBASE}hero-auth.jpg`;
 
 /* ----- avatar + khung tròn / khung ngang ----- */
 function avatar(m,s=124,frameId){const f=frameId===undefined?m.frame:frameId;
+ if(f&&String(f).startsWith('concept-'))return `<div class="av none" style="--s:${s}px;display:grid;place-items:center">${cxFrameAv(Number(String(f).slice(8)),s,m)}</div>`;
  if(f&&String(f).startsWith('idcard-')&&typeof idFrameAv==='function')return `<div class="av none" style="--s:${s}px;display:grid;place-items:center">${idFrameAv(String(f).slice(7),s,m)}</div>`;
  return `<div class="av ${f?'':'none'} ${String(f).startsWith('birthday-james')||String(f).startsWith('secret-')?'j':''} ${String(f).startsWith('limited-')?'lt':''}" style="--s:${s}px;--ca:${m.a};--cb:${m.b}"><div class="pt">${m.photo?`<img src="${m.photo}" alt="">`:m.photoPath?`<img ${AVA(m.photoPath)} alt="">`:m.ini}</div>${f?`<img class="fr" src="${frameImg(f,'avatar')}" alt="" loading="lazy">`:''}</div>`}
-function titleFrame(id,text,h=56){const t=TMAP[id];if(t&&String(id).startsWith('idcard-'))return idTitlePill(String(id).slice(7),text||t.name,h);if(!t)return `<span class="tf none" style="--h:${h}px">Chưa đeo danh hiệu</span>`;
+function titleFrame(id,text,h=56){const t=TMAP[id];if(t&&String(id).startsWith('concept-'))return cxTitlePill(Number(String(id).slice(8)),text||t.name,h);if(t&&String(id).startsWith('idcard-'))return idTitlePill(String(id).slice(7),text||t.name,h);if(!t)return `<span class="tf none" style="--h:${h}px">Chưa đeo danh hiệu</span>`;
  const W=t.tw;return `<span class="tf tn ${String(id).startsWith('limited-')?'lt':''}" style="--h:${h}px;--ar:${W/200};--l:${180/W*100}%"><img src="${frameImg(id,'title')}" alt="" loading="lazy"><span>${text||t.name}</span></span>`}
 /* ----- thẻ ảnh ----- */
 const CAKE='<svg class="cake" viewBox="0 0 96 108"><use href="#cake"/></svg>';

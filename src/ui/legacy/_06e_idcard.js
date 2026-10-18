@@ -121,9 +121,8 @@ async function idSave(){const c=S.idc;if(!c||IDS.busy)return;if(!API.online()){t
 function idColTile(){const c=S.idc;if(!c||!(colFilter==='all'||colFilter==='event'))return '';
  const mid=c.member,has=!!c.photo_path,nameOk=!!(c.holder||'').trim(),need=!mid||!has||!nameOk;
  const st=(ok,t)=>`<span class="${ok?'mok':''}">${ok?'✓ ':''}${t}</span>`;
- const pk=(S.stash||[]).filter(x=>x.event_id===MC_EID&&!x.opened_at);
  return `<div class="mpctile" style="margin-bottom:12px"><button class="mpcbtn" data-id-act="open">${need?'<span class="mpnew">Mới</span>':''}${idFront(mid,c)}<div class="mpcap"><b>Thẻ ID Fan</b><span>${need?'Bấm để hoàn thiện thẻ của bạn':'Bấm để xem hoặc chỉnh thẻ'}</span></div></button><div class="mpchk">${st(!!mid,'Thành viên')}${st(has,'Ảnh')}${st(nameOk,'Tên')}</div>
- ${pk.length?`<p class="mpsub" style="margin:12px 0 0">${pk.length} gói Mùa Concept đang chờ trong Sự kiện (mở từ 18/10).</p>`:''}</div>`}
+ ${cxOn()&&(CX.s.packs||[]).length?`<p class="mpsub" style="margin:12px 0 0">${CX.s.packs.length} pack Mùa Concept đang chờ, mở ở tab Hôm nay.</p>`:''}</div>`}
 function idProMenu(){if(!S.idc)return '';const mid=idMine();return `<button class="menu" data-id-act="open"><span class="l">${ic('image')}<span>Thẻ ID Fan<small>${mid?'Chỉnh ảnh, tên và mở khung '+IDM[mid].n:'Chọn thành viên, thêm ảnh và tên'}</small></span></span>${ic('right')}</button>`}
 
 /* ----- bắt sự kiện ----- */

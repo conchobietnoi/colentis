@@ -98,6 +98,7 @@ on conflict (id) do nothing;
 -- ---------- Thư: nhãn + thư phát cho mọi người theo lịch ----------
 alter table public.mails add column if not exists tag text check (char_length(tag) <= 24);
 alter table public.mails add column if not exists tag_color text check (tag_color ~ '^#[0-9A-Fa-f]{6}$');
+alter table public.mails add column if not exists summary text check (char_length(summary) <= 120);
 alter table public.mails add column if not exists broadcast_at timestamptz;  -- có giá trị: phát cho mọi người dùng (kể cả người vào sau)
 
 -- ---------- Hàm nội bộ ----------
@@ -156,7 +157,7 @@ begin
     'ticks', (select coalesce(jsonb_agg(day_no order by day_no), '[]') from concept_ticks where user_id = u),
     'packs', (select coalesce(jsonb_agg(jsonb_build_object('id', id, 'con', con, 'kind', kind) order by created_at, id), '[]')
                 from concept_packs where user_id = u and opened_at is null),
-    'cards', (select coalesce(jsonb_agg(jsonb_build_object('con', con, 'slot', slot, 'holo', holo, 'count', count)), '[]')
+    'cards', (select coalesce(jsonb_agg(jsonb_build_object('con', con, 'slot', slot, 'holo', holo, 'count', count, 'first_at', first_at)), '[]')
                 from concept_cards where user_id = u and count > 0),
     'unlocks', (select coalesce(jsonb_agg(con order by con), '[]') from concept_unlocks where user_id = u),
     'ultra', (select coalesce(jsonb_agg(jsonb_build_object('n', n, 'songs', songs) order by n), '[]') from concept_ultra where user_id = u),
@@ -473,7 +474,7 @@ end $$;
 update public.mails set
   body = E'Mùa Concept kéo dài 9 ngày với 3 concept: Urichinguchana (ngày 1–3), Aniyaaa (ngày 4–6) và Poyoyoi (ngày 7–9).\n\nMỗi ngày hoàn thành nhiệm vụ của concept để nhận 2 pack, mỗi pack 5 thẻ. Thẻ nào của bạn thì bạn tự rút. Thẻ trùng thì tặng được cho bạn bè, và bạn cũng có thể xin thẻ còn thiếu.\n\nĐủ 5 thẻ thường: mở panorama, khung tròn, danh hiệu và 1 pack thưởng thẻ app. Đủ cả 3 concept: nhận 2 thẻ Ultra Limited, tự chọn bài hát cho mỗi thẻ.',
   gifts = '[{"type":"id_card"},{"type":"id_frame"},{"type":"concept_pack","con":1,"qty":1}]',
-  tag = 'SỰ KIỆN MỚI', tag_color = '#FFB02E'
+  tag = 'SỰ KIỆN MỚI', tag_color = '#FFB02E', summary = 'Gom thẻ, ghép panorama, nhận 2 thẻ Ultra Limited.'
  where kind = 'event' and event_id = 'mua-concept-2026';
 
 -- Quà thư cũ (pack lưu chờ) → pack concept 1 chưa mở.
@@ -488,14 +489,14 @@ declare mid uuid; t record;
 begin
   for t in select * from (values
     ('Aniyaaa đã lên sàn', E'Từ hôm nay đến ngày 6, nhiệm vụ hằng ngày cho pack của Aniyaaa. Concept cũ vẫn mở, bạn có thể gom nốt thẻ còn thiếu.',
-       '[{"type":"concept_pack","con":2,"qty":1}]'::jsonb, 'MỞ KHÓA', '#FF2E88', timestamptz '2026-10-21 00:00:00+07'),
+       '[{"type":"concept_pack","con":2,"qty":1}]'::jsonb, 'MỞ KHÓA', '#FF2E88', timestamptz '2026-10-21 00:00:00+07', 'Concept thứ hai mở từ hôm nay.'),
     ('Poyoyoi · concept cuối', E'Đây là concept cuối cùng của mùa. Hoàn thành cả ba concept để nhận 2 thẻ Ultra Limited có nhạc và video.',
-       '[{"type":"concept_pack","con":3,"qty":1}]'::jsonb, 'MỞ KHÓA', '#4CC9FF', timestamptz '2026-10-24 00:00:00+07'),
+       '[{"type":"concept_pack","con":3,"qty":1}]'::jsonb, 'MỞ KHÓA', '#4CC9FF', timestamptz '2026-10-24 00:00:00+07', 'Hoàn thành cả ba để nhận 2 thẻ Ultra.'),
     ('Sự kiện bí mật · 01/11', E'Sau Mùa Concept sẽ có sự kiện mới vào 01/11. Hiện chỉ biết nó liên quan đến Lịch.\n\nThông tin đầy đủ sẽ được gửi vào hòm thư này khi tới ngày.',
-       '[]'::jsonb, 'SẮP TỚI', '#B79CFF', timestamptz '2026-10-18 00:00:00+07')
-  ) as v(title, body, gifts, tag, color, at) loop
-    insert into public.mails(kind, title, body, gifts, event_id, tag, tag_color, broadcast_at)
-      values ('news', t.title, t.body, t.gifts, 'mua-concept-2026', t.tag, t.color, t.at) returning id into mid;
+       '[]'::jsonb, 'SẮP TỚI', '#B79CFF', timestamptz '2026-10-18 00:00:00+07', 'Chỉ biết nó liên quan đến Lịch.')
+  ) as v(title, body, gifts, tag, color, at, summary) loop
+    insert into public.mails(kind, title, body, gifts, event_id, tag, tag_color, summary, broadcast_at)
+      values ('news', t.title, t.body, t.gifts, 'mua-concept-2026', t.tag, t.color, t.summary, t.at) returning id into mid;
     insert into public.mail_recipients(mail_id, user_id, deliver_at) select mid, id, t.at from public.profiles on conflict do nothing;
     insert into public.notifications(user_id, kind, payload, created_at)
       select id, 'mail', jsonb_build_object('mail_id', mid, 'title', t.title), t.at from public.profiles;
@@ -509,7 +510,7 @@ $$
   select case
     when obj ~ '^c[1-3]-[0-4]\.webp$' then true
     when obj ~ '^ultra-[12]\.webp$' then true
-    when obj ~ '^pano-[1-3]\.webp$' then exists (select 1 from concept_unlocks where user_id = auth.uid() and con = substring(obj from 6 for 1)::int)
+    when obj ~ '^pano-[1-3]\.webp$' then true      -- panorama hiện sẵn dưới các dải che; dải mở dần khi gom thẻ
     when obj ~ '^(ultra-[12]\.mp4|songs/[0-6]\.m4a)$' then (select count(*) from concept_unlocks where user_id = auth.uid()) = 3
     else false end
 $$;

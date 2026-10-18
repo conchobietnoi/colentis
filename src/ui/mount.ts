@@ -1,5 +1,6 @@
 import shell from './shell.html?raw'
 import './mockup.css'
+import './concept.css'
 import { mountUI } from 'virtual:colentis-ui'
 import { bridge } from './bridge'
 

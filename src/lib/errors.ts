@@ -42,6 +42,18 @@ const MAP: Record<string, string> = {
   TOO_MANY_GIFTS: 'Tối đa 4 quà trong một thư.',
   INVALID_GIFT: 'Quà không hợp lệ.',
   NOT_FOUND: 'Không tìm thấy.',
+  OUT_OF_EVENT: 'Hiện chưa trong thời gian Mùa Concept.',
+  ALREADY_DONE: 'Hôm nay bạn đã xong nhiệm vụ rồi.',
+  NO_PACK: 'Bạn chưa có pack nào để mở.',
+  NOT_ENOUGH_SPARE: 'Chỉ còn 1 bản nên chưa tặng được.',
+  INVALID_RECIPIENTS: 'Người nhận chưa hợp lệ.',
+  ALREADY_OWNED: 'Bạn đã có thẻ này rồi.',
+  TOO_MANY_REQUESTS: 'Bạn đã xin quá nhiều thẻ, hãy chờ người kia trả lời.',
+  NO_GIFT: 'Chưa có thẻ quà nào để nhận.',
+  NEED_ALL_CONCEPTS: 'Cần đủ 3 concept trước.',
+  INVALID_SONGS: 'Hãy chọn 2 bài khác nhau.',
+  INVALID_ULTRA: 'Thẻ Ultra không hợp lệ.',
+  ALREADY_LOCKED: 'Thẻ này đã khóa nhạc rồi.',
 }
 
 export type AppError = { code: string; message: string; offline: boolean }

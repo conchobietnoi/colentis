@@ -106,6 +106,15 @@ export const api = {
   markMailRead: (mid: string) => rpc<void>('mark_mail_read', { mid }),
   chooseWelcomeMember: (m: string) => rpc<void>('choose_welcome_member', { m }),
   claimMail: (mid: string) => rpc<ClaimResult>('claim_mail', { mid }),
+  // ----- Mùa Concept -----
+  conceptState: () => rpc<any>('concept_state'),
+  conceptTick: () => rpc<any>('concept_tick'),
+  conceptOpenPack: (pack_id: string | null) => rpc<any>('concept_open_pack', { pack_id }),
+  conceptGive: (to_ids: string[], c: number, s: number, h: boolean) => rpc<any>('concept_give', { to_ids, c, s, h }),
+  conceptAsk: (from_ids: string[], c: number, s: number, h: boolean) => rpc<any>('concept_ask', { from_ids, c, s, h }),
+  conceptClaimGifts: (from_id: string | null) => rpc<any>('concept_claim_gifts', { from_id }),
+  conceptUltraLock: (n: number, songs: number[]) => rpc<any>('concept_ultra_lock', { n, songs }),
+  conceptPeople: () => rpc<any[]>('concept_people'),
   adminSendMail: (a: { title: string; body: string; gifts: unknown[]; usernames?: string[] | null; at?: string | null }) =>
     rpc<{ mail_id: string; recipients: number }>('admin_send_mail', { title: a.title, body: a.body, gifts: a.gifts, usernames: a.usernames ?? null, at: a.at ?? null }),
   adminSent: () => rpc<any[]>('admin_sent_mails'),

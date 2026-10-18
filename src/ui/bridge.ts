@@ -247,6 +247,19 @@ export const bridge = {
   useRescue: (d: string) => wrap(api.useRescue(d)),
   dayStatus: (d: string) => wrap(api.dayStatus(d)),
   claimMail: (id: string) => wrap(api.claimMail(id)),
+  cxState: () => wrap(api.conceptState()),
+  cxTick: () => wrap(api.conceptTick()),
+  cxOpen: (id: string | null) => wrap(api.conceptOpenPack(id)),
+  cxGive: (ids: string[], c: number, s: number, h: boolean) => wrap(api.conceptGive(ids, c, s, h)),
+  cxAsk: (ids: string[], c: number, s: number, h: boolean) => wrap(api.conceptAsk(ids, c, s, h)),
+  cxClaim: (from: string | null) => wrap(api.conceptClaimGifts(from)),
+  cxUltraLock: (n: number, songs: number[]) => wrap(api.conceptUltraLock(n, songs)),
+  cxPeople: () => wrap(api.conceptPeople()),
+  /** URL ký có hạn cho video/nhạc trong bucket riêng tư `concept` (cần đủ 3 concept). */
+  async cxSigned(path: string) {
+    const { data } = await supabase.storage.from('concept').createSignedUrl(path, 3600)
+    return data?.signedUrl ?? ''
+  },
   khaiMacState: () => wrap(api.khaiMacState()),
   eventAsset: (id: string) => api.eventAsset(id).catch(() => null),
   idCardChoose: (m: string) => wrap(api.idCardChoose(m)),
@@ -307,7 +320,7 @@ export const bridge = {
   // ----- thời gian thực -----
   startRealtime() {
     if (channel || !myId) return
-    const tables = ['tasks', 'notifications', 'mail_recipients', 'friendships', 'calendar_members', 'calendar_invites']
+    const tables = ['tasks', 'notifications', 'mail_recipients', 'friendships', 'calendar_members', 'calendar_invites', 'concept_packs', 'concept_gifts', 'concept_requests']
     let t = 0
     const kick = () => { clearTimeout(t); t = window.setTimeout(backgroundRefresh, 900) }
     try {

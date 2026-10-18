@@ -101,9 +101,9 @@ begin
   perform t.ok(jsonb_array_length(r->'ultra') = 1, 'khóa nhạc thẻ Ultra 1');
   perform t.expect_err('ALREADY_LOCKED', 'select concept_ultra_lock(1, array[1,2])');
   perform concept_ultra_lock(2, array[1,6]);
-  -- bob chưa đủ concept: không đọc được video/nhạc, pano chỉ concept đã mở
+  -- bob chưa đủ concept: không đọc được video/nhạc (pano và poster ai cũng đọc được)
   perform t.as_user(b);
-  perform t.ok(private.can_read_concept('pano-2.webp') and not private.can_read_concept('pano-1.webp') and not private.can_read_concept('ultra-1.mp4') and private.can_read_concept('ultra-1.webp'), 'bob: pano concept 2, chưa có video');
+  perform t.ok(private.can_read_concept('pano-2.webp') and private.can_read_concept('pano-1.webp') and not private.can_read_concept('ultra-1.mp4') and private.can_read_concept('ultra-1.webp'), 'bob: có pano, chưa có video');
   perform t.expect_err('NEED_ALL_CONCEPTS', 'select concept_ultra_lock(1, array[0,4])');
   -- ===== Thư có pack =====
   perform t.as_user(c);

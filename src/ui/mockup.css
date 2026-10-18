@@ -246,10 +246,10 @@ h1,h2,h3{font-weight:900}
 .pc.r-rare{--c:#4cc3ff;--c2:#2457ff}.pc.r-rare .pc-glow{animation:pulse 3s ease-in-out infinite;inset:-20%;filter:blur(28px)}.pc.r-rare .pc-frame{box-shadow:0 0 14px var(--c),0 0 34px rgba(76,195,255,.55)}
 @keyframes pulse{50%{opacity:.3;transform:scale(.97)}}
 .pc.r-legend{--c:#ffd75e;--c2:#b04dff}.pc.r-legend .pc-glow{background:conic-gradient(from 0deg,#ffd75e,#b04dff,#ffd75e);animation:spin 8s linear infinite;opacity:.95;inset:-20%;filter:blur(30px)}
-.pc.r-legend .pc-frame{background:conic-gradient(from var(--a,0deg),#ffd75e,#b04dff,#ff6bd6,#ffd75e);animation:ang 5s linear infinite;box-shadow:0 0 18px rgba(255,215,94,.7),0 0 46px rgba(176,77,255,.55)}
-@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
-@keyframes ang{to{--a:360deg}}@keyframes spin{to{transform:rotate(360deg)}}
-.pc.comet .pc-frame::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:calc(var(--w)*.025);background:conic-gradient(from var(--a,0deg),transparent 0 68%,var(--ch,#fff) 92%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:ang var(--ct,2.4s) linear infinite;filter:drop-shadow(0 0 6px var(--ch,#fff))}
+.pc.r-legend .pc-frame{background:conic-gradient(from var(--ra,0deg),#ffd75e,#b04dff,#ff6bd6,#ffd75e);animation:ang 5s linear infinite;box-shadow:0 0 18px rgba(255,215,94,.7),0 0 46px rgba(176,77,255,.55)}
+@property --ra{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes ang{to{--ra:360deg}}@keyframes spin{to{transform:rotate(360deg)}}
+.pc.comet .pc-frame::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:calc(var(--w)*.025);background:conic-gradient(from var(--ra,0deg),transparent 0 68%,var(--ch,#fff) 92%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:ang var(--ct,2.4s) linear infinite;filter:drop-shadow(0 0 6px var(--ch,#fff))}
 .pc .rays{position:absolute;inset:-30%;background:repeating-conic-gradient(from 0deg,rgba(255,215,94,.28) 0 6deg,transparent 6deg 24deg);-webkit-mask:radial-gradient(circle,transparent 24%,#000 26%,transparent 62%);mask:radial-gradient(circle,transparent 24%,#000 26%,transparent 62%);animation:spin 28s linear infinite;opacity:.9;pointer-events:none}
 .pc .rays.b{animation-direction:reverse;animation-duration:40s;inset:-40%;opacity:.5;background:repeating-conic-gradient(from 8deg,rgba(176,77,255,.5) 0 4deg,transparent 4deg 18deg)}
 .pc .ringx{position:absolute;inset:7%;border-radius:18px;border:2px solid var(--c);opacity:0;animation:ripple2 var(--d,3s) ease-out infinite;animation-delay:var(--l)}
