@@ -240,7 +240,7 @@ function layout(){
   book.style.transform=`${t} rotateX(8deg)`;
 }
 /* ===== lật trang cong: mỗi trang đang lật tách thành NS dải nối khớp, góc từng dải lệch dần theo tiến độ ===== */
-const NS=18;
+const NS=40;
 const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
 const TH=3; /* độ dày mỗi tờ trên chồng giấy (px) */
 function bendAt(t){ /* góc lệch tương đối mỗi dải (độ): <0 mép ngoài đi trước (lúc nhấc), >0 mép ngoài trễ (lúc hạ) */
@@ -256,7 +256,7 @@ function enterStrip(l){
   let parent=l;
   for(let i=0;i<NS;i++){
     const st=document.createElement('div');st.className='st';
-    st.style.cssText=`position:absolute;top:0;height:100%;left:${i?sw-0.0:0}px;width:${sw+1}px;transform-origin:left center;transform-style:preserve-3d`;
+    st.style.cssText=`position:absolute;top:0;height:100%;left:${i?sw-0.0:0}px;width:${sw+2.2}px;transform-origin:left center;transform-style:preserve-3d`;
     if(!i)st.style.left='0px';
     const sf=document.createElement('div'),sb=document.createElement('div');
     sf.className='sf';sb.className='sb';
@@ -274,20 +274,37 @@ function exitStrip(l){if(!l._st)return;l.innerHTML=l._orig;l._st=null}
 function setT(i,t){ /* t: 0 = nằm bên phải, 1 = đã lật sang trái */
   const l=leaves[i];l._t=t;
   l.style.transform=`rotateY(${-180*t}deg)`;
-  if(!l._st)return;
-  const b=bendAt(t);let acc=-180*t;const ang=[];
+  if(!l._st){castOff();return}
+  const b=bendAt(t),sn=Math.sin(Math.PI*t);let acc=-180*t;const ang=[];
   l._st.forEach((st,k)=>{
-    const w=k?(.35+.65*k/(NS-1)):0;
-    const rel=b*w;acc+=rel;ang.push(acc);
+    const sp=k/(NS-1);
+    /* độ cong dồn về mép ngoài + gợn sóng nhẹ của tờ giấy */
+    const rel=k?(b*.75*Math.pow(sp,1.6)+sn*.34*Math.sin(k*.85+t*11)*sp):0;
+    acc+=rel;ang.push(acc);
     st.style.transform=k?`rotateY(${rel}deg)`:'none';
   });
-  const dk=a=>Math.min(.34,(1-Math.abs(Math.cos((a+28)*Math.PI/180)))*.5);
+  const dk=a=>Math.min(.36,(1-Math.abs(Math.cos((a+28)*Math.PI/180)))*.5);
+  const sp=a=>{const c=Math.cos((a+62)*Math.PI/180);return c>0?Math.pow(c,14)*.22:0}; /* vệt sáng bóng */
+  let tip=0;
   l._st.forEach((st,k)=>{
     const a0=k?(ang[k-1]+ang[k])/2:ang[0],a1=k<NS-1?(ang[k]+ang[k+1])/2:ang[k];
-    const d0=dk(a0).toFixed(3),d1=dk(a1).toFixed(3);
-    st._fs.style.background=`linear-gradient(90deg,rgba(5,14,26,${d0}),rgba(5,14,26,${d1}))`;
-    st._bs.style.background=`linear-gradient(270deg,rgba(5,14,26,${d0}),rgba(5,14,26,${d1}))`;
+    const d0=dk(a0).toFixed(3),d1=dk(a1).toFixed(3),s0=sp(a0).toFixed(3),s1=sp(a1).toFixed(3);
+    const g=dir=>`linear-gradient(${dir},rgba(255,255,255,${s0}),rgba(255,255,255,${s1})),linear-gradient(${dir},rgba(5,14,26,${d0}),rgba(5,14,26,${d1}))`;
+    st._fs.style.background=g('90deg');st._bs.style.background=g('270deg');
+    tip+=Math.cos(ang[k]*Math.PI/180)/NS;
   });
+  cast(l,tip,sn,t);
+}
+/* bóng trang đang lật đổ xuống trang bên dưới */
+function castEl(){let c=book.querySelector('.cast');if(!c){c=document.createElement('div');c.className='cast';book.appendChild(c)}return c}
+function castOff(){const c=book.querySelector('.cast');if(c)c.style.opacity=0}
+function cast(l,tip,sn,t){
+  const c=castEl(),W=l.offsetWidth,H=l.offsetHeight,half=book.offsetWidth/2;
+  const x=half+tip*W, len=W*(.1+.32*sn);
+  const a=Math.min(.42,sn*.5);
+  /* bóng nằm ngoài mép trang: bên phải mép khi t<.5, bên trái khi t>.5 */
+  const right=t<.5;
+  c.style.cssText=`position:absolute;top:0;height:${H*1.03}px;left:${right?x:x-len}px;width:${len}px;pointer-events:none;opacity:${a};background:linear-gradient(${right?'90deg':'270deg'},rgba(4,10,20,.8),transparent);z-index:1;transform:translateZ(2px)`;
 }
 function zFinal(i){return i<cur?i+1:N-i}
 function updateUI(){
@@ -317,7 +334,7 @@ window.__albScrub=(i,t)=>{const l=leaves[i];enterStrip(l);l.style.zIndex=100;set
 function go(dir){
   if(busy)return;const n=cur+dir;if(n<0||n>N)return;
   const i=dir>0?cur:cur-1;busy=1;cur=n;updateUI();hiss();
-  animateLeaf(i,dir>0?1:0,950,()=>{busy=0});
+  animateLeaf(i,dir>0?1:0,1150,()=>{busy=0});
 }
 function bindDrag(l,i){
   let sx=0,p=0,mode=0,moved=false;
