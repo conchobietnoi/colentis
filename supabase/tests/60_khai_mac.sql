@@ -4,6 +4,8 @@ do $$
 declare a uuid := t.id('alice'); b uuid := t.id('bob'); cal uuid; tk uuid; r jsonb; r2 jsonb; i int; seen text[] := '{}'; mem text;
 begin
   select cm.calendar_id into cal from calendar_members cm join calendars x on x.id = cm.calendar_id where cm.user_id = a and x.name = 'Việc riêng';
+  perform t.as_super();
+  delete from day_locks where user_id in (a, b); delete from task_completions where user_id in (a, b); delete from tasks where owner_id in (a, b); delete from rescue_uses where user_id in (a, b); delete from reward_grants where user_id in (a, b); delete from user_cards where user_id in (a, b);
   perform t.as_user(a);
   perform t.expect_err('NOT_ENOUGH_TASKS', 'select claim_khai_mac(1)');
   perform t.expect_err('INVALID_MILESTONE', 'select claim_khai_mac(6)');

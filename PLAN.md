@@ -415,3 +415,8 @@ Thiết kế gốc: `design/mua-concept/boards/AppBuild.dc.html`. Giao diện ch
 - Tick không còn là tự khai: `concept_tick()` chỉ phát 2 pack khi `private.concept_task_have(uid, ngày) >= need`, nếu không báo `TASK_NOT_MET`. `concept_state().task` = `{need, have}`.
 - Điều kiện (giờ VN, trong hôm nay): 1 xong 1 việc bất kỳ trong hôm nay (016) · 2 và 7 xong 1 việc nhãn "Việc nhà" · 3 tạo hôm nay 1 việc cho ngày mai · 4 xong 1 việc nhãn "Cho người khác" · 5 gắn giờ (tạo/sửa hôm nay) cho 1 việc không cả ngày · 6 xong 1 việc sau 21h · 8 xong 3 việc · 9 xong 1 việc ở lịch chung có ≥2 thành viên.
 - Thêm 2 nhãn mới vào app: "Việc nhà", "Cho người khác". Test: `supabase/tests/75_concept_task.sql`.
+
+### Trang admin v2 (migration 017, mockup `design/admin/`)
+- 4 tab: Tổng quan (số liệu, hoạt động), Gửi thư (người nhận gồm "Chưa điểm danh", mẫu thư, quà gồm Gói Concept, hẹn giờ, xem trước, gửi thử cho mình, nháp lưu trên máy), Thành viên (tìm, lọc, chuỗi/thẻ/thư chưa nhận, nhắc điểm danh, tặng quà), Lịch sử (Hẹn giờ: sửa/gửi ngay/huỷ; Đã gửi: tiến độ nhận quà, nhắc người chưa nhận).
+- Hàm server (chỉ admin): `admin_overview`, `admin_members`, `admin_sent_mails` (có `scheduled`, `read`, `claimed`), `admin_cancel_mail`, `admin_send_now`, `admin_nudge_mail`. Giao diện ở `src/ui/legacy/_07b_admin.js`, test `supabase/tests/80_admin_v2.sql`, `e2e/s9_admin.mjs`.
+- Chưa làm so với mockup: gói thẻ thường/sự kiện/Bá khí (chỉ có Gói Concept), mở khoá ngày, thư lặp lại hằng ngày, tab Nháp trong Lịch sử.

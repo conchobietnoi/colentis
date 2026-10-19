@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Admin · Gửi thư</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.ph{width:390px;height:1180px;background:#E6E9FF;color:#1E1B5E;font-family:'Be Vietnam Pro',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+.ph *{box-sizing:border-box;margin:0}
+.ph button,.ph input,.ph textarea{font-family:inherit;color:inherit}
+.ph button{border:0;cursor:pointer;background:none}
+.sc{flex:1;overflow:hidden;padding:0 16px 12px;display:flex;flex-direction:column;gap:12px}
+.hd{display:flex;align-items:center;gap:10px;padding:18px 0 4px}
+.hd .bk{width:40px;height:40px;border-radius:14px;background:#F7F8FF;border:1.5px solid #C9CEF5;display:grid;place-items:center}
+.hd h1{font-size:26px;font-weight:900;letter-spacing:-.8px;line-height:1}
+.hd small{display:block;font-size:12px;font-weight:700;color:#5B5F9E;margin-bottom:3px}
+.hd .sp{flex:1}
+.card{background:#F7F8FF;border:1.5px solid #C9CEF5;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.lb{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#5B5F9E;display:flex;justify-content:space-between;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.ch{padding:8px 12px;min-height:36px;border-radius:99px;font-size:12px;font-weight:800;border:2px solid #C9CEF5;color:#5B5F9E;background:#F7F8FF;display:inline-flex;gap:6px;align-items:center}
+.ch.on{background:#1E1B5E;border-color:#1E1B5E;color:#fff}
+.ch.pk{background:#FF2E88;border-color:#FF2E88;color:#fff}
+.who{display:flex;gap:8px;overflow:hidden}
+.pp{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;width:58px}
+.pp i{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;color:#fff;font-size:16px;border:3px solid transparent}
+.pp.sel i{border-color:#FF2E88;box-shadow:0 0 0 2px #fff inset}
+.pp.off{opacity:.45}
+.inp{background:#fff;border:1.5px solid #C9CEF5;border-radius:14px;padding:11px 12px;font-size:13.5px;font-weight:600;min-height:44px;width:100%}
+.ta{min-height:92px;line-height:1.45;font-weight:500}
+.cnt{font-size:11px;font-weight:700;color:#5B5F9E;text-align:right}
+.gifts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.g{aspect-ratio:3/4;border-radius:12px;border:2px solid #C9CEF5;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:6px 2px;font-size:10px;font-weight:800;text-align:center;position:relative;overflow:hidden}
+.g::before{content:"";position:absolute;inset:0 0 28px 0;background:var(--b)}
+.g span{position:relative}
+.g.on{border-color:#FF2E88;box-shadow:0 0 0 2px #FF2E88}
+.g .ck{position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:50%;background:#FF2E88;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:900}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;font-size:13px;font-weight:700}
+.sw{width:44px;height:26px;border-radius:99px;background:#C9CEF5;position:relative;flex:none}
+.sw.on{background:#35D0A5}.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3)}.sw.on::after{left:21px}
+.pv{background:linear-gradient(160deg,#fff,#F0EEFF);border:1.5px dashed #7B61FF;border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.pv .tt{font-size:15px;font-weight:900}
+.pv p{font-size:12.5px;line-height:1.45;font-weight:500}
+.pv .gf{display:flex;gap:8px;align-items:center;background:#FFE45E;border-radius:12px;padding:8px 10px;font-size:12px;font-weight:800}
+.send{display:flex;gap:8px}
+.btn{flex:1;min-height:48px;border-radius:99px;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn.p{background:#FF2E88;color:#fff;box-shadow:0 6px 16px rgba(255,46,136,.35)}
+.btn.g2{flex:none;padding:0 18px;border:2px solid #C9CEF5;color:#5B5F9E}
+.new{font-size:9px;font-weight:900;background:#FFE45E;color:#1E1B5E;border-radius:6px;padding:2px 5px;letter-spacing:.05em;margin-left:6px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);padding:7px 4px 20px;background:#F7F8FF;border-top:1.5px solid #C9CEF5}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:#5B5F9E;text-decoration:none;position:relative;padding:3px 0;min-height:44px}
+.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabs .on{color:#FF2E88;font-weight:800}
+.tabs .on::before{content:"";position:absolute;top:-8px;width:22px;height:3px;border-radius:9px;background:#FF2E88}
+</style>
+</helmet>
+<div class="ph">
+<div class="sc">
+  <div class="hd">
+    <a href="Main.dc.html" class="bk" aria-label="Quay lại" style="color:#1E1B5E"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div><small>Quản trị</small><h1>Gửi thư</h1></div>
+    <div class="sp"></div>
+    <button class="ch" style="min-height:36px">Bản nháp<span class="new" style="margin:0">MỚI</span></button>
+  </div>
+
+  <div class="card">
+    <div class="lb"><span>1 · Người nhận</span><span style="color:#FF2E88">3 người</span></div>
+    <div class="chips">
+      <button class="ch">Tất cả</button>
+      <button class="ch on">Chọn người</button>
+      <button class="ch">Chưa điểm danh<span class="new" style="margin:0">MỚI</span></button>
+    </div>
+    <div class="who">
+      <div class="pp sel"><i style="background:#FF2E88">J</i>James</div>
+      <div class="pp sel"><i style="background:#7B61FF">M</i>Martin</div>
+      <div class="pp"><i style="background:#35D0A5;color:#1E1B5E">Y</i>Youngjae</div>
+      <div class="pp sel"><i style="background:#FFB02E;color:#1E1B5E">S</i>Seonghyeon</div>
+      <div class="pp off"><i style="background:#4CC9FF;color:#1E1B5E">K</i>Keonho</div>
+    </div>
+    <div class="inp" style="color:#5B5F9E">Tìm theo tên hoặc tên đăng nhập…</div>
+  </div>
+
+  <div class="card">
+    <div class="lb"><span>2 · Nội dung</span><span>Mẫu<span class="new">MỚI</span></span></div>
+    <div class="chips">
+      <button class="ch on">Chào mừng</button>
+      <button class="ch">Nhắc điểm danh</button>
+      <button class="ch">Chúc mừng</button>
+      <button class="ch">Trống</button>
+    </div>
+    <div class="inp">Chào mừng Mùa Concept</div>
+    <div class="inp ta">Mùa Concept bắt đầu rồi! Mở thẻ ID của bạn và nhận quà khởi đầu nhé. Chúc cả nhà thật vui.</div>
+    <div class="cnt">98 / 500</div>
+  </div>
+
+  <div class="card">
+    <div class="lb"><span>3 · Quà đính kèm</span><span>Tuỳ chọn</span></div>
+    <div class="chips">
+      <button class="ch">Thẻ</button>
+      <button class="ch pk">Gói thẻ<span class="new" style="margin:0">MỚI</span></button>
+      <button class="ch">Khung</button>
+      <button class="ch">Danh hiệu</button>
+      <button class="ch">Không quà</button>
+    </div>
+    <div class="gifts">
+      <div class="g on" style="--b:linear-gradient(160deg,#8D94B8,#5B5F9E)"><i class="ck">✓</i><span>Gói thường</span></div>
+      <div class="g" style="--b:linear-gradient(160deg,#9B5CFF,#4CC9FF)"><span>Gói Concept</span></div>
+      <div class="g" style="--b:linear-gradient(160deg,#FFB02E,#FF2E88)"><span>Gói sự kiện</span></div>
+      <div class="g" style="--b:linear-gradient(160deg,#FF2E88,#7B61FF)"><span>Gói Bá khí</span></div>
+    </div>
+    <div class="row"><span>Số thẻ trong gói</span><span class="chips"><span class="ch on" style="min-height:32px">3</span><span class="ch" style="min-height:32px">5</span></span></div>
+    <div class="row"><span>Độ hiếm tối thiểu</span><span class="chips"><span class="ch on" style="min-height:32px">Rare</span><span class="ch" style="min-height:32px">Legend</span></span></div>
+    <div class="row"><span>Số gói</span><span class="chips"><span class="ch" style="min-height:32px">−</span><b>2</b><span class="ch" style="min-height:32px">+</span></span></div>
+    <div class="cnt" style="text-align:left">Người nhận tự mở gói bằng hiệu ứng gacha. Không tính vào giới hạn 2 thẻ/ngày.</div>
+  </div>
+
+  <div class="card">
+    <div class="lb"><span>4 · Thời gian gửi<span class="new">MỚI</span></span></div>
+    <div class="row"><span>Hẹn giờ gửi</span><span class="sw on" role="img" aria-label="Bật"></span></div>
+    <div class="chips"><button class="ch on">18/10 · 00:00</button><button class="ch">Ngày khác…</button></div>
+  </div>
+
+  <div class="lb" style="padding:0 4px">Xem trước thư</div>
+  <div class="pv">
+    <div class="tt">Chào mừng Mùa Concept</div>
+    <p>Mùa Concept bắt đầu rồi! Mở thẻ ID của bạn và nhận quà khởi đầu nhé. Chúc cả nhà thật vui.</p>
+    <div class="gf">Quà: 2 Gói thường (3 thẻ, từ Rare)</div>
+  </div>
+
+  <div class="send">
+    <button class="btn g2">Gửi thử cho mình</button>
+    <button class="btn p">Hẹn gửi cho 3 người</button>
+  </div>
+</div>
+<nav class="tabs" aria-label="Điều hướng admin">
+  <a href="Main.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Tổng quan</a>
+  <a href="Send.dc.html" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>Gửi thư</a>
+  <a href="Members.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c.6-3.500 3-5 6.500-5s5.900 1.500 6.500 5"/></svg>Thành viên</a>
+  <a href="History.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Lịch sử</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -50,3 +50,6 @@ Nguồn sự thật: `PLAN.md` (kế hoạch final, mới nhất). Mọi quy t�
 - Test: `bash e2e/all.sh` (đặt `CONCEPT_DIR` để chạy cả s7, s8). Nếu build bằng `npm run build` thì phải `bash e2e/build.sh` lại trước khi chạy e2e.
 
 - Nhiệm vụ ngày Mùa Concept do server xác minh (`supabase/migrations/015_concept_task_check.sql`, test `75_concept_task.sql`); nhãn `Việc nhà` và `Cho người khác` dùng cho ngày 2/4/7. Chi tiết cuối `PLAN.md`.
+
+## Trang admin v2
+- Mockup ở `design/admin/`; code `src/ui/legacy/_07b_admin.js`, migration `017_admin_v2.sql`, test `80_admin_v2.sql` và `e2e/s9_admin.mjs`. Các bộ test supabase chạy theo đúng thứ tự tên tệp (`ls supabase/tests/[0-9]*.sql`, bỏ `00_stub`), vì nhiều test dùng dữ liệu của test trước.

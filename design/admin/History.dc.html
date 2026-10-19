@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Admin · Lịch sử</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.ph{width:390px;height:900px;background:#E6E9FF;color:#1E1B5E;font-family:'Be Vietnam Pro',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+.ph *{box-sizing:border-box;margin:0}
+.ph button{font-family:inherit;border:0;cursor:pointer;background:none;color:inherit}
+.sc{flex:1;overflow:hidden;padding:0 16px 12px;display:flex;flex-direction:column;gap:12px}
+.hd{display:flex;align-items:center;gap:10px;padding:18px 0 4px}
+.hd .bk{width:40px;height:40px;border-radius:14px;background:#F7F8FF;border:1.5px solid #C9CEF5;display:grid;place-items:center;color:#1E1B5E}
+.hd h1{font-size:26px;font-weight:900;letter-spacing:-.8px;line-height:1}
+.hd small{display:block;font-size:12px;font-weight:700;color:#5B5F9E;margin-bottom:3px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:#F7F8FF;border:1.5px solid #C9CEF5;border-radius:16px;padding:4px;gap:4px}
+.seg button{min-height:40px;border-radius:12px;font-size:12.5px;font-weight:800;color:#5B5F9E}
+.seg .on{background:#1E1B5E;color:#fff}
+.seg b{background:#FF2E88;color:#fff;border-radius:99px;font-size:10px;padding:1px 6px;margin-left:4px}
+.it{background:#F7F8FF;border:1.5px solid #C9CEF5;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.it.sch{border-color:#7B61FF;background:linear-gradient(135deg,rgba(123,97,255,.12),#F7F8FF)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.top b{font-size:14px;font-weight:900}
+.top time{font-size:11px;font-weight:700;color:#5B5F9E;white-space:nowrap}
+.it p{font-size:12px;font-weight:500;line-height:1.4;color:#3b3a7a}
+.meta{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:10.5px;font-weight:900;border-radius:9px;padding:4px 8px}
+.pr{height:7px;border-radius:9px;background:#E6E9FF;overflow:hidden}.pr i{display:block;height:100%;background:#35D0A5;border-radius:9px}
+.ac{display:flex;gap:6px}
+.ac button{flex:1;min-height:38px;border-radius:12px;font-size:12px;font-weight:800;border:2px solid #C9CEF5}
+.ac .dn{color:#C21B5B;border-color:#FFB3D2}
+.new{font-size:9px;font-weight:900;background:#FFE45E;color:#1E1B5E;border-radius:6px;padding:2px 5px;letter-spacing:.05em;margin-left:5px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);padding:7px 4px 20px;background:#F7F8FF;border-top:1.5px solid #C9CEF5}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:#5B5F9E;text-decoration:none;position:relative;padding:3px 0;min-height:44px}
+.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabs .on{color:#FF2E88;font-weight:800}
+.tabs .on::before{content:"";position:absolute;top:-8px;width:22px;height:3px;border-radius:9px;background:#FF2E88}
+</style>
+</helmet>
+<div class="ph">
+<div class="sc">
+  <div class="hd">
+    <a href="Main.dc.html" class="bk" aria-label="Quay lại"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div><small>Quản trị</small><h1>Lịch sử thư</h1></div>
+  </div>
+  <div class="seg">
+    <button>Đã gửi</button>
+    <button class="on">Hẹn giờ<b>2</b></button>
+    <button>Nháp</button>
+  </div>
+
+  <div class="it sch">
+    <div class="top"><b>Chào mừng Mùa Concept</b><time>18/10 · 00:00</time></div>
+    <p>Mùa Concept bắt đầu rồi! Mở thẻ ID của bạn và nhận quà khởi đầu nhé.</p>
+    <div class="meta"><span class="tag" style="background:#E3DCFF">Hẹn giờ</span><span class="tag" style="background:#FFE45E">Quà: Thẻ Sinh nhật S</span><span class="tag" style="background:#C9F3E6">3 người</span></div>
+    <div class="ac"><button>Sửa</button><button>Gửi ngay</button><button class="dn">Huỷ hẹn</button></div>
+  </div>
+
+  <div class="it sch">
+    <div class="top"><b>Nhắc điểm danh</b><time>Hằng ngày · 20:00</time></div>
+    <p>Hôm nay bạn chưa điểm danh, vào lấy thẻ trước nửa đêm nhé.</p>
+    <div class="meta"><span class="tag" style="background:#E3DCFF">Lặp lại<em class="new" style="font-style:normal">MỚI</em></span><span class="tag" style="background:#C9F3E6">Chưa điểm danh</span></div>
+    <div class="ac"><button>Sửa</button><button>Tạm dừng</button><button class="dn">Huỷ hẹn</button></div>
+  </div>
+
+  <div class="seg" style="grid-template-columns:1fr"><button class="on" style="background:none;color:#5B5F9E;text-align:left;padding-left:10px">Đã gửi gần đây</button></div>
+
+  <div class="it">
+    <div class="top"><b>Chúc mừng sinh nhật James</b><time>14/10 · 00:00</time></div>
+    <div class="meta"><span class="tag" style="background:#C9F3E6">Tất cả · 5 người</span><span class="tag" style="background:#FFE45E">Quà: 5 thẻ sự kiện</span></div>
+    <div class="pr"><i style="width:80%"></i></div>
+    <div class="top"><span style="font-size:11.5px;font-weight:700;color:#5B5F9E">4/5 đã nhận quà · 5/5 đã đọc</span><button style="font-size:12px;font-weight:800;color:#FF2E88;min-height:32px">Gửi lại cho người chưa nhận<em class="new" style="font-style:normal">MỚI</em></button></div>
+  </div>
+
+  <div class="it">
+    <div class="top"><b>Chào mừng thành viên mới</b><time>12/10</time></div>
+    <div class="meta"><span class="tag" style="background:#C9F3E6">2 người</span><span class="tag" style="background:#E6E9FF">Không quà</span></div>
+    <div class="pr"><i style="width:100%"></i></div>
+  </div>
+</div>
+<nav class="tabs" aria-label="Điều hướng admin">
+  <a href="Main.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Tổng quan</a>
+  <a href="Send.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>Gửi thư</a>
+  <a href="Members.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c.6-3.500 3-5 6.500-5s5.900 1.500 6.500 5"/></svg>Thành viên</a>
+  <a href="History.dc.html" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Lịch sử</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

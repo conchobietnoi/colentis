@@ -50,4 +50,7 @@ await page.click('[data-x=admn]'); await page.waitForTimeout(500)
 ok((await page.inputValue('#att')).includes('Nhắc điểm danh'), 'Nhắc điểm danh điền sẵn mẫu và chuyển sang tab Gửi thư')
 // Người thường không vào được RPC
 const r = await B.call('admin_overview', {}); ok(!r.ok, 'người thường bị chặn khỏi hàm admin')
-await finish()
+const real = a.logs.filter(l => !/status of 400/.test(l))
+ok(real.length === 0, 'không lỗi JS: ' + real.join('|').slice(0, 600))
+await a.browser.close()
+process.exit((await finish()) ? 1 : 0)

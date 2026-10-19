@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Admin · Thành viên</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.ph{width:390px;height:900px;background:#E6E9FF;color:#1E1B5E;font-family:'Be Vietnam Pro',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+.ph *{box-sizing:border-box;margin:0}
+.ph button{font-family:inherit;border:0;cursor:pointer;background:none;color:inherit}
+.sc{flex:1;overflow:hidden;padding:0 16px 12px;display:flex;flex-direction:column;gap:12px}
+.hd{display:flex;align-items:center;gap:10px;padding:18px 0 4px}
+.hd .bk{width:40px;height:40px;border-radius:14px;background:#F7F8FF;border:1.5px solid #C9CEF5;display:grid;place-items:center;color:#1E1B5E}
+.hd h1{font-size:26px;font-weight:900;letter-spacing:-.8px;line-height:1}
+.hd small{display:block;font-size:12px;font-weight:700;color:#5B5F9E;margin-bottom:3px}
+.hd .sp{flex:1}
+.srch{background:#F7F8FF;border:1.5px solid #C9CEF5;border-radius:16px;min-height:46px;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:13.5px;font-weight:600;color:#5B5F9E}
+.srch svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.ch{padding:8px 12px;min-height:36px;border-radius:99px;font-size:12px;font-weight:800;border:2px solid #C9CEF5;color:#5B5F9E;background:#F7F8FF}
+.ch.on{background:#1E1B5E;border-color:#1E1B5E;color:#fff}
+.m{background:#F7F8FF;border:1.5px solid #C9CEF5;border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.m.lock{border-color:#FFB02E;background:repeating-linear-gradient(135deg,rgba(255,176,46,.16) 0 6px,rgba(255,176,46,.04) 6px 11px),#F7F8FF}
+.mt{display:flex;gap:10px;align-items:center}
+.av{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:900;font-size:17px;color:#fff}
+.mt div{flex:1;min-width:0}
+.mt b{font-size:15px;font-weight:900;display:block}
+.mt span{font-size:11.5px;font-weight:700;color:#5B5F9E}
+.tag{font-size:10.5px;font-weight:900;border-radius:9px;padding:4px 8px;white-space:nowrap}
+.mi{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.mi div{background:#E6E9FF;border-radius:12px;padding:6px 8px;font-size:10.5px;font-weight:700;color:#5B5F9E}
+.mi b{display:block;font-size:15px;font-weight:900;color:#1E1B5E}
+.ac{display:flex;gap:6px}
+.ac button{flex:1;min-height:40px;border-radius:12px;font-size:12px;font-weight:800;border:2px solid #C9CEF5;color:#1E1B5E;display:flex;align-items:center;justify-content:center;gap:5px}
+.ac button.p{background:#FF2E88;border-color:#FF2E88;color:#fff}
+.new{font-size:9px;font-weight:900;background:#FFE45E;color:#1E1B5E;border-radius:6px;padding:2px 5px;letter-spacing:.05em}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);padding:7px 4px 20px;background:#F7F8FF;border-top:1.5px solid #C9CEF5}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:#5B5F9E;text-decoration:none;position:relative;padding:3px 0;min-height:44px}
+.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabs .on{color:#FF2E88;font-weight:800}
+.tabs .on::before{content:"";position:absolute;top:-8px;width:22px;height:3px;border-radius:9px;background:#FF2E88}
+</style>
+</helmet>
+<div class="ph">
+<div class="sc">
+  <div class="hd">
+    <a href="Main.dc.html" class="bk" aria-label="Quay lại"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div><small>Quản trị</small><h1>Thành viên</h1></div>
+    <div class="sp"></div>
+    <span class="tag" style="background:#1E1B5E;color:#FFE45E">5 người</span>
+  </div>
+  <div class="srch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Tìm tên hoặc tên đăng nhập</div>
+  <div class="chips">
+    <button class="ch on">Tất cả</button>
+    <button class="ch">Hoạt động hôm nay</button>
+    <button class="ch">Ngày bị khoá</button>
+    <button class="ch">Chưa vào 7 ngày<span class="new" style="margin-left:5px">MỚI</span></button>
+  </div>
+
+  <div class="m">
+    <div class="mt"><span class="av" style="background:#FF2E88">J</span><div><b>James</b><span>@james · vào 5 phút trước</span></div><span class="tag" style="background:#C9F3E6">Đang online</span></div>
+    <div class="mi"><div>Chuỗi<b>21</b></div><div>Thẻ<b>64/120</b></div><div>Thư chưa nhận<b>1</b></div></div>
+    <div class="ac"><button class="p">Tặng quà</button><button>Gửi thư</button><button>Chi tiết</button></div>
+  </div>
+
+  <div class="m">
+    <div class="mt"><span class="av" style="background:#7B61FF">M</span><div><b>Martin</b><span>@martin · vào 1 giờ trước</span></div><span class="tag" style="background:#C9F3E6">Hôm nay</span></div>
+    <div class="mi"><div>Chuỗi<b>12</b></div><div>Thẻ<b>48/120</b></div><div>Thư chưa nhận<b>0</b></div></div>
+    <div class="ac"><button class="p">Tặng quà</button><button>Gửi thư</button><button>Chi tiết</button></div>
+  </div>
+
+  <div class="m lock">
+    <div class="mt"><span class="av" style="background:#35D0A5;color:#1E1B5E">Y</span><div><b>Youngjae</b><span>@youngjae · vào hôm qua</span></div><span class="tag" style="background:#FFB02E">Khoá 16/10</span></div>
+    <div class="mi"><div>Chuỗi<b>0</b></div><div>Thẻ<b>31/120</b></div><div>Thư chưa nhận<b>2</b></div></div>
+    <div class="ac"><button class="p">Mở khoá ngày<span class="new" style="margin-left:5px">MỚI</span></button><button>Gửi thư</button><button>Chi tiết</button></div>
+  </div>
+
+  <div class="m">
+    <div class="mt"><span class="av" style="background:#FFB02E;color:#1E1B5E">S</span><div><b>Seonghyeon</b><span>@seonghyeon · vào 3 ngày trước</span></div><span class="tag" style="background:#FFD1EA">Vắng 3 ngày</span></div>
+    <div class="mi"><div>Chuỗi<b>3</b></div><div>Thẻ<b>27/120</b></div><div>Thư chưa nhận<b>4</b></div></div>
+    <div class="ac"><button class="p">Nhắc điểm danh<span class="new" style="margin-left:5px">MỚI</span></button><button>Tặng quà</button><button>Chi tiết</button></div>
+  </div>
+</div>
+<nav class="tabs" aria-label="Điều hướng admin">
+  <a href="Main.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Tổng quan</a>
+  <a href="Send.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>Gửi thư</a>
+  <a href="Members.dc.html" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c.6-3.500 3-5 6.500-5s5.900 1.500 6.500 5"/></svg>Thành viên</a>
+  <a href="History.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Lịch sử</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

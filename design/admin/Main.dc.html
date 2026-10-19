@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Admin · Tổng quan</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.ph{width:390px;height:900px;background:#E6E9FF;color:#1E1B5E;font-family:'Be Vietnam Pro',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+.ph *{box-sizing:border-box;margin:0}
+.ph button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none}
+.sc{flex:1;overflow:hidden;padding:0 16px 12px;display:flex;flex-direction:column;gap:12px}
+.hd{display:flex;align-items:center;gap:10px;padding:18px 0 4px}
+.hd .bk{width:40px;height:40px;border-radius:14px;background:#F7F8FF;border:1.5px solid #C9CEF5;display:grid;place-items:center}
+.hd h1{font-size:26px;font-weight:900;letter-spacing:-.8px;line-height:1}
+.hd small{display:block;font-size:12px;font-weight:700;color:#5B5F9E;margin-bottom:3px}
+.hd .sp{flex:1}
+.bdg{background:#1E1B5E;color:#FFE45E;font-weight:900;font-size:11px;padding:6px 10px;border-radius:11px;transform:rotate(3deg);letter-spacing:.04em}
+.card{background:#F7F8FF;border:1.5px solid #C9CEF5;border-radius:20px;padding:14px}
+.card h2{font-size:15px;font-weight:900;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.card h2 em{font-style:normal;font-size:12px;color:#FF2E88;font-weight:800}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st{border-radius:18px;padding:12px 14px;color:#1E1B5E;display:flex;flex-direction:column;gap:2px}
+.st b{font-size:30px;font-weight:900;letter-spacing:-1px;line-height:1.05}
+.st span{font-size:12px;font-weight:700}
+.st i{font-style:normal;font-size:11px;font-weight:800;opacity:.75}
+.q{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.q button{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:10px 0;border-radius:16px;background:#F7F8FF;border:1.5px solid #C9CEF5;min-height:44px}
+.q .ic{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;color:#fff}
+.q svg,.ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ev{background:linear-gradient(135deg,#7B61FF,#FF2E88);color:#fff;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.ev h2{font-size:15px;font-weight:900;display:flex;justify-content:space-between}
+.ev p{font-size:12px;font-weight:600;opacity:.92}
+.bar{height:8px;border-radius:9px;background:rgba(255,255,255,.3);overflow:hidden}.bar i{display:block;height:100%;width:22%;background:#FFE45E;border-radius:9px}
+.act{display:flex;flex-direction:column}
+.ar{display:flex;gap:10px;align-items:center;padding:9px 0;border-top:1.5px dashed #C9CEF5}
+.ar:first-of-type{border-top:0;padding-top:0}
+.av{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:900;font-size:13px;color:#fff}
+.ar div{flex:1;min-width:0;font-size:12.5px;font-weight:600;line-height:1.35}
+.ar div b{font-weight:800}
+.ar time{font-size:11px;font-weight:700;color:#5B5F9E}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);padding:7px 4px 20px;background:#F7F8FF;border-top:1.5px solid #C9CEF5}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:#5B5F9E;text-decoration:none;position:relative;padding:3px 0;min-height:44px}
+.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabs .on{color:#FF2E88;font-weight:800}
+.tabs .on::before{content:"";position:absolute;top:-8px;width:22px;height:3px;border-radius:9px;background:#FF2E88}
+.new{font-size:9px;font-weight:900;background:#FFE45E;color:#1E1B5E;border-radius:6px;padding:2px 5px;letter-spacing:.05em;margin-left:6px;vertical-align:middle}
+</style>
+</helmet>
+<div class="ph">
+<div class="sc">
+  <div class="hd">
+    <button class="bk" aria-label="Quay lại"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div><small>Quản trị</small><h1>Tổng quan</h1></div>
+    <div class="sp"></div>
+    <span class="bdg">ADMIN</span>
+  </div>
+
+  <div class="stats">
+    <div class="st" style="background:#FFE45E"><span>Thành viên</span><b>5</b><i>4 đang hoạt động hôm nay</i></div>
+    <div class="st" style="background:#C9F3E6"><span>Thư đã gửi</span><b>128</b><i>94% đã nhận quà</i></div>
+    <div class="st" style="background:#FFD1EA"><span>Thẻ đã mở<em class="new">MỚI</em></span><b>312</b><i>+18 hôm nay</i></div>
+    <div class="st" style="background:#D6E8FF"><span>Hẹn giờ<em class="new">MỚI</em></span><b>2</b><i>gần nhất: 18/10 00:00</i></div>
+  </div>
+
+  <div class="q">
+    <button><span class="ic" style="background:#FF2E88"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></span>Gửi thư</button>
+    <button><span class="ic" style="background:#7B61FF"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-4-6-3-5 0M12 8c2-4 6-3 5 0"/></svg></span>Tặng quà</button>
+    <button><span class="ic" style="background:#35D0A5;color:#1E1B5E"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.5 3-5 6.5-5s5.900 1.500 6.500 5M17 11a3 3 0 100-6M18.500 15c2 .5 3 2 3.500 5"/></svg></span>Thành viên</button>
+    <button><span class="ic" style="background:#4CC9FF;color:#1E1B5E"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>Hẹn giờ</button>
+  </div>
+
+  <div class="ev">
+    <h2><span>Mùa Concept</span><span>Ngày 0/9</span></h2>
+    <p>18 – 26/10/2026 · còn 1 ngày nữa bắt đầu</p>
+    <div class="bar"><i></i></div>
+  </div>
+
+  <div class="card act">
+    <h2>Hoạt động gần đây <em>Xem tất cả</em></h2>
+    <div class="ar"><span class="av" style="background:#FF2E88">J</span><div><b>James</b> nhận quà thư “Chào mừng Mùa Concept”</div><time>2 phút</time></div>
+    <div class="ar"><span class="av" style="background:#7B61FF">M</span><div><b>Martin</b> điểm danh, chuỗi 12 ngày</div><time>1 giờ</time></div>
+    <div class="ar"><span class="av" style="background:#35D0A5;color:#1E1B5E">Y</span><div><b>Youngjae</b> mở gói, nhận thẻ SSS</div><time>3 giờ</time></div>
+    <div class="ar"><span class="av" style="background:#FFB02E;color:#1E1B5E">S</span><div>Thư “Nhắc điểm danh” gửi cho <b>tất cả</b></div><time>hôm qua</time></div>
+  </div>
+</div>
+<nav class="tabs" aria-label="Điều hướng admin">
+  <a href="Main.dc.html" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Tổng quan</a>
+  <a href="Send.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>Gửi thư</a>
+  <a href="Members.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c.6-3.500 3-5 6.500-5s5.900 1.500 6.500 5"/></svg>Thành viên</a>
+  <a href="History.dc.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Lịch sử</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

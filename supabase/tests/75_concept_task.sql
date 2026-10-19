@@ -11,7 +11,7 @@ declare a uuid := t.id('alice'); b uuid := t.id('bob'); r jsonb; cal uuid; sh uu
 begin
   perform t.as_super();
   delete from concept_ticks where user_id = a; delete from concept_packs where user_id = a;
-  delete from tasks where owner_id = a; delete from task_completions where user_id = a;
+  perform set_config('session_replication_role', 'replica', true); delete from day_locks where user_id = a; delete from tasks where owner_id = a; delete from task_completions where user_id = a; perform set_config('session_replication_role', 'origin', true);
   insert into friendships(requester, addressee, status) values (a, b, 'accepted') on conflict do nothing;
   select id into cal from calendars where owner_id = a order by created_at limit 1;
   perform t.as_user(a);
