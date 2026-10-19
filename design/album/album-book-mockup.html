@@ -35,12 +35,36 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .lbl{position:absolute;left:-20px;right:-20px;top:100%;margin-top:-2px;text-align:center;font-size:12px;font-weight:700;color:var(--soft);pointer-events:none}
 .hint{max-width:760px;margin:52px auto 0;text-align:center;font-size:12px;color:var(--soft)}
 
+/* kệ một cuốn + khoá */
+.row{min-height:300px}
+.bk3{--w:clamp(150px,44vw,230px)}
+.slot{display:flex;flex-direction:column;align-items:center}
+.slot.lk .bk3{filter:saturate(.55) brightness(.78)}
+.padl{position:absolute;left:50%;top:38%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:rgba(21,18,59,.86);border:2px solid rgba(255,255,255,.35);display:grid;place-items:center;color:var(--butter);z-index:3;pointer-events:none;box-shadow:0 8px 22px rgba(0,0,0,.5)}
+.padl .i{width:30px;height:30px}
+.slot.unl .padl{animation:padFly .9s ease forwards}
+@keyframes padFly{0%{transform:scale(1) rotate(0)}30%{transform:scale(1.25) rotate(-14deg)}100%{transform:translateY(-120px) scale(.3) rotate(40deg);opacity:0}}
+.slot.unl .bk3{animation:pop .9s ease}
+@keyframes pop{0%{filter:saturate(.55) brightness(.78)}40%{filter:saturate(1.4) brightness(1.5) drop-shadow(0 0 28px #FFE45E)}100%{filter:none}}
+.slot.shake .bk3{animation:shk .45s}
+@keyframes shk{0%,100%{translate:0}20%{translate:-8px}40%{translate:8px}60%{translate:-5px}80%{translate:5px}}
+.prog{margin-top:44px;font-size:12px;font-weight:800;color:var(--soft);display:flex;align-items:center;gap:8px}
+.prog i{display:block;width:92px;height:7px;border-radius:9px;background:var(--line);overflow:hidden}.prog i b{display:block;height:100%;background:var(--butter);border-radius:9px}
+.spark{position:absolute;width:7px;height:7px;border-radius:50%;pointer-events:none;z-index:4;animation:spk 1s ease-out forwards}
+@keyframes spk{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+.modal{position:fixed;inset:0;z-index:30;display:none;align-items:flex-end;justify-content:center;background:rgba(10,8,34,.6)}
+.modal.on{display:flex;animation:fadeIn .25s both}
+.msheet{width:min(460px,100%);background:var(--bg2);border:1.5px solid var(--line);border-radius:22px 22px 0 0;padding:20px 18px max(20px,env(safe-area-inset-bottom))}
+.msheet h2{margin:0 0 4px;font-size:18px}.msheet p{margin:0 0 12px;font-size:13px;color:var(--soft);line-height:1.5}
+.cd{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1.5px dashed var(--line);font-size:13.5px;font-weight:700}
+.cd:first-of-type{border-top:0}.cd .ck{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:900;background:var(--line);color:var(--soft);flex:none}
+.cd.ok .ck{background:var(--mint);color:#1E1B5E}.cd.ok{color:var(--ink)}.cd:not(.ok){color:var(--soft)}
 /* bìa mẫu (thay bằng ảnh bìa thật) */
 .cover{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:12px;color:#fff;background:linear-gradient(155deg,var(--c1),var(--c2))}
 .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 50% at 20% 0%,rgba(255,255,255,.4),transparent 60%),linear-gradient(100deg,rgba(0,0,0,.28) 0 5%,rgba(255,255,255,.12) 6% 7%,transparent 9%)}
-.cover b{position:relative;font-size:clamp(11px,2.4vw,15px);letter-spacing:.2em;font-weight:900;text-transform:uppercase}
-.cover i{position:relative;font-style:normal;font-size:clamp(17px,3.4vw,24px);font-weight:900;line-height:1.05;text-shadow:0 2px 10px rgba(0,0,0,.35)}
-.cover small{position:relative;font-size:10px;font-weight:700;opacity:.85;letter-spacing:.08em}
+.cover b{color:#0d0d0d;position:relative;font-size:clamp(11px,2.4vw,15px);letter-spacing:.2em;font-weight:900;text-transform:uppercase}
+.cover i{position:relative;font-style:normal;font-size:clamp(20px,4.2vw,30px);font-weight:900;line-height:.92;letter-spacing:-.04em;color:#0d0d0d}
+.cover small{color:#0d0d0d;position:relative;font-size:10px;font-weight:700;opacity:.85;letter-spacing:.08em}
 .cover .gloss{position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.28) 48%,transparent 60%);transform:translateX(-120%);animation:gl 5s ease-in-out infinite}
 @keyframes gl{0%,55%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
 
@@ -94,7 +118,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 <body>
 <div class="top">
   <div><h1>Album của mình</h1><div class="sub">Bộ sưu tập › Album · bản mockup, ảnh mẫu</div></div>
-  <span class="chip">3 cuốn</span>
+  <span class="chip">1 cuốn</span>
 </div>
 
 <div class="shelf">
@@ -102,6 +126,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
   <div class="hint">Chạm vào sách để mở · rê hoặc nghiêng điện thoại để xoay</div>
 </div>
 
+<div class="modal" id="lockM" role="dialog" aria-modal="true"><div class="msheet"><h2>Album còn đang khoá</h2><p>Hoàn thành các điều kiện của Mùa Concept để mở cuốn album.</p><div id="conds"></div><button class="btn" id="tryUnlock" style="width:100%;margin-top:12px;background:var(--pink);border-color:var(--pink);color:#fff;min-height:46px">Mở khoá thử (chỉ có ở mockup)</button><button class="btn" id="lockX" style="width:100%;margin-top:8px;min-height:44px">Đóng</button></div></div>
 <div class="reader" id="reader" aria-modal="true" role="dialog">
   <div class="rbar">
     <button class="btn" id="close">← Về kệ</button>
@@ -124,13 +149,14 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 <script>
 (function(){
 const BOOKS=[
- {t:'Album 01',n:'First\nAlbum',c1:'#FF2E88',c2:'#7B61FF',sub:'12 trang',p:5},
- {t:'Album 02',n:'Second\nAlbum',c1:'#4CC9FF',c2:'#2F4BFF',sub:'12 trang',p:5},
- {t:'Album 03',n:'Third\nAlbum',c1:'#FFB02E',c2:'#FF2E88',sub:'12 trang',p:5}
+ {t:'GREENGREEN',n:'GREEN<br>GREEN',c1:'#5C7A63',c2:'#8DB69A',sub:'Mini Album · 2026.05.04',p:5}
 ];
+/* điều kiện mở sách (mockup: bấm "Mở khoá thử" để xem hiệu ứng) */
+const CONDS=[['Gom đủ concept Urichinguchana',true],['Gom đủ concept Aniyaaa',true],['Gom đủ concept Poyoyoi',false]];
+let UNLOCKED=false;
 const PAL=[['#FF2E88','#FFB02E'],['#4CC9FF','#7B61FF'],['#35D0A5','#4CC9FF'],['#FFE45E','#FF9A5C'],['#7B61FF','#FF2E88'],['#FF9A5C','#FF2E88'],['#35D0A5','#FFE45E'],['#4CC9FF','#35D0A5']];
 const $=s=>document.querySelector(s), row=$('#row');
-const coverHTML=b=>`<div class="cover" style="--c1:${b.c1};--c2:${b.c2}"><b>CORTIS</b><i>${b.n.replace('\n','<br>')}</i><small>${b.sub.toUpperCase()}</small><span class="gloss"></span></div>`;
+const coverHTML=b=>`<div class="cover" style="--c1:${b.c1};--c2:${b.c2}"><b>CORTIS</b><i>${b.n}</i><small>${b.sub.toUpperCase()}</small><span class="gloss"></span></div>`;
 
 /* ---- kệ sách ---- */
 BOOKS.forEach((b,i)=>{
@@ -140,12 +166,31 @@ BOOKS.forEach((b,i)=>{
    <div class="spine"><span>CORTIS · ${b.t.toUpperCase()}</span></div><div class="edge"></div><div class="tp"></div><div class="bt"></div><div class="shadow"></div>`;
   el.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;const r=el.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.classList.add('tilt');el.style.transform=`rotateY(${18-x*34}deg) rotateX(${-4-y*18}deg) translateY(-6px)`});
   el.addEventListener('pointerleave',()=>{el.classList.remove('tilt');el.style.transform=''});
-  el.addEventListener('click',()=>openBook(i));
-  const slot=document.createElement('div');slot.className='slot';slot.appendChild(el);slot.insertAdjacentHTML('beforeend',`<div class="lbl">${b.t}</div>`);row.insertBefore(slot,row.querySelector('.plank'));
+  el.addEventListener('click',()=>{if(UNLOCKED)openBook(i);else{const sl=el.closest('.slot');sl.classList.remove('shake');void sl.offsetWidth;sl.classList.add('shake');showLock()}});
+  const slot=document.createElement('div');slot.className='slot';slot.appendChild(el);slot.classList.add('lk');slot.insertAdjacentHTML('beforeend',`<span class="padl" id="padl">${'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>'}</span><div class="lbl">${b.t}</div><div class="prog" id="prog"></div>`);row.insertBefore(slot,row.querySelector('.plank'));
 });
 /* nghiêng theo con quay (nếu có) */
 addEventListener('deviceorientation',e=>{if(e.gamma==null||$('#reader').classList.contains('on'))return;const g=Math.max(-25,Math.min(25,e.gamma));document.querySelectorAll('.bk3:not(:hover)').forEach(el=>{el.style.transform=`rotateY(${32-g*.8}deg) rotateX(-4deg)`})},{passive:true});
 
+/* ---- khoá / mở khoá ---- */
+function refreshLock(){
+  const have=CONDS.filter(c=>c[1]).length,pr=$('#prog');
+  if(pr)pr.innerHTML=UNLOCKED?'<span style="color:var(--mint)">Đã mở khoá · chạm để đọc</span>':`Mở khoá ${have}/${CONDS.length}<i><b style="width:${have/CONDS.length*100}%"></b></i>`;
+  const cd=$('#conds');if(cd)cd.innerHTML=CONDS.map(c=>`<div class="cd ${c[1]?'ok':''}"><span class="ck">${c[1]?'✓':''}</span>${c[0]}</div>`).join('');
+}
+function showLock(){refreshLock();$('#lockM').classList.add('on')}
+$('#lockX').onclick=()=>$('#lockM').classList.remove('on');
+$('#lockM').addEventListener('click',e=>{if(e.target.id==='lockM')$('#lockM').classList.remove('on')});
+$('#tryUnlock').onclick=()=>{
+  $('#lockM').classList.remove('on');
+  CONDS.forEach(c=>c[1]=true);UNLOCKED=true;refreshLock();
+  const sl=document.querySelector('.slot');sl.classList.add('unl');hiss();
+  const r=sl.getBoundingClientRect(),cx=r.width/2,cy=r.height*.4;
+  for(let i=0;i<26&&!reduce;i++){const e=document.createElement('i');e.className='spark';const a=Math.random()*6.28,d=60+Math.random()*110;
+    e.style.cssText=`left:${cx}px;top:${cy}px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px;background:${['#FFE45E','#FF2E88','#4CC9FF','#35D0A5'][i%4]};animation-delay:${Math.random()*.15}s`;sl.appendChild(e);setTimeout(()=>e.remove(),1300)}
+  setTimeout(()=>{sl.classList.remove('lk','unl');const pd=sl.querySelector('.padl');if(pd)pd.remove()},900);
+};
+refreshLock();
 /* ---- trình đọc ---- */
 const book=$('#book'),reader=$('#reader'),uL=$('#uL'),uR=$('#uR');
 let leaves=[],N=0,cur=0,busy=0,cfg=null,snd=true,ac=null;
