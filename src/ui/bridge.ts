@@ -316,6 +316,11 @@ export const bridge = {
   markNotifRead: (ref: string | null) => { api.markNotificationsRead(ref ? [ref] : undefined).catch(() => undefined) },
   adminSendMail: (a: Parameters<typeof api.adminSendMail>[0]) => wrap(api.adminSendMail(a)),
   adminSent: () => wrap(api.adminSent()),
+  adminOverview: () => wrap(api.adminOverview()),
+  adminMembers: () => wrap(api.adminMembers()),
+  adminCancelMail: (id: string) => wrap(api.adminCancelMail(id)),
+  adminSendNow: (id: string) => wrap(api.adminSendNow(id)),
+  adminNudgeMail: (id: string) => wrap(api.adminNudgeMail(id)),
 
   // ----- thời gian thực -----
   startRealtime() {

@@ -83,40 +83,6 @@ function openDup(){const own=Object.entries(S.own).map(([id,o])=>({c:CBY[id],o})
  ${top?`<div class="card-b dupt"><span class="dtr">${ic('crown')}</span><div style="min-width:0"><small>Nhận nhiều nhất</small><b>${esc(top.c.name)}</b></div><span class="dtn">×${top.o.n}</span></div>`:''}
  <div class="sub" style="padding:10px 18px 0">Thẻ trùng vẫn có giá trị: số lần nhận được lưu để bạn biết thẻ nào “có duyên” với mình. Thẻ sự kiện tính riêng, không vào “đủ bộ”.</div>
  ${group.length?group.map(g=>`<div class="sec" style="--rc:${RCOL[g.r]}"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:${RCOL[g.r]};box-shadow:0 0 8px ${RCOL[g.r]}"></i>${g.r==='event'?'Sự kiện':NAME[g.r]}</span><small>${g.list.length} thẻ trùng</small></div><div class="card-b" style="margin-top:4px;padding:6px 14px">${g.list.map(x=>`<button class="duprow" data-act="view" data-cid="${x.c.id}"><span class="dth">${cardHTML(x.c,{w:'100%',thumb:1})}</span><span class="dtx"><b>${esc(x.c.name)}</b><small>Lần đầu ${esc(x.o.date)} · ${esc(x.o.src)}</small></span><span class="dtn">×${x.o.n}</span></button>`).join('')}</div>`).join(''):`<div class="empty"><div class="ei">${ic('cards')}</div>Bạn chưa có thẻ trùng nào.</div>`}</div>`;openPage('pgDup')}
-/* ===== trang admin gửi thư ===== */
-const ADM={to:'all',users:[],gifts:[],kind:'card',rar:'any',saver:1,title:'',sched:'now',cid:'',cf:'event',hist:[]};
-function admKeep(fn){const keep={t:($('#att')||{}).value||'',b:($('#atb')||{}).value||''};fn();renderAdmin();$('#att').value=keep.t;$('#atb').value=keep.b;$('#atc').textContent=keep.b.length+'/600'}
-const CFLT=[['event','Sự kiện'],['supreme','Bá khí'],['legend','Huyền Thoại'],['rare','Hiếm'],['common','Thường']];
-const GRAR={any:'Ngẫu nhiên',common:'Thường',rare:'Hiếm',legendary:'Huyền Thoại',supreme:'Bá khí'};
-const GIFTLBL=g=>g.type==='card'?`1 thẻ ${GRAR[g.rarity]||'ngẫu nhiên'}`:g.type==='rescue'?`${g.qty} thẻ cứu`:g.type==='card_id'?`Thẻ: ${(CBY[g.id]||{name:g.id}).name}`:`Khung/danh hiệu: ${(TMAP[g.id]||{name:g.id}).name}`;
-async function openAdmin(){if(!ADM.title&&TITLES[0])ADM.title=TITLES[0].id;renderAdmin();openPage('pgAdmin');try{const h=await API.adminSent();ADM.hist=h.map(x=>({t:x.title,to:`${x.recipients} người`,g:x.gifts.length?x.gifts.map(GIFTLBL).join(', '):'Không có quà',d:fmtDT(x.created_at)}));renderAdmin()}catch(e){}}
-const fmtDT=iso=>{const d=new Date(iso);return `${pad(d.getDate())}/${pad(d.getMonth()+1)} · ${pad(d.getHours())}:${pad(d.getMinutes())}`};
-function renderAdmin(){const A=ADM;const tl=[...EVT,...WELCOME,...TITLES];
- $('#pgAdmin').innerHTML=`<div class="ptop"><button class="ibtn" data-act="back" data-p="pgAdmin" aria-label="Quay lại">${ic('left')}</button><h1>Gửi thư (admin)</h1><span class="chip on" style="font-size:10.5px">${ic('crown')} Admin</span></div>
- <div class="pbody"><div class="card-b" style="margin-top:6px"><h2>Người nhận</h2>
-  <div class="iseg a2 ${A.to==='some'?'r':''}" style="margin-top:8px"><i></i><button class="${A.to==='all'?'on':''}" data-x="ato" data-v="all">Tất cả</button><button class="${A.to==='some'?'on':''}" data-x="ato" data-v="some">Theo username</button></div>
-  ${A.to==='some'?`<div class="achips">${A.users.map((u,i)=>`<span class="chip on">@${esc(u)} <b data-x="aur" data-i="${i}" style="cursor:pointer">×</b></span>`).join('')}</div><div class="arow"><input class="in" id="aun" placeholder="username, rồi bấm Thêm" autocomplete="off" autocapitalize="off"><button class="btn-s" data-x="aua">Thêm</button></div>`:`<div class="sub" style="margin-top:8px">Gửi cho toàn bộ tài khoản đang hoạt động.</div>`}</div>
- <div class="card-b"><h2>Nội dung thư</h2><input class="in" id="att" maxlength="60" placeholder="Tiêu đề (tối đa 60 ký tự)" autocomplete="off"><textarea class="in" id="atb" rows="4" maxlength="600" placeholder="Lời nhắn gửi bạn bè..."></textarea><div class="sub" id="atc">0/600</div></div>
- <div class="card-b"><h2>Quà đính kèm <em>${A.gifts.length}</em></h2><div class="sub">Quà admin là quà bổ sung, không tính vào hạn mức 2 thẻ mỗi ngày và không khóa ngày.</div>
-  <div class="gsel"><button class="chip ${A.kind==='card'?'on':''}" data-x="agk" data-v="card">Thẻ ngẫu nhiên</button><button class="chip ${A.kind==='cardid'?'on':''}" data-x="agk" data-v="cardid">Thẻ cụ thể</button><button class="chip ${A.kind==='rescue'?'on':''}" data-x="agk" data-v="rescue">Thẻ cứu</button><button class="chip ${A.kind==='title'?'on':''}" data-x="agk" data-v="title">Khung và danh hiệu</button></div>
-  ${A.kind==='card'?`<div class="gsel">${['any','common','rare','legendary','supreme'].map(r=>`<button class="chip ${A.rar===r?'on':''}" data-x="agr" data-v="${r}">${GRAR[r]}</button>`).join('')}</div>`:''}
-  ${A.kind==='rescue'?`<div class="step"><button class="ibtn sm" data-x="ags" data-v="-1">−</button><b>${A.saver}</b><button class="ibtn sm" data-x="ags" data-v="1">+</button><span class="sub">thẻ cứu (tối đa 5)</span></div>`:''}
-  ${A.kind==='cardid'?`<div class="gsel">${CFLT.map(x=>`<button class="chip ${A.cf===x[0]?'on':''}" data-x="agf" data-v="${x[0]}">${x[1]}</button>`).join('')}</div><div class="agrid">${ALLCARDS.filter(c=>c.r===A.cf).sort((a,b)=>(a.ev<b.ev?-1:a.ev>b.ev?1:0)||a.sort-b.sort).map(c=>`<button class="agc ${A.cid===c.id?'on':''}" data-x="agc" data-v="${c.id}"><span class="agth" style="--ar:${c.ar}">${cardHTML(c,{w:'100%',thumb:1})}</span><small>${esc(c.name)}</small></button>`).join('')||'<div class="sub">Không có thẻ nào.</div>'}</div>`:''}
-  ${A.kind==='title'?`<div class="agrid t2">${tl.map(t=>`<button class="agc agt ${A.title===t.id?'on':''}" data-x="agp" data-v="${t.id}"><span class="agav">${avatar(ME,64,t.id)}</span><span class="agtf">${titleFrame(t.id,t.name,30)}</span><small>${esc(t.name)}</small></button>`).join('')}</div>`:''}
-  <button class="btn-s pink" data-x="aga" style="margin-top:8px">${ic('plus')} Thêm quà này</button>
-  <div class="achips">${A.gifts.map((g,i)=>`<span class="chip on">${esc(GIFTLBL(g))} <b data-x="agd" data-i="${i}" style="cursor:pointer">×</b></span>`).join('')}</div></div>
- <div class="card-b"><h2>Thời gian gửi</h2><div class="iseg a2 ${A.sched==='later'?'r':''}" style="margin-top:8px"><i></i><button class="${A.sched==='now'?'on':''}" data-x="asc" data-v="now">Gửi ngay</button><button class="${A.sched==='later'?'on':''}" data-x="asc" data-v="later">Hẹn giờ</button></div>${A.sched==='later'?`<input class="in" id="adt" type="datetime-local">`:''}</div>
- <div style="padding:0 14px"><button class="big alt" data-x="aprev">${ic('mail')} Xem trước thư</button><button class="big" data-x="asend">${ic('send')} Gửi thư</button><div class="sub" style="text-align:center;margin-top:8px">Mỗi thư chỉ gửi một lần. Quà đã gửi không thu hồi được.</div></div>
- <div class="nsec" style="margin-top:14px">Đã gửi gần đây</div>${A.hist.map(h=>`<div class="card-b" style="margin-top:8px;padding:11px 14px"><b style="font-size:13.5px">${esc(h.t)}</b><div class="sub" style="margin-top:2px">${esc(h.to)} · ${esc(h.g)} · ${esc(h.d)}</div></div>`).join('')}</div>`;
- const tb=$('#atb');if(tb)tb.oninput=()=>{$('#atc').textContent=tb.value.length+'/600'}}
-function adminDraft(){const t=($('#att')||{}).value||'',b=($('#atb')||{}).value||'';return {t:t.trim(),b:b.trim()}}
-function adminCheck(){const d=adminDraft();if(!d.t)return 'Nhập tiêu đề thư';if(!d.b)return 'Nhập nội dung thư';if(ADM.to==='some'&&!ADM.users.length)return 'Thêm ít nhất 1 username người nhận';if(ADM.sched==='later'&&!($('#adt')||{}).value)return 'Chọn thời gian hẹn giờ';return ''}
-function adminPreview(){const e=adminCheck();if(e){toast(e);return}const d=adminDraft();
- openSheet(`<h2>Xem trước</h2><div class="sub">Người nhận sẽ thấy thư như thế này.</div><div class="letter gift" style="margin:12px 0 0;width:100%;cursor:default"><div class="lbody"><span class="seal">${ic('gift')}</span><h3>${esc(d.t)}</h3><p>${esc(d.b)}</p><div class="meta"><span>${ADM.sched==='now'?'Vừa xong':'Hẹn giờ'}</span>${ADM.gifts.map(g=>`<span class="gp2">${esc(GIFTLBL(g))}</span>`).join('')}</div></div></div><button class="big gh" data-x="cfno">Đóng</button>`)}
-function adminSend(){const e=adminCheck();if(e){toast(e);return}const d=adminDraft(),n=ADM.to==='all'?0:ADM.users.length,at=ADM.sched==='later'?new Date($('#adt').value).toISOString():null;
- confirmSheet({icon:'send',title:`Gửi cho ${ADM.to==='all'?'tất cả tài khoản':n+' người'}?`,body:`Thư “${esc(d.t)}”${ADM.gifts.length?` kèm ${ADM.gifts.map(GIFTLBL).join(', ')}`:''}${ADM.sched==='later'?' sẽ được hẹn giờ gửi':' sẽ gửi ngay'}. Không thể thu hồi sau khi gửi.`,okText:'Xác nhận gửi',ok:async()=>{
-  try{await API.adminSendMail({title:d.t,body:d.b,gifts:ADM.gifts,usernames:ADM.to==='all'?null:ADM.users,at});ADM.gifts=[];ADM.users=[];closeSheet();await API.reload();renderAll();openAdmin();toast(ADM.sched==='now'?'Đã gửi thư':'Đã hẹn giờ gửi thư')}
-  catch(er){const m=String((er&&er.message)||'');if(/UNKNOWN_USERNAMES:(.*)/.test(m))toast('Không có username: '+m.match(/UNKNOWN_USERNAMES:(.*)/)[1]);else apiFail(er)}}})}
 /* ===== màn lỗi ===== */
 const ERRS={
  load:{ic:'wifioff',tone:'#4CC9FF',t:'Chưa tải được dữ liệu',p:'Có thể mạng đang chậm. Dữ liệu của bạn vẫn an toàn, bạn chưa mất gì.',b:[['Thử lại','retry'],['Xem bản đã lưu','dis','gh']]},
@@ -247,6 +213,7 @@ function bdCheck(v){if(!v)return {ok:true,msg:''};const d=new Date(v+'T00:00:00'
  if(d>new Date(TODAY.y,TODAY.m,TODAY.d))return {ok:false,msg:'Ngày sinh không thể ở tương lai'};if(d<new Date(1940,0,1))return {ok:false,msg:'Hãy nhập năm sinh từ 1940'};return {ok:true,msg:''}}
 /* ===== điều khiển ===== */
 document.addEventListener('click',e=>{const t=e.target.closest('[data-x]');if(!t)return;const a=t.dataset.x,d=t.dataset;
+ if(admAct(a,d))return;
  switch(a){
  case 'notif':openNotif();break;
  case 'nopen':{const n=NOTIFS.find(x=>x.id===d.id);if(!n)break;if(n.kind==='req'||n.kind==='inv')break;if(!n.read){n.read=true;API.markNotifRead(n.ref)}if(n.go){closePage('pgNotif');renderAll();if(n.go==='mail')openMail();else go(n.go)}else{renderNotif();renderAll()}break}
@@ -271,23 +238,6 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-x]');if(!t
  case 'cfno':closeSheet();break;
  case 'dup':openDup();break;
  case 'admin':openAdmin();break;
- case 'ato':ADM.to=d.v;renderAdmin();break;
- case 'aua':{const i=$('#aun'),v=i.value.trim().toLowerCase().replace(/^@/,'');if(!/^[a-z0-9_]{4,19}$/.test(v)){toast('Username 4 đến 19 ký tự: chữ thường, số, gạch dưới');break}if(!ADM.users.includes(v))ADM.users.push(v);renderAdmin();break}
- case 'aur':ADM.users.splice(+d.i,1);renderAdmin();break;
- case 'agk':admKeep(()=>{ADM.kind=d.v});break;
- case 'agr':admKeep(()=>{ADM.rar=d.v});break;
- case 'ags':admKeep(()=>{ADM.saver=Math.max(1,Math.min(5,ADM.saver+(+d.v)))});break;
- case 'agf':admKeep(()=>{ADM.cf=d.v});break;
- case 'agc':admKeep(()=>{ADM.cid=d.v});break;
- case 'agp':admKeep(()=>{ADM.title=d.v});break;
- case 'aga':{const k=ADM.kind;const sel=$('#agt');if(sel)ADM.title=sel.value;
-  if(k==='cardid'&&!ADM.cid){toast('Chọn một thẻ trước');break}
-  const g=k==='card'?{type:'card',rarity:ADM.rar}:k==='cardid'?{type:'card_id',id:ADM.cid}:k==='rescue'?{type:'rescue',qty:ADM.saver}:{type:'title',id:ADM.title};
-  if(ADM.gifts.length>=4){toast('Mỗi thư đính kèm tối đa 4 quà');break}const keep={t:($('#att')||{}).value,b:($('#atb')||{}).value};ADM.gifts.push(g);renderAdmin();$('#att').value=keep.t||'';$('#atb').value=keep.b||'';$('#atc').textContent=($('#atb').value.length)+'/600';break}
- case 'agd':{const keep={t:$('#att').value,b:$('#atb').value};ADM.gifts.splice(+d.i,1);renderAdmin();$('#att').value=keep.t;$('#atb').value=keep.b;$('#atc').textContent=keep.b.length+'/600';break}
- case 'asc':{const keep={t:$('#att').value,b:$('#atb').value};ADM.sched=d.v;renderAdmin();$('#att').value=keep.t;$('#atb').value=keep.b;$('#atc').textContent=keep.b.length+'/600';break}
- case 'aprev':adminPreview();break;
- case 'asend':adminSend();break;
  case 'err':errAct(d.v,t);break;
  case 'events':eventsSheet();break;
  case 'setbd':editProfile();break;

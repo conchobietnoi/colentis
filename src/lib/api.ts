@@ -118,6 +118,11 @@ export const api = {
   adminSendMail: (a: { title: string; body: string; gifts: unknown[]; usernames?: string[] | null; at?: string | null }) =>
     rpc<{ mail_id: string; recipients: number }>('admin_send_mail', { title: a.title, body: a.body, gifts: a.gifts, usernames: a.usernames ?? null, at: a.at ?? null }),
   adminSent: () => rpc<any[]>('admin_sent_mails'),
+  adminOverview: () => rpc<any>('admin_overview'),
+  adminMembers: () => rpc<any[]>('admin_members'),
+  adminCancelMail: (id: string) => rpc<null>('admin_cancel_mail', { mid: id }),
+  adminSendNow: (id: string) => rpc<number>('admin_send_now', { mid: id }),
+  adminNudgeMail: (id: string) => rpc<number>('admin_nudge_mail', { mid: id }),
   notifications: () => q<Notification[]>(supabase.from('notifications').select('*').order('created_at', { ascending: false }).limit(60)),
   markNotificationsRead: (ids?: string[]) => rpc<void>('mark_notifications_read', { ids: ids ?? null }),
   sendCheer: (to_id: string) => rpc<void>('send_cheer', { to_id }),
