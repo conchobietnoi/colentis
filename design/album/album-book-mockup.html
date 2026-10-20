@@ -101,6 +101,22 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .face.f .pgno{right:12px}.face.back .pgno{left:12px}
 .face.endpaper{background:linear-gradient(135deg,#4a9aa7,#2E7C8A);display:flex;align-items:center;justify-content:center;color:rgba(13,13,13,.6);font-weight:900;letter-spacing:.3em;font-size:13px}
 
+
+.pg.cr2{container-type:inline-size;padding:0;display:grid;grid-template-columns:1.15fr 1fr;gap:0;color:#1f5b66;background:radial-gradient(120% 90% at 100% 100%,rgba(255,46,136,.07),transparent 55%),#f6f6f2}
+.cr2 .cl{padding:6.5cqw 4cqw 6cqw 8cqw;display:flex;flex-direction:column;border-right:.35cqw solid rgba(31,91,102,.16)}
+.cr2 .cl small{font-size:2.1cqw;font-weight:800;letter-spacing:.14em;opacity:.7;white-space:nowrap}
+.cr2 .cl b{margin-top:2cqw;font-size:7.8cqw;line-height:.88;letter-spacing:-.05em;font-weight:900;color:#0d0d0d}
+.cr2 .cl em{margin-top:1.6cqw;font-style:normal;font:600 2.3cqw ui-monospace,Menlo,monospace;color:#3d8795}
+.cr2 .cl ol{margin:3cqw 0 0;padding:0;list-style:none;font-size:2.35cqw;font-weight:700;line-height:1.6}
+.cr2 .cl li{display:flex;gap:2.4cqw;border-top:.3cqw solid rgba(31,91,102,.13)}
+.cr2 .cl li i{font:600 2cqw/1.9 ui-monospace,Menlo,monospace;font-style:normal;color:#FF2E88}
+.cr2 .cc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqw;padding:6cqw 6cqw}
+.cr2 .seal{width:27cqw;height:27cqw;display:block}
+.cr2 .dots{display:flex;gap:1.5cqw}
+.cr2 .dots u{width:2.8cqw;height:2.8cqw;border-radius:50%;background:linear-gradient(135deg,#FF2E88,#FFB02E);opacity:calc(.55 + var(--k)*.056)}
+.cr2 .cc p{margin:0;text-align:center;font-size:2.5cqw;line-height:1.6;font-weight:600;color:#3d8795}
+.cr2 .cc strong{color:#FF2E88;font-weight:800}
+
 /* lớp lật FlipHTML5 */
 .fl{backface-visibility:visible}.fl .fx{display:block;pointer-events:none}
 /* (cũ) dải trang */
@@ -113,7 +129,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 /* bố cục trang mẫu */
 .face{background:#f6f6f2}
 .pg.tt,.pg.cr{align-items:center;justify-content:center;text-align:center;color:#1f5b66;padding:0}
-.pg.tt b{font-size:clamp(9px,2.4vw,15px);letter-spacing:-.04em;font-weight:900;transform:rotate(-8deg)}
+.pg.tt b{font-size:clamp(9px,2.4vw,15px);letter-spacing:-.04em;font-weight:900}
 .pg.tt small{font:500 clamp(4px,.9vw,6px) ui-monospace,monospace;margin-top:4px;color:#3d8795}
 .pg.cr{gap:6px}.pg.cr b{letter-spacing:.3em;font-size:clamp(8px,1.8vw,11px)}.pg.cr p{margin:0;font-size:clamp(5.5px,1.2vw,8px);line-height:1.5;font-weight:600}.pg.cr p.s{opacity:.55}
 .pg{position:absolute;inset:0;padding:9% 9% 12%;display:flex;flex-direction:column;gap:6%}
@@ -220,7 +236,7 @@ function photo(n,k){if(IMGS&&IMGS.pages&&IMGS.pages[n-1])return `<div class="ph 
 function page(n){ /* n = số trang; 2 = trang tên, 3–22 = 20 ảnh STREET (ngang 3:2, tràn trang), 25 = credit */
   if(n===2)return `<div class="pg tt"><b>GREENGREEN</b><small>34.09035° N, 118.34873° W</small></div>`;
   if(n>=3&&n<=22)return `<div class="pg full">${photo(n-2,n)}</div>`;
-  if(n===23)return `<div class="pg cr"><b>CORTIS</b><p>2nd Mini Album<br>GREENGREEN<br>STREET ver.</p><p class="s">Credit · lời bài hát · thông tin<br>(chữ in nhỏ như bản thật)</p></div>`;
+  if(n===23)return `<div class="pg cr2"><div class="cl"><small>CORTIS · 2ND MINI ALBUM</small><b>GREEN<br>GREEN</b><em>STREET ver.</em><ol><li><i>01</i>TNT</li><li><i>02</i>REDRED</li><li><i>03</i>ACAI</li><li><i>04</i>YOUNGCREATORCREW</li><li><i>05</i>Wassup</li><li><i>06</i>Blue Lips</li></ol></div><div class="cc"><svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="sealp" d="M50 50 m-39 0 a39 39 0 1 1 78 0 a39 39 0 1 1 -78 0"/></defs><circle cx="50" cy="50" r="47" fill="none" stroke="#FF2E88" stroke-width="1.3"/><circle cx="50" cy="50" r="27" fill="none" stroke="#FF2E88" stroke-width=".7" stroke-dasharray="2 2.4"/><text font-size="7.4" font-weight="800" fill="#FF2E88"><textPath href="#sealp" startOffset="0" textLength="243" lengthAdjust="spacing">COLENTIS · MÙA CONCEPT · 18–26.10.2026 ·</textPath></text><path d="M38 51.5 l8 8 l16-18" fill="none" stroke="#FF2E88" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="dots"><u style="--k:0"></u><u style="--k:1"></u><u style="--k:2"></u><u style="--k:3"></u><u style="--k:4"></u><u style="--k:5"></u><u style="--k:6"></u><u style="--k:7"></u><u style="--k:8"></u></div><p>Sưu tầm tại <strong>Colentis</strong><br>Hoàn thành 9/9 ngày</p></div></div>`;
   return `<div class="pg"></div>`;
 }
 function leafHTML(i,b){
@@ -307,7 +323,7 @@ function zFinal(i){return i<cur?i+1:N-i}
 function updateUI(){
   uL.style.width=(cur*TH)+'px';uR.style.width=((N-cur)*TH)+'px';
   book.querySelector('.board.l').style.opacity=cur===0?0:1;book.querySelector('.under.l').style.opacity=cur===0?0:1;
-  $('#cnt').textContent=cur===0?'Bìa':cur===N?'Bìa sau':`Trang ${2*cur}–${2*cur+1} / ${2*N-1}`;
+  $('#cnt').textContent=cur===0?'Bìa':cur===N?'Bìa sau':`Trang ${2*cur-1}–${2*cur} / ${2*N-1}`;
   $('#prev').disabled=cur===0;$('#next').disabled=cur===N;
   layout();
 }
