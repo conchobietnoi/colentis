@@ -101,7 +101,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .btn{font:inherit;font-weight:700;font-size:13px;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:8px 14px;cursor:pointer}
 .btn:active{transform:scale(.96)}
 .btn[disabled]{opacity:.35;cursor:default}
-.stage{perspective:2200px;perspective-origin:50% 40%;width:calc(var(--pw)*2);height:calc(var(--pw)*.6667);position:relative;touch-action:pan-y}
+.stage{perspective:2200px;perspective-origin:50% 40%;width:calc(var(--pw)*2);height:calc(var(--pw)*.6667);position:relative;touch-action:none}
 .book{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.8,.2,1);transform:translateX(-25%) rotateX(8deg)}
 .under{position:absolute;top:2px;bottom:2px;background:repeating-linear-gradient(90deg,#f1eefb 0 1.5px,#cdc8e6 1.5px 3px);border-radius:2px;transition:width .5s}
 .under.r{left:50%;transform:translateZ(-2px)}
@@ -172,6 +172,9 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .reader .btn[hidden]{display:none}
 .empty{text-align:center;color:var(--soft);font-size:13.5px;line-height:1.6;margin:40px 16px}
 .rbar .btn{padding:7px 11px;font-size:12px}
+.reader,.reader *{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.reader .btn{touch-action:manipulation}
+html,body{overscroll-behavior:none;position:fixed;inset:0;width:100%}
 </style>
 </head>
 <body>
@@ -433,6 +436,8 @@ function hiss(){
     s.connect(f);f.connect(g);g.connect(ac.destination);s.start();
   }catch(_){}
 }
+/* iOS PWA: chặn cuộn/đàn hồi trang khi kéo lật (nhất là lúc xoay ngang, hướng lật trùng hướng cuộn dọc) */
+['touchstart','touchmove'].forEach(t=>reader.addEventListener(t,e=>{if(reader.classList.contains('on')&&!e.target.closest('.btn'))e.preventDefault()},{passive:false}));
 /* ---- toàn màn hình + xoay ngang ---- */
 function fit(){const land=innerWidth>innerHeight;if(ROT&&land)ROT=false,reader.classList.remove('rot');
   const W=ROT?innerHeight:innerWidth,H=ROT?innerWidth:innerHeight;
