@@ -110,7 +110,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .cr2 .cl ol{margin:3cqw 0 0;padding:0;list-style:none;font-size:2.35cqw;font-weight:700;line-height:1.6}
 .cr2 .cl li{display:flex;gap:2.4cqw;border-top:.3cqw solid rgba(31,91,102,.13)}
 .cr2 .cl li i{font:600 2cqw/1.9 ui-monospace,Menlo,monospace;font-style:normal;color:#FF2E88}
-.cr2 .cc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqw;padding:6cqw 6cqw}
+.cr2 .cc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5cqw;padding:6cqw 6cqw}
 .cr2 .seal{width:27cqw;height:27cqw;display:block}
 .cr2 .dots{display:flex;gap:1.5cqw}
 .cr2 .dots u{width:2.8cqw;height:2.8cqw;border-radius:50%;background:linear-gradient(135deg,#FF2E88,#FFB02E);opacity:calc(.55 + var(--k)*.056)}
@@ -159,7 +159,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
   <div class="hint">Chạm vào sách để mở · rê hoặc nghiêng điện thoại để xoay</div>
 </div>
 
-<div class="modal" id="lockM" role="dialog" aria-modal="true"><div class="msheet"><h2>Album còn đang khoá</h2><p>Hoàn thành các điều kiện của Mùa Concept để mở cuốn album.</p><div id="conds"></div><button class="btn" id="tryUnlock" style="width:100%;margin-top:12px;background:var(--pink);border-color:var(--pink);color:#fff;min-height:46px">Mở khoá thử (chỉ có ở mockup)</button><button class="btn" id="lockX" style="width:100%;margin-top:8px;min-height:44px">Đóng</button></div></div>
+<div class="modal" id="lockM" role="dialog" aria-modal="true"><div class="msheet"><h2>Album còn đang khoá</h2><p>Hoàn thành điều kiện để mở cuốn album này.</p><div id="conds"></div><button class="btn" id="tryUnlock" style="width:100%;margin-top:12px;background:var(--pink);border-color:var(--pink);color:#fff;min-height:46px">Mở khoá thử (chỉ có ở mockup)</button><button class="btn" id="lockX" style="width:100%;margin-top:8px;min-height:44px">Đóng</button></div></div>
 <div class="reader" id="reader" aria-modal="true" role="dialog">
   <div class="rbar">
     <button class="btn" id="close">← Về kệ</button>
@@ -185,7 +185,7 @@ const BOOKS=[
  {t:'GREENGREEN · STREET',n:'GREEN<br>GREEN',c1:'#2E7C8A',c2:'#5BB5C2',sub:'STREET ver.',p:11}
 ];
 /* điều kiện mở sách (mockup: bấm "Mở khoá thử" để xem hiệu ứng) */
-const CONDS=[['Gom đủ concept Urichinguchana',true],['Gom đủ concept Aniyaaa',true],['Gom đủ concept Poyoyoi',false]];
+const CONDS=[['Điều kiện 1 (sẽ gắn với sự kiện sau)',true],['Điều kiện 2 (sẽ gắn với sự kiện sau)',true],['Điều kiện 3 (sẽ gắn với sự kiện sau)',false]];
 let UNLOCKED=false;
 const PAL=[['#0f2a44','#2f78b8'],['#13384f','#5bb5c2'],['#1b2a4a','#3d6fb0'],['#0b1c33','#2a8fa8'],['#274b6e','#8fd0d8'],['#162b3d','#3a7ca0'],['#2c3e57','#6aa9c9'],['#0e2438','#2f9aa5']];
 const $=s=>document.querySelector(s), row=$('#row');
@@ -236,7 +236,7 @@ function photo(n,k){if(IMGS&&IMGS.pages&&IMGS.pages[n-1])return `<div class="ph 
 function page(n){ /* n = số trang; 2 = trang tên, 3–22 = 20 ảnh STREET (ngang 3:2, tràn trang), 25 = credit */
   if(n===2)return `<div class="pg tt"><b>GREENGREEN</b><small>34.09035° N, 118.34873° W</small></div>`;
   if(n>=3&&n<=22)return `<div class="pg full">${photo(n-2,n)}</div>`;
-  if(n===23)return `<div class="pg cr2"><div class="cl"><small>CORTIS · 2ND MINI ALBUM</small><b>GREEN<br>GREEN</b><em>STREET ver.</em><ol><li><i>01</i>TNT</li><li><i>02</i>REDRED</li><li><i>03</i>ACAI</li><li><i>04</i>YOUNGCREATORCREW</li><li><i>05</i>Wassup</li><li><i>06</i>Blue Lips</li></ol></div><div class="cc"><svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="sealp" d="M50 50 m-39 0 a39 39 0 1 1 78 0 a39 39 0 1 1 -78 0"/></defs><circle cx="50" cy="50" r="47" fill="none" stroke="#FF2E88" stroke-width="1.3"/><circle cx="50" cy="50" r="27" fill="none" stroke="#FF2E88" stroke-width=".7" stroke-dasharray="2 2.4"/><text font-size="7.4" font-weight="800" fill="#FF2E88"><textPath href="#sealp" startOffset="0" textLength="243" lengthAdjust="spacing">COLENTIS · MÙA CONCEPT · 18–26.10.2026 ·</textPath></text><path d="M38 51.5 l8 8 l16-18" fill="none" stroke="#FF2E88" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="dots"><u style="--k:0"></u><u style="--k:1"></u><u style="--k:2"></u><u style="--k:3"></u><u style="--k:4"></u><u style="--k:5"></u><u style="--k:6"></u><u style="--k:7"></u><u style="--k:8"></u></div><p>Sưu tầm tại <strong>Colentis</strong><br>Hoàn thành 9/9 ngày</p></div></div>`;
+  if(n===23)return `<div class="pg cr2"><div class="cl"><small>CORTIS · 2ND MINI ALBUM</small><b>GREEN<br>GREEN</b><em>STREET ver.</em><ol><li><i>01</i>TNT</li><li><i>02</i>REDRED</li><li><i>03</i>ACAI</li><li><i>04</i>YOUNGCREATORCREW</li><li><i>05</i>Wassup</li><li><i>06</i>Blue Lips</li></ol></div><div class="cc"><svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="sealp" d="M50 50 m-39 0 a39 39 0 1 1 78 0 a39 39 0 1 1 -78 0"/></defs><circle cx="50" cy="50" r="47" fill="none" stroke="#FF2E88" stroke-width="1.3"/><circle cx="50" cy="50" r="27" fill="none" stroke="#FF2E88" stroke-width=".7" stroke-dasharray="2 2.4"/><text font-size="7.4" font-weight="800" fill="#FF2E88"><textPath href="#sealp" startOffset="0" textLength="243" lengthAdjust="spacing">COLENTIS · ALBUM SƯU TẦM · CORTIS ·</textPath></text><path d="M38 51.5 l8 8 l16-18" fill="none" stroke="#FF2E88" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><p>Sưu tầm tại <strong>Colentis</strong><br>Album kỷ niệm</p></div></div>`;
   return `<div class="pg"></div>`;
 }
 function leafHTML(i,b){
