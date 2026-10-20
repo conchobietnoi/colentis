@@ -182,7 +182,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 <script>
 (function(){
 const BOOKS=[
- {t:'GREENGREEN · STREET',n:'GREEN<br>GREEN',c1:'#2E7C8A',c2:'#5BB5C2',sub:'STREET ver.',p:11}
+ {t:'GREENGREEN · STREET',n:'GREEN<br>GREEN',c1:'#2E7C8A',c2:'#5BB5C2',sub:'STREET ver.',p:12}
 ];
 /* điều kiện mở sách (mockup: bấm "Mở khoá thử" để xem hiệu ứng) */
 const CONDS=[['Điều kiện 1 (sẽ gắn với sự kiện sau)',true],['Điều kiện 2 (sẽ gắn với sự kiện sau)',true],['Điều kiện 3 (sẽ gắn với sự kiện sau)',false]];
@@ -198,7 +198,7 @@ const coverHTML=b=>`<div class="cover" style="--c1:${b.c1};--c2:${b.c2}">${IMGS&
 BOOKS.forEach((b,i)=>{
   const el=document.createElement('button');el.className='bk3';el.setAttribute('aria-label','Mở '+b.t);
   el.style.setProperty('--c1',b.c1);
-  el.innerHTML=`<div class="fc front">${coverHTML(b)}</div><div class="fc back">${IMGS&&IMGS.back?realImg(IMGS.back):''}</div>
+  el.innerHTML=`<div class="fc front">${coverHTML(b)}</div><div class="fc back"><div class="cover">${IMGS&&IMGS.back?realImg(IMGS.back):''}</div></div>
    <div class="spine"><span>CORTIS · GREENGREEN</span></div><div class="edge"></div><div class="tp"></div><div class="bt"></div><div class="shadow"></div>`;
   el.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;const r=el.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.classList.add('tilt');el.style.transform=`rotateY(${18-x*34}deg) rotateX(${-4-y*18}deg) translateY(-6px)`});
   el.addEventListener('pointerleave',()=>{el.classList.remove('tilt');el.style.transform=''});
@@ -240,6 +240,9 @@ function page(n){ /* n = số trang; 2 = trang tên, 3–22 = 20 ảnh STREET (n
   return `<div class="pg"></div>`;
 }
 function leafHTML(i,b){
+  if(i===N-1){ /* tờ cuối: mặt trước = giấy lót, mặt sau = bìa sau thật */
+    return `<div class="face f endpaper">CORTIS<div class="shade"></div></div><div class="face back" style="background:none;border-radius:8px 2px 2px 8px"><div class="cover" style="border-radius:8px 2px 2px 8px">${IMGS&&IMGS.back?realImg(IMGS.back):'<div class="endpaper" style="position:absolute;inset:0">BÌA SAU</div>'}</div><div class="shade"></div></div>`;
+  }
   const front=i===0?`<div class="face f" style="background:none;border-radius:2px 8px 8px 2px">${coverHTML(b)}<div class="shade"></div></div>`
     :`<div class="face f">${page(2*i)}<span class="pgno">${2*i}</span><div class="shade"></div></div>`;
   const back=i===0?`<div class="face back endpaper">CORTIS<div class="shade"></div></div>`
@@ -322,8 +325,8 @@ function setU(i,u,r){const l=leaves[i],f=l._fl;if(!f)return;l._u=u;l._r=r==null?
 function zFinal(i){return i<cur?i+1:N-i}
 function updateUI(){
   uL.style.width=(cur*TH)+'px';uR.style.width=((N-cur)*TH)+'px';
-  book.querySelector('.board.l').style.opacity=cur===0?0:1;book.querySelector('.under.l').style.opacity=cur===0?0:1;
-  $('#cnt').textContent=cur===0?'Bìa':cur===N?'Bìa sau':`Trang ${2*cur-1}–${2*cur} / ${2*N-1}`;
+  book.querySelector('.board.l').style.opacity=cur===0?0:1;book.querySelector('.under.l').style.opacity=cur===0?0:1;book.querySelector('.board.r').style.opacity=cur===N?0:1;book.querySelector('.under.r').style.opacity=cur===N?0:1;
+  $('#cnt').textContent=cur===0?'Bìa':cur===N?'Bìa sau':cur===N-1?'Trang 23 · Credit':`Trang ${2*cur-1}–${2*cur} / ${2*N-3}`;
   $('#prev').disabled=cur===0;$('#next').disabled=cur===N;
   layout();
 }
