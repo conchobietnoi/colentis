@@ -99,9 +99,11 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .face.back::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(270deg,rgba(0,0,0,.2),rgba(0,0,0,.04) 7%,transparent 14%)}
 .pgno{display:none;position:absolute;bottom:7px;font-size:10px;font-weight:700;color:#8d8fc0}
 .face.f .pgno{right:12px}.face.back .pgno{left:12px}
-.endpaper{background:linear-gradient(135deg,#4a9aa7,#2E7C8A);display:flex;align-items:center;justify-content:center;color:rgba(13,13,13,.6);font-weight:900;letter-spacing:.3em;font-size:13px}
+.face.endpaper{background:linear-gradient(135deg,#4a9aa7,#2E7C8A);display:flex;align-items:center;justify-content:center;color:rgba(13,13,13,.6);font-weight:900;letter-spacing:.3em;font-size:13px}
 
-/* dải trang khi đang lật */
+/* lớp lật FlipHTML5 */
+.fl{backface-visibility:visible}.fl .fx{display:block;pointer-events:none}
+/* (cũ) dải trang */
 .st{backface-visibility:visible}
 .sf,.sb{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#f6f6f2}
 .sb{transform:rotateY(180deg)}
@@ -244,73 +246,63 @@ function layout(){
   const t=cur===0?'translateX(-25%)':cur===N?'translateX(25%)':'translateX(0)';
   book.style.transform=`${t} rotateX(8deg)`;
 }
-/* ===== lật trang cong: mỗi trang đang lật tách thành NS dải nối khớp, góc từng dải lệch dần theo tiến độ ===== */
-const NS=40;
+/* ===== lật trang kiểu FlipHTML5: kéo một góc, trang gập theo đường chéo =====
+   Đường gập = trung trực của đoạn nối góc gốc C và góc đang kéo F. Phần gần C gập lại (đối xứng qua đường gập) và hiện mặt sau. */
 const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
 const TH=3; /* độ dày mỗi tờ trên chồng giấy (px) */
-function bendAt(t){ /* góc lệch tương đối mỗi dải (độ): <0 mép ngoài đi trước (lúc nhấc), >0 mép ngoài trễ (lúc hạ) */
-  const s=Math.sin(Math.PI*t);return s*(6.5*(2*t-1)+2.2);
+const LIFT=.98; /* bán kính quỹ đạo góc quanh chân gáy, tính theo bề rộng trang */
+function clipPoly(pts,n,M,sg){
+  const f=p=>sg*((p[0]-M[0])*n[0]+(p[1]-M[1])*n[1]),out=[];
+  for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length],fa=f(a),fb=f(b);
+    if(fa>=0)out.push(a);
+    if((fa>=0)!==(fb>=0)){const t=fa/(fa-fb);out.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t])}}
+  return out}
+const polyCSS=pts=>pts.length<3?'polygon(0 0,0 0,0 0)':'polygon('+pts.map(q=>q[0].toFixed(1)+'px '+q[1].toFixed(1)+'px').join(',')+')';
+function enterFlip(i,dir,cy){ /* dir=+1: trang phải lật sang trái; -1: trang trái lật sang phải; cy: 0 = góc trên, 1 = góc dưới */
+  const l=leaves[i];if(l._fl)return l._fl;
+  const W=l.offsetWidth,H=l.offsetHeight,fr=l.querySelector('.face.f'),bk=l.querySelector('.face.back');
+  const clean=face=>{const c=face.cloneNode(true);c.querySelectorAll('.shade,.pgno').forEach(x=>x.remove());c.classList.remove('f','back');c.style.transform='none';c.style.backfaceVisibility='visible';c.style.webkitBackfaceVisibility='visible';return c};
+  const vis=clean(dir>0?fr:bk),hid=clean(dir>0?bk:fr),rx=dir>0?W:0;
+  const root=document.createElement('div');root.className='fl';
+  root.style.cssText=`position:absolute;left:0;top:0;width:${2*W}px;height:${H}px;pointer-events:none;transform:translateZ(4px)`;
+  const mk=(c,st)=>{const e=document.createElement('div');e.className=c;e.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;'+(st||'');return e};
+  const box=(e,st)=>{const d=document.createElement('i');d.className='fx';d.style.cssText='position:absolute;left:0;top:0;transform-origin:0 0;'+st;e.appendChild(d);return d};
+  const cast=mk('fcast'),rest=mk('frest'),flap=mk('fflap','transform-origin:0 0');
+  const place=(e,node,mir)=>{const w=document.createElement('div');w.style.cssText=`position:absolute;left:${rx}px;top:0;width:${W}px;height:${H}px;${mir?'transform:scaleX(-1);':''}`;w.appendChild(node);e.appendChild(w);return w};
+  place(rest,vis,false);
+  const sp=document.createElement('div');sp.style.cssText=`position:absolute;left:${rx}px;top:0;width:${W}px;height:${H}px;background:linear-gradient(${dir>0?90:270}deg,rgba(0,0,0,.2),rgba(0,0,0,.04) 7%,transparent 14%)`;rest.appendChild(sp);
+  place(flap,hid,true);
+  const rs=box(rest,''),fs=box(flap,''),cs=box(cast,'');
+  const ffw=mk('ffw','filter:drop-shadow(-4px 6px 10px rgba(0,0,0,.5))');ffw.appendChild(flap);root.append(cast,rest,ffw);book.appendChild(root);
+  l.style.visibility='hidden';
+  return l._fl={W,H,dir,cy:cy?H:0,sy:cy?-1:1,rx,root,cast,rest,flap,rs,fs,cs};
 }
-function enterStrip(l){
-  if(l._st)return;
-  const W=l.offsetWidth,sw=W/NS,fr=l.querySelector('.face.f'),bk=l.querySelector('.face.back');
-  l._orig=l.innerHTML;
-  const clean=(face,back)=>{const c=face.cloneNode(true);c.querySelectorAll('.shade,.pgno').forEach(x=>x.remove());c.classList.remove('f','back');c.classList.add('sface');c.style.transform='none';c.style.backfaceVisibility='visible';c.style.webkitBackfaceVisibility='visible';return c};
-  const fC=clean(fr),bC=clean(bk);
-  l.innerHTML='';l._st=[];
-  let parent=l;
-  for(let i=0;i<NS;i++){
-    const st=document.createElement('div');st.className='st';
-    st.style.cssText=`position:absolute;top:0;height:100%;left:${i?sw-0.0:0}px;width:${sw+2.2}px;transform-origin:left center;transform-style:preserve-3d`;
-    if(!i)st.style.left='0px';
-    const sf=document.createElement('div'),sb=document.createElement('div');
-    sf.className='sf';sb.className='sb';
-    const fi=document.createElement('div'),bi=document.createElement('div');
-    fi.className=bi.className='sin';
-    fi.style.cssText=`position:absolute;top:0;left:${-i*sw}px;width:${W}px;height:100%`;
-    bi.style.cssText=`position:absolute;top:0;left:${-(W-(i+1)*sw)}px;width:${W}px;height:100%`;
-    fi.appendChild(fC.cloneNode(true));bi.appendChild(bC.cloneNode(true));
-    const fs=document.createElement('i'),bs=document.createElement('i');fs.className=bs.className='ss';
-    sf.append(fi,fs);sb.append(bi,bs);st.append(sf,sb);
-    parent.appendChild(st);st._fs=fs;st._bs=bs;l._st.push(st);parent=st;
-  }
+function exitFlip(l){if(!l._fl)return;l._fl.root.remove();l._fl=null;l.style.visibility=''}
+function boxXf(d,M,v,len,grad,op){
+  const B=3*(d._W||600);const th=Math.atan2(v[1],v[0])*180/Math.PI;
+  d.style.width=len+'px';d.style.height=B+'px';d.style.opacity=op;d.style.background=grad;
+  d.style.transform=`translate(${M[0].toFixed(1)}px,${M[1].toFixed(1)}px) rotate(${th.toFixed(2)}deg) translateY(${-B/2}px)`;
 }
-function exitStrip(l){if(!l._st)return;l.innerHTML=l._orig;l._st=null}
-function setT(i,t){ /* t: 0 = nằm bên phải, 1 = đã lật sang trái */
-  const l=leaves[i];l._t=t;
-  l.style.transform=`rotateY(${-180*t}deg)`;
-  if(!l._st){castOff();return}
-  const b=bendAt(t),sn=Math.sin(Math.PI*t);let acc=-180*t;const ang=[];
-  l._st.forEach((st,k)=>{
-    const sp=k/(NS-1);
-    /* độ cong dồn về mép ngoài + gợn sóng nhẹ của tờ giấy */
-    const rel=k?(b*.75*Math.pow(sp,1.6)+sn*.34*Math.sin(k*.85+t*11)*sp):0;
-    acc+=rel;ang.push(acc);
-    st.style.transform=k?`rotateY(${rel}deg)`:'none';
-  });
-  const dk=a=>Math.min(.36,(1-Math.abs(Math.cos((a+28)*Math.PI/180)))*.5);
-  const sp=a=>{const c=Math.cos((a+62)*Math.PI/180);return c>0?Math.pow(c,14)*.22:0}; /* vệt sáng bóng */
-  let tip=0;
-  l._st.forEach((st,k)=>{
-    const a0=k?(ang[k-1]+ang[k])/2:ang[0],a1=k<NS-1?(ang[k]+ang[k+1])/2:ang[k];
-    const d0=dk(a0).toFixed(3),d1=dk(a1).toFixed(3),s0=sp(a0).toFixed(3),s1=sp(a1).toFixed(3);
-    const g=dir=>`linear-gradient(${dir},rgba(255,255,255,${s0}),rgba(255,255,255,${s1})),linear-gradient(${dir},rgba(5,14,26,${d0}),rgba(5,14,26,${d1}))`;
-    st._fs.style.background=g('90deg');st._bs.style.background=g('270deg');
-    tip+=Math.cos(ang[k]*Math.PI/180)/NS;
-  });
-  cast(l,tip,sn,t);
+function foldAt(f,F,u){
+  const {W,H,dir,cy,rx}=f,C=[dir>0?2*W:0,cy];
+  const dx=F[0]-C[0],dy=F[1]-C[1],d=Math.hypot(dx,dy);
+  f.rs._W=f.fs._W=f.cs._W=W+H;
+  if(d<1.5){f.rest.style.clipPath='none';f.flap.style.clipPath=f.cast.style.clipPath=polyCSS([]);return}
+  const n=[dx/d,dy/d],M=[(C[0]+F[0])/2,(C[1]+F[1])/2];
+  const R=[[rx,0],[rx+W,0],[rx+W,H],[rx,H]];
+  const rest=clipPoly(R,n,M,1),fold=clipPoly(R,n,M,-1);
+  f.rest.style.clipPath=rest.length>2?polyCSS(rest):polyCSS([]);
+  f.flap.style.clipPath=polyCSS(fold);f.cast.style.clipPath=polyCSS(fold);
+  const k=2*(M[0]*n[0]+M[1]*n[1]);
+  f.flap.style.transform=`matrix(${1-2*n[0]*n[0]},${-2*n[0]*n[1]},${-2*n[0]*n[1]},${1-2*n[1]*n[1]},${k*n[0]},${k*n[1]})`;
+  const amp=Math.min(1,.25+d/(W*.9));
+  boxXf(f.fs,M,[-n[0],-n[1]],W*1.5,'linear-gradient(90deg,rgba(0,0,0,.58),rgba(0,0,0,.2) 10%,rgba(255,255,255,0) 34%,rgba(255,255,255,.2) 64%,rgba(0,0,0,.08))',amp);
+  boxXf(f.rs,M,[n[0],n[1]],W*.55,'linear-gradient(90deg,rgba(0,0,0,.46),rgba(0,0,0,.16) 24%,transparent)',amp);
+  boxXf(f.cs,M,[-n[0],-n[1]],W*.26,'linear-gradient(90deg,rgba(0,0,0,.5),transparent)',amp);
 }
-/* bóng trang đang lật đổ xuống trang bên dưới */
-function castEl(){let c=book.querySelector('.cast');if(!c){c=document.createElement('div');c.className='cast';book.appendChild(c)}return c}
-function castOff(){const c=book.querySelector('.cast');if(c)c.style.opacity=0}
-function cast(l,tip,sn,t){
-  const c=castEl(),W=l.offsetWidth,H=l.offsetHeight,half=book.offsetWidth/2;
-  const x=half+tip*W, len=W*(.1+.32*sn);
-  const a=Math.min(.42,sn*.5);
-  /* bóng nằm ngoài mép trang: bên phải mép khi t<.5, bên trái khi t>.5 */
-  const right=t<.5;
-  c.style.cssText=`position:absolute;top:0;height:${H*1.03}px;left:${right?x:x-len}px;width:${len}px;pointer-events:none;opacity:${a};background:linear-gradient(${right?'90deg':'270deg'},rgba(4,10,20,.8),transparent);z-index:1;transform:translateZ(2px)`;
-}
+/* vị trí góc kéo theo quỹ đạo vòng cung quanh chân gáy; r<1 khi người dùng kéo vào trong */
+function cornerPos(f,u,r){const th=Math.PI*u;return [f.W+f.dir*f.W*r*Math.cos(th),f.cy+f.sy*f.W*LIFT*r*Math.sin(th)]}
+function setU(i,u,r){const l=leaves[i],f=l._fl;if(!f)return;l._u=u;l._r=r==null?1:r;foldAt(f,cornerPos(f,u,l._r),u)}
 function zFinal(i){return i<cur?i+1:N-i}
 function updateUI(){
   uL.style.width=(cur*TH)+'px';uR.style.width=((N-cur)*TH)+'px';
@@ -319,48 +311,52 @@ function updateUI(){
   $('#prev').disabled=cur===0;$('#next').disabled=cur===N;
   layout();
 }
-function render(){ /* đặt mọi trang về trạng thái nghỉ */
-  leaves.forEach((l,i)=>{exitStrip(l);setT(i,i<cur?1:0);l.style.transition='none';l.style.zIndex=zFinal(i)});
-  updateUI();
-}
-function animateLeaf(i,to,dur,done){
-  const l=leaves[i];enterStrip(l);l.style.zIndex=100;
-  const from=l._t,t0=performance.now();dur=reduce?0:dur*Math.max(.35,Math.abs(to-from));
-  cancelAnimationFrame(l._raf);
+function placeLeaf(i){const l=leaves[i];l.style.transition='none';l.style.transform=`rotateY(${i<cur?-180:0}deg)`;l.style.zIndex=zFinal(i)}
+function render(){leaves.forEach((l,i)=>{exitFlip(l);placeLeaf(i)});updateUI()}
+/* chạy hoạt ảnh gập từ (u0,r0) tới u1 (0 = trả về chỗ cũ, 1 = lật hẳn) */
+function animateFold(i,u1,dur,done){
+  const l=leaves[i],f=l._fl,u0=l._u||0,r0=l._r==null?1:l._r,t0=performance.now();
+  dur=reduce?0:dur*Math.max(.4,Math.abs(u1-u0));cancelAnimationFrame(l._raf);
   const step=now=>{
-    const u=dur?Math.min(1,(now-t0)/dur):1;
-    setT(i,from+(to-from)*ease(u));
-    if(u<1)l._raf=requestAnimationFrame(step);
-    else{setT(i,to);exitStrip(l);l.style.zIndex=zFinal(i);done&&done()}
+    const k=dur?Math.min(1,(now-t0)/dur):1,e=ease(k);
+    setU(i,u0+(u1-u0)*e,r0+(1-r0)*e);
+    if(k<1)l._raf=requestAnimationFrame(step);else{setU(i,u1,1);done&&done()}
   };
   l._raf=requestAnimationFrame(step);
 }
-window.__albScrub=(i,t)=>{const l=leaves[i];enterStrip(l);l.style.zIndex=100;setT(i,t)}; /* móc kiểm thử */
-function go(dir){
+window.__albScrub=(i,u,dir,cy)=>{const l=leaves[i];enterFlip(i,dir||1,cy==null?1:cy);setU(i,u,1)}; /* móc kiểm thử */
+function go(dir,cy){
   if(busy)return;const n=cur+dir;if(n<0||n>N)return;
-  const i=dir>0?cur:cur-1;busy=1;cur=n;updateUI();hiss();
-  animateLeaf(i,dir>0?1:0,1150,()=>{busy=0});
+  const i=dir>0?cur:cur-1;busy=1;
+  enterFlip(i,dir,cy==null?1:cy);leaves[i]._u=0;leaves[i]._r=1;setU(i,0,1);
+  cur=n;updateUI();hiss();
+  animateFold(i,1,1000,()=>{exitFlip(leaves[i]);placeLeaf(i);busy=0});
 }
 function bindDrag(l,i){
-  let sx=0,p=0,mode=0,moved=false;
+  let mode=0,moved=false,sx=0,cyk=1,f=null;
+  const toBook=e=>{const r=book.getBoundingClientRect();return [(e.clientX-r.left)/r.width*book.offsetWidth,(e.clientY-r.top)/r.height*book.offsetHeight]};
   l.addEventListener('pointerdown',e=>{
     if(busy)return;const flipped=i<cur;
     if(!flipped&&i!==cur)return;if(flipped&&i!==cur-1)return;
-    mode=flipped?-1:1;sx=e.clientX;p=0;moved=false;l.setPointerCapture(e.pointerId);
+    mode=flipped?-1:1;sx=e.clientX;moved=false;l.setPointerCapture(e.pointerId);
+    const q=toBook(e);cyk=q[1]<l.offsetHeight/2?0:1; /* chạm nửa trên: nhấc góc trên; nửa dưới: góc dưới */
   });
   l.addEventListener('pointermove',e=>{
     if(!mode)return;
-    const w=l.offsetWidth||200,span=Math.max(w*1.5,120);
-    p=Math.max(0,Math.min(1,mode*(sx-e.clientX)/span));
-    if(p>.02&&!moved){moved=true;enterStrip(l);l.style.zIndex=100}
-    if(moved)setT(i,mode>0?p:1-p);
+    if(!moved){if(Math.abs(e.clientX-sx)<6)return;moved=true;f=enterFlip(i,mode,cyk);l._u=0;l._r=1}
+    const q=toBook(e),S=[f.W,f.cy];let vx=q[0]-S[0],vy=q[1]-S[1];
+    let sn=f.sy*vy;if(sn<0){vy=0;sn=0} /* góc không đi xuống dưới mép */
+    const dd=Math.hypot(vx,vy)||1,rr=Math.min(1,dd/(f.W*LIFT));
+    const th=Math.atan2(f.sy*vy,mode*vx);
+    foldAt(f,[S[0]+vx/dd*rr*f.W*LIFT,S[1]+vy/dd*rr*f.W*LIFT],th/Math.PI);
+    l._u=Math.max(0,Math.min(1,th/Math.PI));l._r=rr;
   });
   const end=e=>{
     if(!mode)return;const m=mode;mode=0;
-    if(!moved){go(m);return}
+    if(!moved){go(m,cyk);return}
     busy=1;
-    if(p>.3){cur+=m;updateUI();hiss();animateLeaf(i,m>0?1:0,800,()=>{busy=0})}
-    else animateLeaf(i,m>0?0:1,500,()=>{busy=0});
+    if(l._u>.38){cur+=m;updateUI();hiss();animateFold(i,1,900,()=>{exitFlip(l);placeLeaf(i);busy=0})}
+    else animateFold(i,0,550,()=>{exitFlip(l);placeLeaf(i);busy=0});
   };
   l.addEventListener('pointerup',end);l.addEventListener('pointercancel',end);
 }
