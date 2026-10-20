@@ -20,7 +20,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .shelf{position:relative;max-width:760px;margin:clamp(40px,14vh,130px) auto 0;padding-bottom:22px}
 .row{display:flex;justify-content:center;gap:clamp(18px,6vw,56px);align-items:flex-end;padding:0 8px 18px;position:relative;perspective:1100px;min-height:260px;padding-bottom:30px}
 .plank{position:absolute;left:-4px;right:-4px;bottom:0;height:22px;border-radius:6px;background:linear-gradient(#4a3f9e,#2a2470 55%,#1c1856);box-shadow:0 14px 28px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.18)}
-.bk3{--w:clamp(104px,26vw,150px);--h:calc(var(--w)*.75);--d:calc(var(--w)*.13);position:relative;width:var(--w);height:var(--h);transform-style:preserve-3d;transform:rotateY(32deg) rotateX(-4deg);transition:transform .5s cubic-bezier(.2,.8,.2,1);cursor:pointer;border:0;padding:0;background:none;color:inherit;font:inherit;margin-bottom:6px;outline-offset:10px}
+.bk3{--w:clamp(104px,26vw,150px);--h:calc(var(--w)*.6667);--d:calc(var(--w)*.13);position:relative;width:var(--w);height:var(--h);transform-style:preserve-3d;transform:rotateY(32deg) rotateX(-4deg);transition:transform .5s cubic-bezier(.2,.8,.2,1);cursor:pointer;border:0;padding:0;background:none;color:inherit;font:inherit;margin-bottom:6px;outline-offset:10px}
 .bk3.tilt{transition:transform .12s linear}
 .bk3 .fc{position:absolute;inset:0;border-radius:3px 7px 7px 3px;overflow:hidden}
 .bk3 .front{transform:translateZ(calc(var(--d)/2))}
@@ -61,11 +61,13 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .cd.ok .ck{background:var(--mint);color:#1E1B5E}.cd.ok{color:var(--ink)}.cd:not(.ok){color:var(--soft)}
 /* bìa mẫu (thay bằng ảnh bìa thật) */
 .cover{position:absolute;inset:0;overflow:hidden;background:#cfd9e4}
+.cover .art.real,.ph.real{background-size:cover;background-position:center}
+.ph.real::before,.ph.real::after{display:none}
 .cover .art{position:absolute;inset:0;width:100%;height:100%;display:block}
 .cover::before{content:"";position:absolute;inset:0;z-index:2;background:radial-gradient(90% 50% at 20% 0%,rgba(255,255,255,.22),transparent 60%),linear-gradient(100deg,rgba(0,0,0,.28) 0 4%,rgba(255,255,255,.14) 5% 6%,transparent 8%)}
-.cover .lab{position:absolute;right:0;bottom:0;width:36%;background:#8ED1D8;padding:3.2% 4% 3%;z-index:3;color:#0d0d0d}
+.cover .lab{position:absolute;right:0;bottom:0;width:41%;background:#8ED1D8;padding:3.2% 4% 3%;z-index:3;color:#0d0d0d}
 .cover .lab i{display:block;font-style:normal;font-weight:900;font-size:clamp(10px,2.3vw,17px);letter-spacing:-.045em;line-height:1;white-space:nowrap}
-.cover .lab em{display:block;margin-top:2px;font:500 clamp(3.6px,.9vw,6.6px)/1.1 ui-monospace,Menlo,monospace;letter-spacing:.02em;white-space:nowrap;font-style:normal}
+.cover .lab em{display:block;margin-top:2px;font:500 clamp(3px,.74vw,5.6px)/1.1 ui-monospace,Menlo,monospace;letter-spacing:.02em;white-space:nowrap;font-style:normal}
 .cover .gloss{position:absolute;inset:0;z-index:4;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.26) 48%,transparent 60%);transform:translateX(-120%);animation:gl 5s ease-in-out infinite}
 @keyframes gl{0%,55%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
 
@@ -77,7 +79,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .btn{font:inherit;font-weight:700;font-size:13px;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:8px 14px;cursor:pointer}
 .btn:active{transform:scale(.96)}
 .btn[disabled]{opacity:.35;cursor:default}
-.stage{perspective:2200px;perspective-origin:50% 40%;width:calc(var(--pw)*2);height:calc(var(--pw)*.75);position:relative;touch-action:pan-y}
+.stage{perspective:2200px;perspective-origin:50% 40%;width:calc(var(--pw)*2);height:calc(var(--pw)*.6667);position:relative;touch-action:pan-y}
 .book{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.8,.2,1);transform:translateX(-25%) rotateX(8deg)}
 .under{position:absolute;top:2px;bottom:2px;background:repeating-linear-gradient(90deg,#f1eefb 0 1.5px,#cdc8e6 1.5px 3px);border-radius:2px;transition:width .5s}
 .under.r{left:50%;transform:translateZ(-2px)}
@@ -114,7 +116,7 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 .pg.cr{gap:6px}.pg.cr b{letter-spacing:.3em;font-size:clamp(8px,1.8vw,11px)}.pg.cr p{margin:0;font-size:clamp(5.5px,1.2vw,8px);line-height:1.5;font-weight:600}.pg.cr p.s{opacity:.55}
 .pg{position:absolute;inset:0;padding:9% 9% 12%;display:flex;flex-direction:column;gap:6%}
 .ph{flex:1;border-radius:4px;position:relative;overflow:hidden;background:linear-gradient(140deg,var(--a),var(--b));box-shadow:0 2px 8px rgba(30,27,94,.25)}
-.ph::after{content:'ẢNH ' attr(data-n) ' / 22';position:absolute;right:8px;bottom:6px;font-size:11px;font-weight:800;color:rgba(255,255,255,.85)}
+.ph::after{content:'ẢNH ' attr(data-n) ' / 20';position:absolute;right:8px;bottom:6px;font-size:11px;font-weight:800;color:rgba(255,255,255,.85)}
 .ph::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 30% 20%,rgba(255,255,255,.35),transparent 70%)}
 .pol{background:#fff;padding:7% 7% 18%;box-shadow:0 4px 14px rgba(30,27,94,.3);transform:rotate(-2.5deg);flex:1;display:flex}
 .pol .ph{box-shadow:none}
@@ -162,20 +164,23 @@ h1{font-size:18px;font-weight:800;margin:0;letter-spacing:.2px}
 <script>
 (function(){
 const BOOKS=[
- {t:'GREENGREEN · STREET',n:'GREEN<br>GREEN',c1:'#2E7C8A',c2:'#5BB5C2',sub:'STREET ver.',p:13}
+ {t:'GREENGREEN · STREET',n:'GREEN<br>GREEN',c1:'#2E7C8A',c2:'#5BB5C2',sub:'STREET ver.',p:11}
 ];
 /* điều kiện mở sách (mockup: bấm "Mở khoá thử" để xem hiệu ứng) */
 const CONDS=[['Gom đủ concept Urichinguchana',true],['Gom đủ concept Aniyaaa',true],['Gom đủ concept Poyoyoi',false]];
 let UNLOCKED=false;
 const PAL=[['#0f2a44','#2f78b8'],['#13384f','#5bb5c2'],['#1b2a4a','#3d6fb0'],['#0b1c33','#2a8fa8'],['#274b6e','#8fd0d8'],['#162b3d','#3a7ca0'],['#2c3e57','#6aa9c9'],['#0e2438','#2f9aa5']];
 const $=s=>document.querySelector(s), row=$('#row');
-const coverHTML=b=>`<div class="cover" style="--c1:${b.c1};--c2:${b.c2}"><svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice" class="art"><rect width="120" height="90" fill="#dcd6ca"/><rect y="0" width="120" height="22" fill="#e7e3da"/><rect y="20" width="120" height="3" fill="#bdb7aa"/><g fill="#f4f5f6"><rect x="20" y="13" width="30" height="9" rx="3"/><rect x="78" y="12" width="28" height="9" rx="3"/></g><rect x="53" y="13" width="22" height="9" rx="3" fill="#6b7d96"/><rect y="23" width="120" height="40" fill="#4a5b78"/><path d="M0 24h120" stroke="#8d9ab0" stroke-width=".6"/><path d="M0 34 L46 62 L46 90 L0 90Z" fill="#c2c5c8"/><path d="M0 34 L46 62 L46 66 L0 38Z" fill="#f0f1f2"/><g fill="#2c6b46"><path d="M12 30 L8 14 L14 26 L16 12 L18 27 L24 15 L20 31Z"/></g><path d="M30 60 H120 V90 H46Z" fill="#59688a"/><rect x="66" y="40" width="18" height="12" rx="4" fill="#27423a"/><ellipse cx="78" cy="30" rx="6.5" ry="8" fill="#d6ad8e"/><path d="M71 28 q7-10 14 0 v-3 q-7-8-14 0z" fill="#1c1c24"/><path d="M60 52 q4-10 26-9 l8 22 H62z" fill="#1d2a45"/><ellipse cx="102" cy="30" rx="7" ry="8.5" fill="#d9b394"/><path d="M92 32 q0-14 10-14 q10 0 10 14 l-3 22 H95z" fill="#1d3fa6"/><path d="M95 24 q7-9 14 0 l2 8 h-18z" fill="#1d3fa6"/><ellipse cx="46" cy="36" rx="6" ry="7.6" fill="#d6ad8e"/><path d="M40 33 q6-9 12 0 l1 3 h-14z" fill="#2a2018"/><path d="M36 44 h20 l-2 18 H38z" fill="#f2f2f0"/><ellipse cx="12" cy="45" rx="6" ry="7.6" fill="#d8b092"/><path d="M6 43 q6-9 12 0 l1 3 h-14z" fill="#4a3322"/><path d="M0 52 q10-4 28-1 l4 14 H0z" fill="#59b5b0"/><path d="M14 64 L92 60 L112 66 L116 74 L96 80 L24 78Z" fill="#3f7fb8"/><path d="M24 78 L96 80 L116 74 L120 90 H20Z" fill="#33699f"/><path d="M80 62 q18-4 38 6 l-2 8 q-20-8-38-6z" fill="#2c5f93"/><ellipse cx="22" cy="69" rx="8" ry="9" fill="#d6ad8e"/><path d="M13 66 q8-12 18-3 l-2 6 q-8-4-14 2z" fill="#4a3022"/><path d="M26 74 q14-6 40-4 l4 12 q-26-4-40 2z" fill="#4a5f82"/></svg><div class="lab"><i>GREEN<wbr>GREEN</i><em>34.09035° N, 118.34873° W</em></div><span class="gloss"></span></div>`;
+/* ảnh thật (bìa trước, bìa sau, 20 trang) do trang nạp vào window.ALBUM_IMAGES = {cover, back, pages:[...]} từ bucket riêng tư; không có thì dùng hình mẫu */
+const IMGS=window.ALBUM_IMAGES||null;
+const realImg=u=>`<div class="art real" style="background-image:url('${u}')"></div>`;
+const coverHTML=b=>`<div class="cover" style="--c1:${b.c1};--c2:${b.c2}">${IMGS&&IMGS.cover?realImg(IMGS.cover):`<svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice" class="art"><rect width="120" height="90" fill="#dcd6ca"/><rect y="0" width="120" height="22" fill="#e7e3da"/><rect y="20" width="120" height="3" fill="#bdb7aa"/><g fill="#f4f5f6"><rect x="20" y="13" width="30" height="9" rx="3"/><rect x="78" y="12" width="28" height="9" rx="3"/></g><rect x="53" y="13" width="22" height="9" rx="3" fill="#6b7d96"/><rect y="23" width="120" height="40" fill="#4a5b78"/><path d="M0 24h120" stroke="#8d9ab0" stroke-width=".6"/><path d="M0 34 L46 62 L46 90 L0 90Z" fill="#c2c5c8"/><path d="M0 34 L46 62 L46 66 L0 38Z" fill="#f0f1f2"/><g fill="#2c6b46"><path d="M12 30 L8 14 L14 26 L16 12 L18 27 L24 15 L20 31Z"/></g><path d="M30 60 H120 V90 H46Z" fill="#59688a"/><rect x="66" y="40" width="18" height="12" rx="4" fill="#27423a"/><ellipse cx="78" cy="30" rx="6.5" ry="8" fill="#d6ad8e"/><path d="M71 28 q7-10 14 0 v-3 q-7-8-14 0z" fill="#1c1c24"/><path d="M60 52 q4-10 26-9 l8 22 H62z" fill="#1d2a45"/><ellipse cx="102" cy="30" rx="7" ry="8.5" fill="#d9b394"/><path d="M92 32 q0-14 10-14 q10 0 10 14 l-3 22 H95z" fill="#1d3fa6"/><path d="M95 24 q7-9 14 0 l2 8 h-18z" fill="#1d3fa6"/><ellipse cx="46" cy="36" rx="6" ry="7.6" fill="#d6ad8e"/><path d="M40 33 q6-9 12 0 l1 3 h-14z" fill="#2a2018"/><path d="M36 44 h20 l-2 18 H38z" fill="#f2f2f0"/><ellipse cx="12" cy="45" rx="6" ry="7.6" fill="#d8b092"/><path d="M6 43 q6-9 12 0 l1 3 h-14z" fill="#4a3322"/><path d="M0 52 q10-4 28-1 l4 14 H0z" fill="#59b5b0"/><path d="M14 64 L92 60 L112 66 L116 74 L96 80 L24 78Z" fill="#3f7fb8"/><path d="M24 78 L96 80 L116 74 L120 90 H20Z" fill="#33699f"/><path d="M80 62 q18-4 38 6 l-2 8 q-20-8-38-6z" fill="#2c5f93"/><ellipse cx="22" cy="69" rx="8" ry="9" fill="#d6ad8e"/><path d="M13 66 q8-12 18-3 l-2 6 q-8-4-14 2z" fill="#4a3022"/><path d="M26 74 q14-6 40-4 l4 12 q-26-4-40 2z" fill="#4a5f82"/></svg>`}<div class="lab"><i>GREEN<wbr>GREEN</i><em>34.09035° N, 118.34873° W</em></div><span class="gloss"></span></div>`;
 
 /* ---- kệ sách ---- */
 BOOKS.forEach((b,i)=>{
   const el=document.createElement('button');el.className='bk3';el.setAttribute('aria-label','Mở '+b.t);
   el.style.setProperty('--c1',b.c1);
-  el.innerHTML=`<div class="fc front">${coverHTML(b)}</div><div class="fc back"></div>
+  el.innerHTML=`<div class="fc front">${coverHTML(b)}</div><div class="fc back">${IMGS&&IMGS.back?realImg(IMGS.back):''}</div>
    <div class="spine"><span>CORTIS · GREENGREEN</span></div><div class="edge"></div><div class="tp"></div><div class="bt"></div><div class="shadow"></div>`;
   el.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;const r=el.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.classList.add('tilt');el.style.transform=`rotateY(${18-x*34}deg) rotateX(${-4-y*18}deg) translateY(-6px)`});
   el.addEventListener('pointerleave',()=>{el.classList.remove('tilt');el.style.transform=''});
@@ -209,11 +214,11 @@ const book=$('#book'),reader=$('#reader'),uL=$('#uL'),uR=$('#uR');
 let leaves=[],N=0,cur=0,busy=0,cfg=null,snd=true,ac=null;
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-function photo(n,k){const p=PAL[(n+k)%PAL.length];return `<div class="ph" data-n="${n}" style="--a:${p[0]};--b:${p[1]}"></div>`}
-function page(n){ /* n = số trang; 2 = trang tên, 3–24 = 22 ảnh STREET (ngang 3:2, tràn trang), 25 = credit */
+function photo(n,k){if(IMGS&&IMGS.pages&&IMGS.pages[n-1])return `<div class="ph real" style="background-image:url('${IMGS.pages[n-1]}')"></div>`;const p=PAL[(n+k)%PAL.length];return `<div class="ph" data-n="${n}" style="--a:${p[0]};--b:${p[1]}"></div>`}
+function page(n){ /* n = số trang; 2 = trang tên, 3–22 = 20 ảnh STREET (ngang 3:2, tràn trang), 25 = credit */
   if(n===2)return `<div class="pg tt"><b>GREENGREEN</b><small>34.09035° N, 118.34873° W</small></div>`;
-  if(n>=3&&n<=24)return `<div class="pg full">${photo(n-2,n)}</div>`;
-  if(n===25)return `<div class="pg cr"><b>CORTIS</b><p>2nd Mini Album<br>GREENGREEN<br>STREET ver.</p><p class="s">Credit · lời bài hát · thông tin<br>(chữ in nhỏ như bản thật)</p></div>`;
+  if(n>=3&&n<=22)return `<div class="pg full">${photo(n-2,n)}</div>`;
+  if(n===23)return `<div class="pg cr"><b>CORTIS</b><p>2nd Mini Album<br>GREENGREEN<br>STREET ver.</p><p class="s">Credit · lời bài hát · thông tin<br>(chữ in nhỏ như bản thật)</p></div>`;
   return `<div class="pg"></div>`;
 }
 function leafHTML(i,b){
