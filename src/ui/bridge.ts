@@ -260,6 +260,14 @@ export const bridge = {
     const { data } = await supabase.storage.from('concept').createSignedUrl(path, 3600)
     return data?.signedUrl ?? ''
   },
+  /** URL ký có hạn cho ảnh album trong bucket riêng tư `album` (chỉ người đã nhận album mới đọc được). */
+  albumReaderUrl: `${import.meta.env.BASE_URL}album/reader.html`,
+  async albumUrls(albumId: string, names: string[]) {
+    const { data } = await supabase.storage.from('album').createSignedUrls(names.map((n) => `${albumId}/${n}`), 3600)
+    const out: Record<string, string> = {}
+    for (const r of data ?? []) if (r.signedUrl && r.path) out[r.path.split('/').pop() as string] = r.signedUrl
+    return out
+  },
   khaiMacState: () => wrap(api.khaiMacState()),
   eventAsset: (id: string) => api.eventAsset(id).catch(() => null),
   idCardChoose: (m: string) => wrap(api.idCardChoose(m)),

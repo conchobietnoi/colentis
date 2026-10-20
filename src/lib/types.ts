@@ -112,6 +112,7 @@ export type Gift =
   | { type: 'welcome' }
   | { type: 'concept_pack'; con: number; qty?: number }
   | { type: 'event'; id: string }
+  | { type: 'album'; id: string }
 
 export interface MailRow { id: string; kind: 'admin' | 'event' | 'welcome' | 'news'; title: string; body: string; gifts: Gift[]; event_id: string | null; created_at: string; tag?: string | null; tag_color?: string | null; summary?: string | null }
 export interface MailRecipient { mail_id: string; user_id: string; deliver_at: string; read_at: string | null; claimed_at: string | null; claim_result: ClaimResult | null }

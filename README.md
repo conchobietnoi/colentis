@@ -220,6 +220,15 @@ Migration 013 creates the private bucket "concept". Upload these files from the 
 
 Videos and songs are only readable after a user has unlocked all 3 concepts.
 
+Album media (private Storage bucket "album")
+
+Migration 018 creates the private bucket "album" and the album gift (type "album" in admin mails). Upload the images from the Dashboard (Storage -> album, folder greengreen-street/); they are never committed to the repository:
+
+- cover.jpg (front cover, 3:2), back.jpg (back cover, 3:2)
+- 03.jpg .. 22.jpg (the 20 inner photos, 3:2, about 1200 px wide, JPEG quality ~72)
+
+Only a user who has received the album (user_albums) can read these files. The reader lives in public/album/reader.html (shelf + page-flip reader, rotate and full screen) and is loaded in an iframe; it receives signed URLs from the app through postMessage and never calls Supabase itself.
+
 These tests are intended for development and do not interact with the production backend.
 
 Project Structure

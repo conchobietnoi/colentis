@@ -122,6 +122,7 @@ function renderPro(){const eq=S.equip,un=S.unlocked,tot=TITLES.length;
  <div class="ach">${ord.map(a=>`<button class="${un.has(a.id)?'':'lk'} ${eq===a.id?'eq':''}" data-act="ach" data-id="${a.id}">${avatar(ME,62,a.id)}<span class="nm">${a.id.startsWith('welcome-')&&!un.has(a.id)?'Tân binh':esc(a.name)}</span></button>`).join('')}</div>
  ${cxRewardsHTML()}
  ${idProMenu()}
+ ${albumProMenu()}
  <button class="menu" data-x="recap"><span class="l">${ic('chart')}<span>Tổng kết tháng ${TODAY.m+1}<small>Số việc, thẻ hiếm nhất, ảnh để chia sẻ</small></span></span>${ic('right')}</button>
  <button class="menu" data-x="events"><span class="l">${ic('cake')}<span>Sự kiện sắp tới<small>Ngày sinh các thành viên, đếm ngược</small></span></span>${ic('right')}</button>
  <button class="menu" data-act="theme"><span class="l">${ic('image')}<span>Giao diện lịch<small>Màu, nền, chế độ tối</small></span></span>${ic('right')}</button>

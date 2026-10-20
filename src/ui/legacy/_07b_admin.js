@@ -1,5 +1,5 @@
 /* ===== Trang admin v2: Tổng quan · Gửi thư · Thành viên · Lịch sử (theo mockup admin đã duyệt) ===== */
-const ADM={tab:'ov',ov:null,mem:[],hist:[],hseg:'sch',mf:'all',mq:'',sq:'',to:'all',users:[],gifts:[],kind:'card',rar:'any',saver:1,cf:'event',cid:'',title:'',con:1,pq:1,
+const ADM={alb:'',tab:'ov',ov:null,mem:[],hist:[],hseg:'sch',mf:'all',mq:'',sq:'',to:'all',users:[],gifts:[],kind:'card',rar:'any',saver:1,cf:'event',cid:'',title:'',con:1,pq:1,
  tpl:'welcome',t:'',b:'',sched:false,at:'',editId:null,loading:false,draft:false};
 const ADCOL=['#FF2E88','#7B61FF','#35D0A5','#FFB02E','#4CC9FF'],ADDK=['#fff','#fff','#1E1B5E','#1E1B5E','#1E1B5E'];
 const ADTPL=[['welcome','Chào mừng','Chào mừng Mùa Concept','Mùa Concept bắt đầu rồi! Mở thẻ ID của bạn và nhận quà khởi đầu nhé. Chúc cả nhà thật vui.'],
@@ -8,7 +8,7 @@ const ADTPL=[['welcome','Chào mừng','Chào mừng Mùa Concept','Mùa Concept
  ['blank','Trống','','']];
 const CFLT=[['event','Sự kiện'],['supreme','Bá khí'],['legend','Huyền Thoại'],['rare','Hiếm'],['common','Thường']];
 const GRAR={any:'Ngẫu nhiên',common:'Thường',rare:'Hiếm',legendary:'Huyền Thoại',supreme:'Bá khí'};
-const GIFTLBL=g=>g.type==='card'?`1 thẻ ${GRAR[g.rarity]||'ngẫu nhiên'}`:g.type==='rescue'?`${g.qty} thẻ cứu`:g.type==='card_id'?`Thẻ: ${(CBY[g.id]||{name:g.id}).name}`:g.type==='concept_pack'?`${g.qty||1} gói Concept ${g.con}`:`Khung/danh hiệu: ${(TMAP[g.id]||{name:g.id}).name}`;
+const GIFTLBL=g=>g.type==='card'?`1 thẻ ${GRAR[g.rarity]||'ngẫu nhiên'}`:g.type==='rescue'?`${g.qty} thẻ cứu`:g.type==='card_id'?`Thẻ: ${(CBY[g.id]||{name:g.id}).name}`:g.type==='album'?`Album ${albumName(g.id)}`:g.type==='concept_pack'?`${g.qty||1} gói Concept ${g.con}`:`Khung/danh hiệu: ${(TMAP[g.id]||{name:g.id}).name}`;
 const fmtDT=iso=>{const d=new Date(iso);return `${pad(d.getDate())}/${pad(d.getMonth()+1)} · ${pad(d.getHours())}:${pad(d.getMinutes())}`};
 function admAgo(iso){if(!iso)return 'chưa vào';const s=Math.max(0,(Date.now()-new Date(iso).getTime())/1000);
  if(s<90)return 'vừa xong';if(s<3600)return Math.round(s/60)+' phút trước';if(s<86400)return Math.round(s/3600)+' giờ trước';const d=Math.round(s/86400);return d===1?'hôm qua':d+' ngày trước'}
@@ -58,8 +58,9 @@ function admSendTab(){const A=ADM,n=admRecipients().length,tpl=ADTPL,preview=A.t
   <div class="gsel">${tpl.map(t=>`<button class="chip ${A.tpl===t[0]?'on':''}" data-x="adp" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>
   <input class="in" id="att" maxlength="60" placeholder="Tiêu đề (tối đa 60 ký tự)" autocomplete="off" value="${esc(A.t)}"><textarea class="in" id="atb" rows="4" maxlength="600" placeholder="Lời nhắn gửi bạn bè...">${esc(A.b)}</textarea><div class="sub" id="atc" style="text-align:right">${A.b.length}/600</div></div>
  <div class="card-b"><h2>3 · Quà đính kèm <em>${A.gifts.length}/4</em></h2><div class="sub">Quà admin là quà bổ sung, không tính vào hạn mức 2 thẻ mỗi ngày và không khóa ngày.</div>
-  <div class="gsel"><button class="chip ${A.kind==='card'?'on':''}" data-x="agk" data-v="card">Thẻ ngẫu nhiên</button><button class="chip ${A.kind==='cardid'?'on':''}" data-x="agk" data-v="cardid">Thẻ cụ thể</button><button class="chip ${A.kind==='pack'?'on':''}" data-x="agk" data-v="pack">Gói Concept</button><button class="chip ${A.kind==='rescue'?'on':''}" data-x="agk" data-v="rescue">Thẻ cứu</button><button class="chip ${A.kind==='title'?'on':''}" data-x="agk" data-v="title">Khung và danh hiệu</button></div>
+  <div class="gsel"><button class="chip ${A.kind==='card'?'on':''}" data-x="agk" data-v="card">Thẻ ngẫu nhiên</button><button class="chip ${A.kind==='cardid'?'on':''}" data-x="agk" data-v="cardid">Thẻ cụ thể</button><button class="chip ${A.kind==='pack'?'on':''}" data-x="agk" data-v="pack">Gói Concept</button><button class="chip ${A.kind==='album'?'on':''}" data-x="agk" data-v="album">Album</button><button class="chip ${A.kind==='rescue'?'on':''}" data-x="agk" data-v="rescue">Thẻ cứu</button><button class="chip ${A.kind==='title'?'on':''}" data-x="agk" data-v="title">Khung và danh hiệu</button></div>
   ${A.kind==='card'?`<div class="gsel">${['any','common','rare','legendary','supreme'].map(r=>`<button class="chip ${A.rar===r?'on':''}" data-x="agr" data-v="${r}">${GRAR[r]}</button>`).join('')}</div>`:''}
+  ${A.kind==='album'?`<div class="gsel">${ALBUM_DEF.map(a=>`<button class="chip ${A.alb===a.id?'on':''}" data-x="agal" data-v="${a.id}">${esc(a.title)} · ${esc(a.sub)}</button>`).join('')}</div><div class="sub">Người nhận bấm “Nhận quà” trong thư để album vào kệ của họ.</div>`:''}
   ${A.kind==='rescue'?`<div class="step"><button class="ibtn sm" data-x="ags" data-v="-1">−</button><b>${A.saver}</b><button class="ibtn sm" data-x="ags" data-v="1">+</button><span class="sub">thẻ cứu (tối đa 5)</span></div>`:''}
   ${A.kind==='pack'?`<div class="gsel">${[1,2,3].map(c=>`<button class="chip ${A.con===c?'on':''}" data-x="agv" data-v="${c}">${(typeof CXN!=='undefined'&&CXN[c]&&CXN[c].n)||'Concept '+c}</button>`).join('')}</div><div class="step"><button class="ibtn sm" data-x="agq" data-v="-1">−</button><b>${A.pq}</b><button class="ibtn sm" data-x="agq" data-v="1">+</button><span class="sub">gói (tối đa 5), mỗi gói 5 thẻ</span></div>`:''}
   ${A.kind==='cardid'?`<div class="gsel">${CFLT.map(x=>`<button class="chip ${A.cf===x[0]?'on':''}" data-x="agf" data-v="${x[0]}">${x[1]}</button>`).join('')}</div><div class="agrid">${ALLCARDS.filter(c=>c.r===A.cf).sort((a,b)=>(a.ev<b.ev?-1:a.ev>b.ev?1:0)||a.sort-b.sort).map(c=>`<button class="agc ${A.cid===c.id?'on':''}" data-x="agc" data-v="${c.id}"><span class="agth" style="--ar:${c.ar}">${cardHTML(c,{w:'100%',thumb:1})}</span><small>${esc(c.name)}</small></button>`).join('')||'<div class="sub">Không có thẻ nào.</div>'}</div>`:''}
@@ -111,6 +112,7 @@ function admAct(a,d){
   case 'adp':{const t=ADTPL.find(x=>x[0]===d.v);ADM.tpl=d.v;if(t){ADM.t=t[2];ADM.b=t[3]}admSave();re();return true}
   case 'agk':ADM.kind=d.v;re();return true;
   case 'agr':ADM.rar=d.v;re();return true;
+  case 'agal':ADM.alb=d.v;re();return true;
   case 'ags':ADM.saver=Math.max(1,Math.min(5,ADM.saver+(+d.v)));re();return true;
   case 'agv':ADM.con=+d.v;re();return true;
   case 'agq':ADM.pq=Math.max(1,Math.min(5,ADM.pq+(+d.v)));re();return true;
@@ -119,7 +121,7 @@ function admAct(a,d){
   case 'agp':ADM.title=d.v;re();return true;
   case 'aga':{const k=ADM.kind;if(k==='cardid'&&!ADM.cid){toast('Chọn một thẻ trước');return true}
    if(ADM.gifts.length>=4){toast('Mỗi thư đính kèm tối đa 4 quà');return true}
-   ADM.gifts.push(k==='card'?{type:'card',rarity:ADM.rar}:k==='cardid'?{type:'card_id',id:ADM.cid}:k==='rescue'?{type:'rescue',qty:ADM.saver}:k==='pack'?{type:'concept_pack',con:ADM.con,qty:ADM.pq}:{type:'title',id:ADM.title});admSave();re();return true}
+   ADM.gifts.push(k==='album'?{type:'album',id:ADM.alb||ALBUM_DEF[0].id}:k==='card'?{type:'card',rarity:ADM.rar}:k==='cardid'?{type:'card_id',id:ADM.cid}:k==='rescue'?{type:'rescue',qty:ADM.saver}:k==='pack'?{type:'concept_pack',con:ADM.con,qty:ADM.pq}:{type:'title',id:ADM.title});admSave();re();return true}
   case 'agd':ADM.gifts.splice(+d.i,1);admSave();re();return true;
   case 'asc':ADM.sched=!ADM.sched;admSave();re();return true;
   case 'asend':admSend(false);return true;

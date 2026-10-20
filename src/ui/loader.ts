@@ -87,6 +87,7 @@ function giftsOf(m: MailRow, events: any[]): UiGift[] {
     else if (g.type === 'card_id') out.push({ k: 'card', r: 'any' })
     else if (g.type === 'rescue') out.push({ k: 'saver', n: g.qty ?? 1 })
     else if (g.type === 'title') out.push({ k: 'title', id: g.id })
+    else if (g.type === 'album') out.push({ k: 'album', id: String(g.id) })
     else if (g.type === 'id_card') out.push({ k: 'idcard' })
     else if (g.type === 'id_frame') out.push({ k: 'idframe' })
     else if (g.type === 'stash_pack') out.push({ k: 'cpack', con: 1, n: 1 })
@@ -156,7 +157,7 @@ export async function loadLite(prev: UiSnapshot, months: [number, number][]): Pr
     streak: meRes.streak, rescueMonthlyLeft: meRes.rescue_monthly_left, rescueBonus: meRes.rescue_bonus, taskTotal: meRes.tasks_done_total, catchup: meRes.catchup_days,
     members, tasks: { ...prev.tasks, ...clearRange(prev.tasks, from, to), ...mapTaskList(tasks, myId) }, locks: { ...prev.locks, ...lockMap }, grants: grantMap, own,
     unlocked: userTitles.map((u) => u.title_id), today_info: todayInfo, km: await api.khaiMacState().catch(() => prev.km),
-    idc: await api.myIdCard().catch(() => prev.idc ?? null), stash: await api.eventStash().catch(() => prev.stash ?? []), cx: await api.conceptState().catch(() => prev.cx ?? null),
+    idc: await api.myIdCard().catch(() => prev.idc ?? null), albums: await api.myAlbums().catch(() => prev.albums ?? []), stash: await api.eventStash().catch(() => prev.stash ?? []), cx: await api.conceptState().catch(() => prev.cx ?? null),
     streakIfSaved: meRes.streak_if_saved ?? meRes.streak,
   } as UiSnapshot
 }
@@ -273,7 +274,7 @@ export async function loadSnapshot(opts: { months: [number, number][] }): Promis
     members, cals, tasks: taskMap, cards: cardsCache, own, titles: titlesCache,
     unlocked: userTitles.map((u) => u.title_id),
     mails: mapMails(mails, recs, eventsCache), notifs: nlist, friends, locks: lockMap, grants: grantMap, today_info: todayInfo, eventDone, km: await api.khaiMacState().catch(() => null),
-    idc: await api.myIdCard().catch(() => null), cx: await api.conceptState().catch(() => null), stash: await api.eventStash().catch(() => []),
+    idc: await api.myIdCard().catch(() => null), albums: await api.myAlbums().catch(() => []), cx: await api.conceptState().catch(() => null), stash: await api.eventStash().catch(() => []),
     prefs: Object.fromEntries(prefs.map((x) => [x.calendar_id, x.theme])),
     limits: { calendars: info?.max_calendars ?? 4, members: info?.max_members ?? 6, rescuePerMonth: rescueCfg },
     streakIfSaved: meRes.streak_if_saved ?? meRes.streak,

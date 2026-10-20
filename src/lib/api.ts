@@ -35,6 +35,7 @@ export const api = {
   me: () => rpc<Me>('me'),
   khaiMacState: () => rpc<any>('khai_mac_state'),
   myIdCard: () => rpc<any>('my_id_card'),
+  myAlbums: () => rpc<any[]>('my_albums'),
   idCardChoose: (m: string) => rpc<any>('id_card_choose', { m }),
   idCardSave: (p_holder: string, p_photo: string | null, p_crop: { z: number; x: number; y: number }) => rpc<any>('id_card_save', { p_holder, p_photo, p_crop }),
   eventAsset: (id: string) => q<any[]>(supabase.from('event_assets').select('mime,data').eq('id', id)).then((r) => r[0] ?? null),

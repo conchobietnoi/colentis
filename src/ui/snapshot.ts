@@ -61,6 +61,7 @@ export type UiGift =
   | { k: 'idframe' }
   | { k: 'cpack'; con: number; n: number }
   | { k: 'stash'; id: string }
+  | { k: 'album'; id: string }
 
 export interface UiMail {
   id: string
@@ -135,6 +136,7 @@ export interface UiSnapshot {
   eventDone: Record<string, boolean>
   km: KhaiMacState | null
   idc: any | null
+  albums: any[]
   cx: any | null
   stash: any[]
   prefs: Record<string, any>                          // calId → theme

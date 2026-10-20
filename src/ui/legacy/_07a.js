@@ -242,6 +242,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-x]');if(!t
  case 'events':eventsSheet();break;
  case 'setbd':editProfile();break;
  case 'recap':openRecap();break;
+ case 'albums':openAlbums();break;
  case 'rcshot':shotSheet(recapCanvas(),`colentis-thang-${TODAY.m+1}.png`,`Ảnh tổng kết tháng ${TODAY.m+1}`);break;
  case 'rcshare':{SHOT={};try{const cv=recapCanvas();SHOT={url:cv.toDataURL('image/png'),fname:`colentis-thang-${TODAY.m+1}.png`}}catch(er){}shotShare();break}
  case 'dlcard':cardShot(d.cid);break;
