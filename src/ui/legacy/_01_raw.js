@@ -67,7 +67,7 @@ function applySnapshot(sn){
  S.priv.album=m.album;S.priv.find=m.findable;S.priv.notif=m.notif;S.priv.cheer=m.cheer;S.priv.bdshow=m.showBd;
  S.prefs=sn.prefs;
  S.claimed=!!S.locks[TODAY.iso]||(S.grants[TODAY.iso]||[]).some(g=>g.source==='personal'||g.source==='rescue');
- S.km=sn.km||null;S.idc=sn.idc||null;S.albums=sn.albums||[];cxApply(sn);S.stash=sn.stash||[];S.eventGot=Object.values(sn.eventDone).every(Boolean)&&Object.keys(sn.eventDone).length>0;
+ S.km=sn.km||null;S.idc=sn.idc||null;S.albums=sn.albums||[];S.photos=sn.photos||{};cxApply(sn);S.stash=sn.stash||[];S.eventGot=Object.values(sn.eventDone).every(Boolean)&&Object.keys(sn.eventDone).length>0;
  S.todayCards=(S.grants[TODAY.iso]||[]).map(g=>CBY[g.card]).filter(Boolean);
  S.groupReady=(S.tinfo?S.tinfo.groups:[]).some(g=>g.claimed);
  MAILS.length=0;sn.mails.forEach(x=>MAILS.push(x));

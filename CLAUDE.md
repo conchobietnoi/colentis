@@ -53,3 +53,6 @@ Nguồn sự thật: `PLAN.md` (kế hoạch final, mới nhất). Mọi quy t�
 
 ## Trang admin v2
 - Mockup ở `design/admin/`; code `src/ui/legacy/_07b_admin.js`, migration `017_admin_v2.sql`, test `80_admin_v2.sql` và `e2e/s9_admin.mjs`. Các bộ test supabase chạy theo đúng thứ tự tên tệp (`ls supabase/tests/[0-9]*.sql`, bỏ `00_stub`), vì nhiều test dùng dữ liệu của test trước.
+
+## Check in bằng ảnh vuông (migration 019)
+- Mockup đã duyệt `design/checkin/checkin-mockup.html`; code `src/ui/legacy/_07d_checkin.js` + `src/ui/checkin.css`, migration `019_checkin_photos.sql`, test `90_checkin.sql` và `e2e/s10_checkin.mjs`. Ảnh ở bucket riêng `checkins`, mỗi việc 1 ảnh, hiện trong ghi chú xổ xuống; dấu mộc Colentis vẽ ở UI từ `taken_at` của server. Thành viên chỉ chụp trực tiếp, chỉ admin được chọn ảnh từ máy (đường dẫn `up-`). Đổi UI dòng việc ở `taskRow` (`_02_raw.js`): ghi chú + ảnh nằm trong `.tnb` full chiều rộng.

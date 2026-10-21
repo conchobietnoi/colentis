@@ -28,6 +28,13 @@ export interface UiTask {
   pending?: boolean   // đang chờ đồng bộ (offline)
 }
 
+export interface UiPhoto {
+  p: string          // đường dẫn trong bucket checkins
+  src: string        // camera | upload
+  at: string         // ISO thời điểm chụp
+  owner: string      // 'me' hoặc uuid
+}
+
 export interface UiCard {
   id: string
   r: 'common' | 'rare' | 'legend' | 'supreme' | 'event'
@@ -137,6 +144,7 @@ export interface UiSnapshot {
   km: KhaiMacState | null
   idc: any | null
   albums: any[]
+  photos: Record<string, UiPhoto>   // task_id → ảnh check in
   cx: any | null
   stash: any[]
   prefs: Record<string, any>                          // calId → theme

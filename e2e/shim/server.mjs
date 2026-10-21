@@ -211,6 +211,16 @@ function multipartFile(buf, ctype) {
   return found ?? { buf, type: ctype }
 }
 async function storage(req, res, url, uid) {
+  const multi = /^\/storage\/v1\/object\/sign\/([^/]+)$/.exec(url.pathname)
+  if (multi && req.method === 'POST') {
+    const b = JSON.parse((await readBody(req)).toString() || '{}')
+    const out = []
+    for (const p of b.paths ?? []) {
+      const r = await asUser(uid, (c) => c.query('select 1 from storage.objects where bucket_id=$1 and name=$2', [multi[1], p]))
+      out.push(r.rowCount ? { error: null, path: p, signedURL: `/object/sign/${multi[1]}/${p}?token=shim` } : { error: 'Object not found', path: p, signedURL: null })
+    }
+    return send(res, 200, out)
+  }
   const sg = /^\/storage\/v1\/object\/sign\/([^/]+)\/(.+)$/.exec(url.pathname)
   if (sg && req.method === 'POST') return send(res, 200, { signedURL: `/object/sign/${sg[1]}/${sg[2]}?token=shim` })
   if (sg && req.method === 'GET') {

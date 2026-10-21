@@ -925,6 +925,7 @@ body.pdark .stagewrap{background:radial-gradient(900px 600px at 15% 0,#2a2468,tr
 /* ===== Tab Lịch: việc của bạn, ghi chú gập/mở, chọn màu nền ===== */
 .t .tchev{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:var(--soft);flex:none;transition:transform .2s}
 .t .tchev.on{transform:rotate(180deg);color:var(--ink)}
+.t{flex-wrap:wrap}.t .tnb{flex:0 0 100%;order:9;min-width:0}
 .t .tnote{display:block;font-style:normal;font-weight:600;font-size:12.5px;line-height:1.45;color:var(--soft);margin-top:4px;padding:8px 10px;border-radius:10px;background:var(--sleeve);white-space:pre-wrap;word-break:break-word}
 .caltk{margin:12px 14px 0}
 .bgpick{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:4px 10px 4px 4px;border-radius:99px;border:2px solid var(--line);cursor:pointer}

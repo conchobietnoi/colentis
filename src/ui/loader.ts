@@ -2,7 +2,7 @@ import { api } from '../lib/api'
 import { supabase } from '../lib/supabase'
 import type { CardRow, MailRow, MailRecipient, Person, Task } from '../lib/types'
 import { TITLE_WIDTH } from './titleWidths'
-import type { TodayInfo, UiCal, UiCard, UiFriend, UiGift, UiMail, UiMember, UiNotif, UiSnapshot, UiTask } from './snapshot'
+import type { TodayInfo, UiPhoto, UiCal, UiCard, UiFriend, UiGift, UiMail, UiMember, UiNotif, UiSnapshot, UiTask } from './snapshot'
 
 const PAL: [string, string][] = [
   ['#9AA6FF', '#4CC9FF'], ['#FF7AB8', '#FFE45E'], ['#35D0A5', '#4CC9FF'], ['#FF9A5C', '#FF2E88'],
@@ -124,6 +124,12 @@ async function loadTodayInfo(today: string, myId: string, memberOf: (uid: string
   } catch { return null } // hiển thị được không có phần nhóm
 }
 
+export function mapPhotos(rows: { task_id: string; owner_id: string; path: string; source: string; taken_at: string }[], myId: string): Record<string, UiPhoto> {
+  const out: Record<string, UiPhoto> = {}
+  for (const r of rows) out[r.task_id] = { p: r.path, src: r.source, at: r.taken_at, owner: r.owner_id === myId ? 'me' : r.owner_id }
+  return out
+}
+
 export function mapTaskList(tasks: Task[], myId: string): Record<string, UiTask[]> {
   const out: Record<string, UiTask[]> = {}
   for (const t of tasks) (out[keyOfIso(t.day)] ??= []).push(mapTask(t, myId))
@@ -136,6 +142,7 @@ export async function loadLite(prev: UiSnapshot, months: [number, number][]): Pr
   for (const [y, m0] of months.length ? months : [[prev.today.y, prev.today.m] as [number, number]]) { const r = monthRange(y, m0); if (r.from < from) from = r.from; if (r.to > to) to = r.to }
   const [meRes, tasks, locks, grants, userCards, userTitles] = await Promise.all([api.me(), api.tasks(from, to), api.locks(from, to), api.grants(), api.userCards(), api.userTitles()])
   const myId = meRes.profile.id
+  const photoRows = await api.taskPhotos(from, to).catch(() => null)
   const members = { ...prev.members }
   const memberOf = (uid: string): UiMember => {
     if (uid === myId) return members.me
@@ -157,7 +164,7 @@ export async function loadLite(prev: UiSnapshot, months: [number, number][]): Pr
     streak: meRes.streak, rescueMonthlyLeft: meRes.rescue_monthly_left, rescueBonus: meRes.rescue_bonus, taskTotal: meRes.tasks_done_total, catchup: meRes.catchup_days,
     members, tasks: { ...prev.tasks, ...clearRange(prev.tasks, from, to), ...mapTaskList(tasks, myId) }, locks: { ...prev.locks, ...lockMap }, grants: grantMap, own,
     unlocked: userTitles.map((u) => u.title_id), today_info: todayInfo, km: await api.khaiMacState().catch(() => prev.km),
-    idc: await api.myIdCard().catch(() => prev.idc ?? null), albums: await api.myAlbums().catch(() => prev.albums ?? []), stash: await api.eventStash().catch(() => prev.stash ?? []), cx: await api.conceptState().catch(() => prev.cx ?? null),
+    idc: await api.myIdCard().catch(() => prev.idc ?? null), albums: await api.myAlbums().catch(() => prev.albums ?? []), photos: photoRows ? { ...prev.photos, ...mapPhotos(photoRows, myId) } : (prev.photos ?? {}), stash: await api.eventStash().catch(() => prev.stash ?? []), cx: await api.conceptState().catch(() => prev.cx ?? null),
     streakIfSaved: meRes.streak_if_saved ?? meRes.streak,
   } as UiSnapshot
 }
@@ -212,6 +219,7 @@ export async function loadSnapshot(opts: { months: [number, number][] }): Promis
   let from = '9999', to = '0000'
   for (const [y, m0] of months) { const r = monthRange(y, m0); if (r.from < from) from = r.from; if (r.to > to) to = r.to }
   const [tasks, locks] = await Promise.all([api.tasks(from, to), api.locks(from, to)])
+  const photoRows = await api.taskPhotos(from, to).catch(() => [])
   const taskMap: Record<string, UiTask[]> = {}
   for (const t of tasks) (taskMap[keyOfIso(t.day)] ??= []).push(mapTask(t, myId))
   const lockMap: Record<string, string> = {}
@@ -274,7 +282,7 @@ export async function loadSnapshot(opts: { months: [number, number][] }): Promis
     members, cals, tasks: taskMap, cards: cardsCache, own, titles: titlesCache,
     unlocked: userTitles.map((u) => u.title_id),
     mails: mapMails(mails, recs, eventsCache), notifs: nlist, friends, locks: lockMap, grants: grantMap, today_info: todayInfo, eventDone, km: await api.khaiMacState().catch(() => null),
-    idc: await api.myIdCard().catch(() => null), albums: await api.myAlbums().catch(() => []), cx: await api.conceptState().catch(() => null), stash: await api.eventStash().catch(() => []),
+    idc: await api.myIdCard().catch(() => null), albums: await api.myAlbums().catch(() => []), photos: mapPhotos(photoRows, myId), cx: await api.conceptState().catch(() => null), stash: await api.eventStash().catch(() => []),
     prefs: Object.fromEntries(prefs.map((x) => [x.calendar_id, x.theme])),
     limits: { calendars: info?.max_calendars ?? 4, members: info?.max_members ?? 6, rescuePerMonth: rescueCfg },
     streakIfSaved: meRes.streak_if_saved ?? meRes.streak,

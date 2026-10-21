@@ -229,6 +229,10 @@ Migration 018 creates the private bucket "album" and the album gift (type "album
 
 Only a user who has received the album (user_albums) can read these files. The reader lives in public/album/reader.html (shelf + page-flip reader, rotate and full screen) and is loaded in an iframe; it receives signed URLs from the app through postMessage and never calls Supabase itself.
 
+Check-in photos (private Storage bucket "checkins")
+
+Migration 019 creates the private bucket "checkins" and the table task_photos (one square photo per task). Nothing needs to be uploaded by hand: the app uploads <calendar_id>/<task_id>/cam-<ms>.jpg after a live capture, or up-<ms>.jpg when an admin picks a file and crops it. Everyone in the calendar can read the photo; only the task owner can write it, and the set_task_photo RPC checks owner, path, source and that the file exists. The Colentis stamp (date from the server, taken_at) is drawn by the app on top of every photo. Web pages cannot prove a photo came from the camera, so "capture only" is enforced by the UI (no gallery button) and by the up- path being admin-only, not by the file contents. Code: src/ui/legacy/_07d_checkin.js, src/ui/checkin.css, test supabase/tests/90_checkin.sql and e2e/s10_checkin.mjs.
+
 These tests are intended for development and do not interact with the production backend.
 
 Project Structure

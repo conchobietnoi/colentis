@@ -3,7 +3,7 @@ import { supabase, isConfigured } from '../lib/supabase'
 import { toAppError } from '../lib/errors'
 import type { Task } from '../lib/types'
 import { BLANK, dropImgCache, imgNow, loadImg } from './images'
-import { friendStreak, keyOfIso, loadLite, loadSnapshot, mapTaskList, monthRange, resetCaches, serverNow } from './loader'
+import { friendStreak, keyOfIso, loadLite, loadSnapshot, mapPhotos, mapTaskList, monthRange, resetCaches, serverNow } from './loader'
 import type { UiSnapshot } from './snapshot'
 
 type Hooks = { background?: () => void; offline?: () => void; signedOut?: () => void; recovery?: () => void }
@@ -26,6 +26,8 @@ function qKey() { return 'colentis:queue:' + myId }
 function readQ(): QueueOp[] { try { return JSON.parse(localStorage.getItem(qKey()) || '[]') } catch { return [] } }
 function writeQ(q: QueueOp[]) { try { localStorage.setItem(qKey(), JSON.stringify(q)) } catch { /* bỏ qua */ } }
 const pendingCount = () => (myId ? readQ().length : 0)
+
+const photoCache = new Map<string, { url: string; exp: number }>()
 
 function trackMonth(y: number, m0: number) {
   months.set(`${y}-${m0}`, [y, m0])
@@ -193,9 +195,10 @@ export const bridge = {
     if (months.has(k) || !last) return false
     trackMonth(y, m0)
     const { from, to } = monthRange(y, m0)
-    const [tasks, locks] = await wrap(Promise.all([api.tasks(from, to), api.locks(from, to)]))
+    const [tasks, locks, phs] = await wrap(Promise.all([api.tasks(from, to), api.locks(from, to), api.taskPhotos(from, to).catch(() => [])]))
     const sn = last
     const mapped = mapTaskList(tasks, sn.me.uid)
+    Object.assign((sn.photos ??= {}), mapPhotos(phs, sn.me.uid))
     for (const [k2, list] of Object.entries(mapped)) sn.tasks[k2] = list
     for (const l of locks) sn.locks[l.day] = l.reason
     return true
@@ -268,6 +271,29 @@ export const bridge = {
     for (const r of data ?? []) if (r.signedUrl && r.path) out[r.path.split('/').pop() as string] = r.signedUrl
     return out
   },
+  /** URL ký có hạn cho ảnh check in (bucket riêng tư `checkins`), nhớ tạm để không ký lại mỗi lần vẽ. */
+  async photoUrls(paths: string[]) {
+    const now = Date.now(), out: Record<string, string> = {}, need: string[] = []
+    for (const p of paths) { const c = photoCache.get(p); if (c && c.exp > now) out[p] = c.url; else need.push(p) }
+    for (let i = 0; i < need.length; i += 60) {
+      const part = need.slice(i, i + 60)
+      const { data } = await supabase.storage.from('checkins').createSignedUrls(part, 3600)
+      for (const r of data ?? []) if (r.signedUrl && r.path) { out[r.path] = r.signedUrl; photoCache.set(r.path, { url: r.signedUrl, exp: now + 3300e3 }) }
+    }
+    return out
+  },
+  /** Đưa ảnh đã chụp (hoặc ảnh admin tải lên) lên bucket rồi gắn vào việc. Trả về đường dẫn mới. */
+  async uploadCheckin(task: { id: string; cal: string }, blob: Blob, source: 'camera' | 'upload') {
+    if (!online()) throw Object.assign(new Error('offline'), { app: { code: 'OFFLINE', message: 'Cần có mạng để gửi ảnh check in.', offline: true } })
+    const path = `${task.cal}/${task.id}/${source === 'camera' ? 'cam' : 'up'}-${Date.now()}.jpg`
+    const { error } = await supabase.storage.from('checkins').upload(path, blob, { contentType: 'image/jpeg', upsert: false })
+    if (error) throw Object.assign(error, { app: toAppError(error) })
+    let r
+    try { r = await wrap(api.setTaskPhoto(task.id, path, source)) } catch (e) { supabase.storage.from('checkins').remove([path]).catch(() => undefined); throw e }
+    if (r.old_path && r.old_path !== path) supabase.storage.from('checkins').remove([r.old_path]).catch(() => undefined)
+    return r
+  },
+  myCheckins: () => wrap(api.myCheckins()),
   khaiMacState: () => wrap(api.khaiMacState()),
   eventAsset: (id: string) => api.eventAsset(id).catch(() => null),
   idCardChoose: (m: string) => wrap(api.idCardChoose(m)),

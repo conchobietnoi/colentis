@@ -2,6 +2,9 @@
 const MAP: Record<string, string> = {
   NOT_AUTHENTICATED: 'Phiên đăng nhập đã hết, hãy đăng nhập lại.',
   FORBIDDEN: 'Bạn không có quyền làm việc này.',
+  FILE_NOT_FOUND: 'Ảnh chưa tải lên được, hãy chụp lại.',
+  INVALID_PATH: 'Ảnh không hợp lệ, hãy chụp lại.',
+  INVALID_SOURCE: 'Ảnh không hợp lệ, hãy chụp lại.',
   DAY_LOCKED: 'Ngày này đã khóa, chỉ xem lại được.',
   PAST_DAY: 'Ngày đã qua nên không sửa được nội dung.',
   VERSION_CONFLICT: 'Việc này vừa được sửa ở thiết bị khác. Hãy xem lại rồi thử tiếp.',

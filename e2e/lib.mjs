@@ -4,8 +4,9 @@ export const URL = 'http://localhost:54399/'
 export const CTL = async (p, body = {}) => (await fetch('http://localhost:54399/__ctl/' + p, { method: 'POST', body: JSON.stringify(body) })).json()
 export const sql = (s, params) => CTL('sql', { sql: s, params })
 export async function launch(opts = {}) {
-  const browser = await chromium.launch({ executablePath: process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox'] })
-  const ctx = await browser.newContext({ viewport: { width: 420, height: 860 }, serviceWorkers: 'block', locale: 'vi-VN', timezoneId: 'Asia/Ho_Chi_Minh', ...opts })
+  const browser = await chromium.launch({ executablePath: process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox', ...(opts.args || [])] })
+  const { args: _args, ...ctxOpts } = opts
+  const ctx = await browser.newContext({ viewport: { width: 420, height: 860 }, serviceWorkers: 'block', locale: 'vi-VN', timezoneId: 'Asia/Ho_Chi_Minh', ...ctxOpts })
   const page = await ctx.newPage()
   const logs = []
   page.on('console', (m) => { if (m.type() === 'error' && !/WebSocket|realtime|net::ERR/i.test(m.text()) && !/\/storage\/v1\/object\/concept\//.test(m.location().url || '')) logs.push('console.error: ' + m.text().slice(0, 300)) })
