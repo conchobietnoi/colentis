@@ -36,6 +36,7 @@ ok(row.note === 'Trời mát', 'dòng thêm được nối vào ghi chú')
 const bytes = (await sql(`select count(*)::int n from storage.objects where bucket_id='checkins'`))[0].n
 ok(bytes === 1, 'có 1 tệp trong bucket checkins')
 await shot(page, 's10-done')
+await clearG(page); ok((await sql(`select count(*)::int n from user_titles where user_id=$1 and title_id='photo-1'`, [A.id]))[0].n === 1, 'ảnh đầu tiên nhận danh hiệu sống ảo có tâm')
 await page.click('[data-ci=done]'); await page.waitForTimeout(1200)
 ok(await page.isVisible('.t .ci-nph .cstamp'), 'ảnh + dấu mộc nằm trong ghi chú xổ xuống')
 const loaded = await page.evaluate(() => { const i = document.querySelector('.t .ci-nph img'); return i && i.complete && i.naturalWidth > 0 })
@@ -44,7 +45,7 @@ ok(await page.isVisible('.t .ci-nph [data-ci=cam]'), 'có nút Chụp lại')
 await shot(page, 's10-note')
 // chụp lại thay ảnh cũ
 await page.click('.t .ci-nph [data-ci=cam]'); await page.waitForTimeout(1200)
-await page.click('[data-ci=shot]'); await page.waitForTimeout(900); await page.click('[data-ci=send]'); await page.waitForSelector('#ciDone.on', { timeout: 10000 })
+await page.click('[data-ci=shot]'); await page.waitForTimeout(900); await page.click('[data-ci=send]'); await page.waitForSelector('#ciDone.on', { timeout: 10000 }); await clearG(page)
 ok((await sql(`select count(*)::int n from storage.objects where bucket_id='checkins'`))[0].n === 1, 'chụp lại: tệp cũ bị xóa, còn đúng 1 tệp')
 await page.click('[data-ci=done]'); await page.waitForTimeout(800)
 // bộ sưu tập
@@ -82,7 +83,7 @@ await p2.click('[data-ci=rot]'); await p2.fill('#ciZm', '1.6'); await p2.dispatc
 await shot(p2, 's10-crop')
 await p2.click('[data-ci=usecrop]'); await p2.waitForTimeout(800)
 ok(await p2.isVisible('#ciVf.prev .ci-pv'), 'ảnh cắt hiện ở bước xem trước')
-await p2.click('[data-ci=send]'); await p2.waitForSelector('#ciDone.on', { timeout: 10000 })
+await p2.click('[data-ci=send]'); await p2.waitForSelector('#ciDone.on', { timeout: 10000 }); await clearG(p2)
 const r2 = (await sql(`select source, path from task_photos where owner_id=$1`, [AD.id]))[0]
 ok(r2 && r2.source === 'upload' && /\/up-\d+\.jpg$/.test(r2.path), 'ảnh admin tải lên có nguồn upload')
 // thành viên thường không ghi được đường dẫn up-

@@ -39,5 +39,17 @@ export const TITLE_WIDTH: Record<string, number> = {
  "secret-juhoon": 843,
  "secret-keonho": 843,
  "secret-martin": 843,
- "secret-seonghyeon": 843
+ "secret-seonghyeon": 843,
+ "daily-early": 958,
+ "daily-lunch": 932,
+ "daily-late": 1088,
+ "day-5": 760,
+ "day-10": 1088,
+ "weekend": 1114,
+ "photo-1": 760,
+ "photo-10": 1062,
+ "photo-50": 880,
+ "friend-5": 880,
+ "dup-5": 906,
+ "photo-streak-7": 958,
 }

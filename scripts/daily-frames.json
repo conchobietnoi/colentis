@@ -1,0 +1,86 @@
+[
+ {
+  "id": "daily-early",
+  "name": "gà chưa gáy tui đã xong",
+  "unlock": "Hoàn thành task 4–6 giờ sáng",
+  "rarity": "rare",
+  "sort": 24
+ },
+ {
+  "id": "daily-lunch",
+  "name": "cơm chưa ăn đã đòi làm",
+  "unlock": "Hoàn thành task 11–13 giờ trưa",
+  "rarity": "common",
+  "sort": 25
+ },
+ {
+  "id": "daily-late",
+  "name": "ngủ sớm là chuyện người khác",
+  "unlock": "Hoàn thành task lúc 23 giờ",
+  "rarity": "rare",
+  "sort": 26
+ },
+ {
+  "id": "day-5",
+  "name": "cày như trâu",
+  "unlock": "5 task xong trong một ngày",
+  "rarity": "common",
+  "sort": 27
+ },
+ {
+  "id": "day-10",
+  "name": "trâu cũng biết xin nghỉ phép",
+  "unlock": "10 task xong trong một ngày",
+  "rarity": "legendary",
+  "sort": 28
+ },
+ {
+  "id": "weekend",
+  "name": "thứ bảy chủ nhật ăn được hông",
+  "unlock": "Có task xong cả thứ Bảy và Chủ nhật cùng một cuối tuần",
+  "rarity": "rare",
+  "sort": 29
+ },
+ {
+  "id": "photo-1",
+  "name": "sống ảo có tâm",
+  "unlock": "Check in ảnh lần đầu",
+  "rarity": "common",
+  "sort": 30
+ },
+ {
+  "id": "photo-10",
+  "name": "tấm này đẹp tấm sau đẹp hơn",
+  "unlock": "Check in ảnh cho 10 việc",
+  "rarity": "rare",
+  "sort": 31
+ },
+ {
+  "id": "photo-50",
+  "name": "paparazzi bất đắc dĩ",
+  "unlock": "Check in ảnh cho 50 việc",
+  "rarity": "legendary",
+  "sort": 32
+ },
+ {
+  "id": "friend-5",
+  "name": "quen rộng mà ví mỏng",
+  "unlock": "Có 5 người bạn",
+  "rarity": "rare",
+  "sort": 33
+ },
+ {
+  "id": "dup-5",
+  "name": "gặp thẻ này hoài luôn",
+  "unlock": "Có một thẻ trùng 5 lần",
+  "rarity": "rare",
+  "sort": 34
+ },
+ {
+  "id": "photo-streak-7",
+  "name": "ngày nào cũng soi gương",
+  "unlock": "7 ngày liên tiếp có ảnh check in",
+  "rarity": "legendary",
+  "sort": 35
+ }
+]

@@ -102,7 +102,7 @@ async function ciSend(){if(CI.busy||!CI.blob)return;const f=ciFind(CI.tid);if(!f
   await API.reload('lite').catch(()=>{});
   const g=ciFind(CI.tid);let ticked=false;
   if(g&&!g.t.done&&isoOfKey(g.k)<=TODAY.iso&&tickable(isoOfKey(g.k))&&!(g.k===todayKey&&S.claimed)){try{await tickTask(g.t.id);ticked=true}catch(e){}}
-  S.ckLoaded=0;
+  S.ckLoaded=0;try{await newTitlesPrompt()}catch(e){}
   $('#ciDone').innerHTML=`<div class="ci-sq">${ciPh('',r.taken_at,'thump',CI.url)}</div><h2>Đã check in!</h2><p>Ảnh đã nằm trong ghi chú của việc.<br>Cả lịch đều xem được.${ticked?'<br>Việc đã được đánh dấu xong.':''}${capFail?'<br>Chưa thêm được dòng ghi chú.':''}</p><button class="ci-btn" data-ci="done">Xem trong ghi chú</button>`;
   $('#ciDone').classList.add('on');renderAll();refreshOpen()}
  catch(e){apiFail(e)}finally{CI.busy=false;btn&&btn.classList.remove('ld')}}
