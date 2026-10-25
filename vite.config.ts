@@ -69,7 +69,8 @@ export default defineConfig({
         // Ảnh thẻ lấy từ Supabase Storage (URL ký có hạn): không cache trong precache.
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.includes('/storage/v1/object/'),
+            // Nhạc/video (cần phản hồi 206 theo Range) không đi qua cache này: bản 200 đã lưu làm iOS/Android không phát được.
+            urlPattern: ({ url, request }) => url.pathname.includes('/storage/v1/object/') && request.destination !== 'audio' && request.destination !== 'video' && !/\.(m4a|mp4|mp3|webm)$/i.test(url.pathname),
             handler: 'CacheFirst',
             options: { cacheName: 'card-images', expiration: { maxEntries: 220, maxAgeSeconds: 60 * 60 * 24 * 30 }, cacheableResponse: { statuses: [0, 200] } },
           },

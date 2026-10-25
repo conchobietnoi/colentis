@@ -94,8 +94,9 @@ let cxHydT=0;
 {const ap=document.getElementById('app');if(ap)new MutationObserver(()=>{if(cxHydT)return;cxHydT=requestAnimationFrame(()=>{cxHydT=0;cxHydrate()})}).observe(ap,{childList:true,subtree:true})}
 const cxCard=(c,s)=>cxImg('c'+c+'-'+s+'.webp');
 /* tải sẵn bài vào bộ nhớ (blob) để tua/phát tức thì, không phải chờ mạng lúc hiệu ứng Ultra */
-function cxWarm(k){if(CX.bl&&CX.bl[k])return;if(CX['w:'+k])return;CX['w:'+k]=1;
- cxSign([k]).then(()=>fetch(CX.sg[k])).then(r=>{if(!r.ok)throw 0;return r.blob()}).then(b=>{CX.bl=CX.bl||{};CX.bl[k]=URL.createObjectURL(b)}).catch(()=>{CX['w:'+k]=0})}
+function cxWarm(k){if(CX.bl&&CX.bl[k])return Promise.resolve(CX.bl[k]);if(CX['w:'+k])return CX['w:'+k];
+ const p=cxSign([k]).then(()=>fetch(CX.sg[k])).then(r=>{if(!r.ok)throw 0;return r.blob()}).then(b=>{CX.bl=CX.bl||{};return CX.bl[k]=URL.createObjectURL(b)}).catch(()=>{CX['w:'+k]=0;return ''});
+ CX['w:'+k]=p;return p}
 async function cxSign(paths){
  let ch=false;
  await Promise.all(paths.map(async p=>{if(CX.sg[p])return;try{CX.sg[p]=await API.cxSigned(p);ch=true}catch(e){}}));
@@ -434,27 +435,32 @@ function cxUltraSfx3() {
   } catch (e) {}
 }
 function cxStopUltraMusic() {
+  window.__ugTk = (window.__ugTk || 0) + 1;
   try { var a = window.__ugA; if (window.__ugT) { clearInterval(window.__ugT); window.__ugT = 0; } if (window.__ugO) { clearTimeout(window.__ugO); window.__ugO = 0; } if (a) a.pause(); } catch (e) {}
 }
 function cxUltraMusic(imp) {
   try {
     cxStopUltraMusic();
     var a = cxAudEl('__ugA'); var k0 = 'songs/0.m4a';
-    if (!CX.sg[k0]) { cxSign([k0]).then(function () { if (window.__ugOn) cxUltraMusic(imp); }); return; }
-    var st = Math.max(0, (window.__ugs || 30) - imp);
-    a.muted = false; a.preload = 'auto'; a.volume = 0;
-    var u0 = (CX.bl && CX.bl[k0]) || CX.sg[k0];
-    if (a.getAttribute('src') !== u0) a.src = u0;
-    /* phát ngay (không đợi canplay: iOS không tải trước nếu chưa phát), tua tới đoạn cao trào khi đã có metadata */
-    var seek = function () { try { if (Math.abs(a.currentTime - st) > 1) a.currentTime = st; } catch (e) {} };
-    if (a.readyState >= 1) seek(); else a.addEventListener('loadedmetadata', function f() { a.removeEventListener('loadedmetadata', f); seek(); });
-    var pr = a.play();
-    if (pr && pr.catch) pr.catch(function () {
-      var re = function () { document.removeEventListener('click', re, true); document.removeEventListener('touchend', re, true); if (window.__ugOn) { try { a.play(); } catch (e) {} } };
-      document.addEventListener('click', re, true); document.addEventListener('touchend', re, true);
+    /* phát từ blob đã tải về (không cần Range, chạy được trên iOS/Android); chờ tối đa 4s, quá thì dùng link ký */
+    var tk = (window.__ugTk = (window.__ugTk || 0) + 1);
+    var wait = new Promise(function (r) { setTimeout(function () { r(''); }, 4000); });
+    Promise.race([cxWarm(k0), wait]).then(function (bu) {
+      if (!window.__ugOn || tk !== window.__ugTk) return;
+      var u0 = bu || CX.sg[k0]; if (!u0) return;
+      var st = Math.max(0, (window.__ugs || 30) - imp);
+      a.muted = false; a.preload = 'auto'; a.volume = 0;
+      if (a.getAttribute('src') !== u0) a.src = u0;
+      var seek = function () { try { if (Math.abs(a.currentTime - st) > 1) a.currentTime = st; } catch (e) {} };
+      if (a.readyState >= 1) seek(); else a.addEventListener('loadedmetadata', function f() { a.removeEventListener('loadedmetadata', f); seek(); });
+      var pr = a.play();
+      if (pr && pr.catch) pr.catch(function () {
+        var re = function () { document.removeEventListener('click', re, true); document.removeEventListener('touchend', re, true); if (window.__ugOn) { try { a.play(); } catch (e) {} } };
+        document.addEventListener('click', re, true); document.addEventListener('touchend', re, true);
+      });
+      var v = 0; window.__ugT = setInterval(function () { v = Math.min(1, v + 0.08); try { a.volume = v; } catch (e) {} if (v >= 1) { clearInterval(window.__ugT); window.__ugT = 0; } }, 60);
+      window.__ugO = setTimeout(function () { var w = 1; window.__ugT = setInterval(function () { w = Math.max(0, w - 0.1); try { a.volume = w; } catch (e) {} if (w <= 0) { clearInterval(window.__ugT); window.__ugT = 0; a.pause(); } }, 90); }, (imp + 9.2) * 1000);
     });
-    var v = 0; window.__ugT = setInterval(function () { v = Math.min(1, v + 0.08); try { a.volume = v; } catch (e) {} if (v >= 1) { clearInterval(window.__ugT); window.__ugT = 0; } }, 60);
-    window.__ugO = setTimeout(function () { var w = 1; window.__ugT = setInterval(function () { w = Math.max(0, w - 0.1); try { a.volume = w; } catch (e) {} if (w <= 0) { clearInterval(window.__ugT); window.__ugT = 0; a.pause(); } }, 90); }, (imp + 9.2) * 1000);
   } catch (e) {}
 }
 
