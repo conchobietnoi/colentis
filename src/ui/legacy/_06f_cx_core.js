@@ -313,12 +313,12 @@ function cxBuild(){
  for(let q=1;q<=2;q++){V['u'+q+'Ready']=allCel&&!!ult[q];V['u'+q+'New']=allCel&&!ult[q];V['u'+q+'Lock']=!allCel;
   V['u'+q+'Songs']=ult[q]?CXSONGS[ult[q][0]].t+' · '+CXSONGS[ult[q][1]].t:'';V['uPoster'+q]=cxImg('ultra-'+q+'.webp');V['uVid'+q]=CX.sg['ultra-'+q+'.mp4']||''}
  H.openU=e=>{const n=cxIdx(e);cxSet({u:n,sheet:'',pg:'ucard',ust:'idle',paused:false,disc:'A'});
-  const p=ult[n]||[0,4];cxSign(['ultra-'+n+'.mp4','songs/'+p[0]+'.m4a','songs/'+p[1]+'.m4a'])};
+  const p=ult[n]||[0,4];cxSign(['ultra-'+n+'.mp4','songs/'+p[0]+'.m4a','songs/'+p[1]+'.m4a']);cxWarm('songs/'+p[0]+'.m4a');cxWarm('songs/'+p[1]+'.m4a')};
  H.startU=e=>cxSet({u:cxIdx(e),sheet:'songs',sel:[0,4]});
  H.jumpU=()=>{
   if(!allCel){cxFlash('Cần đủ 3 concept trước');CX.u.colCon=4;cxSet({fx:'',pg:'',sheet:''});go('col');cxSetAll({});return}
   /* phát lại hiệu ứng nhận 2 thẻ Ultra + nhạc GO; giữ quyền phát ngay trong cú chạm này */
-  try{const a=cxAudEl('__ugA');a.muted=true;a.src=CXSIL;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}
+  try{const a=cxAudEl('__ugA');a.muted=true;a.loop=true;a.src=CXSIL;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}
   cxWarm('songs/0.m4a');
   window.__ugOn=false;
   cxSet({fx:'uget',ugSk:false})};
@@ -390,20 +390,20 @@ function cxStopAudio(){try{if(window.__ca){window.__ca.pause();window.__ca.onend
 function cxStartAudio(i){
  cxStopAudio();
  const a=cxAudEl('__sa');window.__ca=a;
- /* giữ quyền phát trong cú chạm của người dùng: phát ngay (im lặng) rồi mới đổi sang bài thật khi link đã ký xong */
- try{a.muted=true;a.src=CXSIL;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}
+ /* giữ quyền phát trong cú chạm: phát im lặng lặp lại trong lúc tải, rồi đổi sang bài thật (iOS không cho phát sau khi chờ mạng nếu không làm vậy) */
+ try{a.muted=true;a.loop=true;a.src=CXSIL;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}
+ const k='songs/'+i+'.m4a';
  const go1=src=>{try{
-  if(window.__ca!==a)return;
-  a.muted=false;a.preload='auto';a.src=src;
+  if(window.__ca!==a||!src)return;
+  a.loop=false;a.muted=false;a.preload='auto';a.src=src;
   a.ontimeupdate=()=>{const el=document.getElementById('pgi'),tx=document.getElementById('pgt');if(el&&a.duration)el.style.width=(a.currentTime/a.duration*100)+'%';if(tx)tx.textContent=cxFmt(a.currentTime)};
   a.onended=()=>cxSet({paused:true});
   const fail=()=>{cxFlash('Chạm lại màn hình để phát nhạc');cxSet({paused:true})};
   const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{
-   /* bị chặn: thử lại ở cú chạm kế tiếp, không bắt người dùng bấm Tạm dừng/Tiếp tục */
    const re=()=>{document.removeEventListener('click',re,true);document.removeEventListener('touchend',re,true);if(window.__ca!==a)return;const r2=a.play();if(r2&&r2.then)r2.then(()=>cxSet({paused:false}),fail)};
    document.addEventListener('click',re,true);document.addEventListener('touchend',re,true);fail()})}catch(e){}};
- const k='songs/'+i+'.m4a';
- if(CX.sg[k])go1(CX.sg[k]);else cxSign([k]).then(()=>{if(CX.sg[k])go1(CX.sg[k])})}
+ if(CX.bl&&CX.bl[k])go1(CX.bl[k]);
+ else{cxFlash('Đang tải nhạc…');cxWarm(k).then(u=>go1(u||CX.sg[k]))}}
 
 /* ===== panorama: nghiêng điện thoại để nhìn quanh (có thanh kéo dự phòng) ===== */
 let cxTiltOn=false;
@@ -449,7 +449,7 @@ function cxUltraMusic(imp) {
       if (!window.__ugOn || tk !== window.__ugTk) return;
       var u0 = bu || CX.sg[k0]; if (!u0) return;
       var st = Math.max(0, (window.__ugs || 30) - imp);
-      a.muted = false; a.preload = 'auto'; a.volume = 0;
+      a.loop = false; a.muted = false; a.preload = 'auto'; a.volume = 0;
       if (a.getAttribute('src') !== u0) a.src = u0;
       var seek = function () { try { if (Math.abs(a.currentTime - st) > 1) a.currentTime = st; } catch (e) {} };
       if (a.readyState >= 1) seek(); else a.addEventListener('loadedmetadata', function f() { a.removeEventListener('loadedmetadata', f); seek(); });
