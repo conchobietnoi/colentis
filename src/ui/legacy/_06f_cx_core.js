@@ -311,7 +311,13 @@ function cxBuild(){
  H.openU=e=>{const n=cxIdx(e);cxSet({u:n,sheet:'',pg:'ucard',ust:'idle',paused:false,disc:'A'});
   const p=ult[n]||[0,4];cxSign(['ultra-'+n+'.mp4','songs/'+p[0]+'.m4a','songs/'+p[1]+'.m4a'])};
  H.startU=e=>cxSet({u:cxIdx(e),sheet:'songs',sel:[0,4]});
- H.jumpU=()=>{if(!allCel)cxFlash('Cần đủ 3 concept trước');CX.u.colCon=4;cxSet({fx:'',pg:'',sheet:''});go('col');cxSetAll({})};
+ H.jumpU=()=>{
+  if(!allCel){cxFlash('Cần đủ 3 concept trước');CX.u.colCon=4;cxSet({fx:'',pg:'',sheet:''});go('col');cxSetAll({});return}
+  /* phát lại hiệu ứng nhận 2 thẻ Ultra + nhạc GO; giữ quyền phát ngay trong cú chạm này */
+  try{const a=cxAudEl('__ugA');a.muted=true;a.src=CXSIL;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}
+  cxSign(['songs/0.m4a']);
+  window.__ugOn=false;
+  cxSet({fx:'uget',ugSk:false})};
  H.startU1=()=>{CX.u.colCon=4;cxSet({fx:'',pg:'',u:1,sheet:'songs',sel:[0,4]});go('col');cxSetAll({})};
  V.u=u.u;V.uIs1=u.u===1;V.uIs2=u.u===2;
  const sel=u.sel;
