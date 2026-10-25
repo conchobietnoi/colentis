@@ -466,7 +466,7 @@ function cxBannerHTML(){return cxLive()?cxFrag('bnx'):''}
 function cxTaskHTML(){return cxLive()&&cxDay()<=9?cxFrag('taskRow'):''}
 function cxClaimHTML(){return cxLive()&&(CX.s.packs||[]).length?cxFrag('claim'):''}
 function cxGiftHTML(){return cxOn()&&(CX.s.gifts||[]).length?cxFrag('gift'):''}
-function cxRewardsHTML(){return cxLive()||(CX.s&&(CX.s.unlocks||[]).length)?cxFrag('rewards'):''}
+function cxRewardsHTML(){return ''}
 function cxColChipsHTML(){return cxFrag('colchips')}
 function cxColHTML(){return cxFrag('col')}
 const cxColActive=()=>cxLive()||(CX.s&&((CX.s.cards||[]).length||(CX.s.unlocks||[]).length));
