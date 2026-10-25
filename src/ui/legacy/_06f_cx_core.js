@@ -105,7 +105,7 @@ async function cxSign(paths){
 /* ----- tải/làm mới trạng thái ----- */
 async function cxReload(){
  try{CX.s=await API.cxState();CX.loaded=true}catch(e){CX.s=CX.s||null}
- CX.ver++;if(CX.s&&(CX.s.unlocks||[]).length>=2)cxBuf('songs/0.m4a')}
+ CX.ver++;if(CX.s&&(CX.s.unlocks||[]).length>=2)cxPrefetch('songs/0.m4a')}
 async function cxEnsurePeople(){if(CX.people)return;try{CX.people=await API.cxPeople()}catch(e){CX.people=[]}}
 async function cxCall(p){try{return await p}catch(e){apiFail(e);return null}}
 
@@ -142,7 +142,8 @@ function cxBuild(){
  /* ---- banner ---- */
  let bt='',bsub='';const nxt=live&&dc?CXN[dc].n:'';
  if(day<1){bt='Sắp diễn ra';bsub='Bắt đầu 18/10'}else if(day>9){bt='Đã kết thúc';bsub='Bộ sưu tập của bạn được giữ nguyên'}
- else if(allCel){bt='Đủ 3/3 concept';bsub='Thẻ Ultra đang chờ bạn'}
+ else if(allCel&&!(ult[1]&&ult[2])){bt='Đủ 3/3 concept';bsub=(ult[1]||ult[2])?'Còn 1 thẻ Ultra đang chờ bạn':'Thẻ Ultra đang chờ bạn'}
+ else if(allCel){bt='Đủ 3/3 concept';bsub='Đã nhận 2 thẻ Ultra · nghe nhạc ở Bộ sưu tập'}
  else if(pn>0){bt=pn+' pack đang chờ';bsub='Chạm để vào sự kiện và mở pack'}
  else if(taskDone){bt='Hôm nay xong rồi';bsub='Đủ '+celN+'/3 concept · hẹn bạn ngày mai'}
  else{bt=nxt;bsub='Nhiệm vụ: '+task.t}
@@ -175,7 +176,7 @@ function cxBuild(){
    line:lk?'Chưa mở':(ok?'Đủ bộ · '+h+'/5 holo':n+'/5 thường · '+h+'/5 holo'),v:'',img:cxCard(c,c+1),p:n/5*100,st:lk?'Mở '+CXN[c].open:(ok?'Đủ bộ ✓':n+'/5 thẻ')}});
  V.hubWhen=live?'18–26/10 · ngày '+day+'/9':(day<1?'18–26/10 · chưa bắt đầu':'18–26/10 · đã kết thúc');
  V.tdays=[];for(let t=1;t<=9;t++){const tc=cxDayCon(t);let cl='';if(done[t])cl='done';else if(t===day)cl='today';else if(t<day)cl='miss';V.tdays.push({d:17+t,cls:cl,c:tc?CXN[tc].a:'#FFE45E'})}
- V.ultSt1=!allCel;V.ultSt2=allCel;
+ const ultN=(ult[1]?1:0)+(ult[2]?1:0);V.ultSt1=!allCel;V.ultSt2=allCel&&ultN<2;V.ultLeftTxt=ultN===1?'Còn 1 thẻ Ultra đang chờ bạn':'2 thẻ Ultra đang chờ bạn';
  H.hubCal=()=>{cxSet({pg:''});go('cal')};
  H.openCon=e=>{CX.u.pg='';CX.u.colCon=cxIdx(e);go('col');cxSetAll({})};
  H.closePg=()=>{cxStopAudio();cxSet({pg:'',ust:'idle',flipped:false})};
@@ -313,7 +314,7 @@ function cxBuild(){
  for(let q=1;q<=2;q++){V['u'+q+'Ready']=allCel&&!!ult[q];V['u'+q+'New']=allCel&&!ult[q];V['u'+q+'Lock']=!allCel;
   V['u'+q+'Songs']=ult[q]?CXSONGS[ult[q][0]].t+' · '+CXSONGS[ult[q][1]].t:'';V['uPoster'+q]=cxImg('ultra-'+q+'.webp');V['uVid'+q]=CX.sg['ultra-'+q+'.mp4']||''}
  H.openU=e=>{const n=cxIdx(e);cxSet({u:n,sheet:'',pg:'ucard',ust:'idle',paused:false,disc:'A'});
-  const p=ult[n]||[0,4];cxSign(['ultra-'+n+'.mp4','songs/'+p[0]+'.m4a','songs/'+p[1]+'.m4a']);cxBuf('songs/'+p[0]+'.m4a');cxBuf('songs/'+p[1]+'.m4a')};
+  const p=ult[n]||[0,4];cxSign(['ultra-'+n+'.mp4','songs/'+p[0]+'.m4a','songs/'+p[1]+'.m4a']);cxPrefetch('songs/'+p[0]+'.m4a');cxPrefetch('songs/'+p[1]+'.m4a')};
  H.startU=e=>cxSet({u:cxIdx(e),sheet:'songs',sel:[0,4]});
  H.jumpU=()=>{
   if(!allCel){cxFlash('Cần đủ 3 concept trước');CX.u.colCon=4;cxSet({fx:'',pg:'',sheet:''});go('col');cxSetAll({});return}
@@ -386,17 +387,22 @@ function cxAudEl(k){if(!window[k]){const a=new Audio();a.preload='none';window[k
  const un=()=>{try{const c=cxAC();if(c&&!ok){const o=c.createBuffer(1,1,22050),sr=c.createBufferSource();sr.buffer=o;sr.connect(c.destination);sr.start(0)}}catch(e){}if(ok)return;['__sa','__ugA'].forEach(k=>{try{const a=cxAudEl(k);if(a.src&&!a.paused)return;a.muted=true;a.src=CXSIL;const p=a.play();const done=g=>{try{a.pause();a.muted=false;a.removeAttribute('src');if(g&&!ok){ok=true;EV.forEach(e=>document.removeEventListener(e,un,true))}}catch(e){}};if(p&&p.then)p.then(()=>done(true),()=>done(false));else done(true)}catch(e){}})};
  EV.forEach(e=>document.addEventListener(e,un,true))})();
 /* Nhạc chạy bằng Web Audio (đã chạy được trên iPhone: tiếng hiệu ứng nghe được), giải mã cả bài nên không phụ thuộc Range/moov của file m4a */
-const CXA={ctx:null,bufs:{},ld:{}};
+const CXA={ctx:null,bufs:{},ld:{},raw:{}};
 function cxAC(){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
- try{if(!CXA.ctx||CXA.ctx.state==='closed')CXA.ctx=new AC();if(CXA.ctx.state!=='running'){const r=CXA.ctx.resume();if(r&&r.catch)r.catch(()=>{})}}catch(e){return null}
+ try{if(!CXA.ctx||CXA.ctx.state==='closed'){try{CXA.ctx=new AC({sampleRate:32000})}catch(e){CXA.ctx=new AC()}}if(CXA.ctx.state!=='running'){const r=CXA.ctx.resume();if(r&&r.catch)r.catch(()=>{})}}catch(e){return null}
  return CXA.ctx}
-function cxBuf(k){if(CXA.bufs[k])return Promise.resolve(CXA.bufs[k]);if(CXA.ld[k])return CXA.ld[k];
+/* tải sẵn dữ liệu nén (~2MB) nhưng chưa giải mã: giải mã cả bài tốn ~70MB nên chỉ làm khi cần phát */
+function cxPrefetch(k){if(CXA.raw[k])return CXA.raw[k];
  const st=e=>{CXA.err=e;throw e};
  const p=cxSign([k]).then(()=>{if(!CX.sg[k])st('ký link');return fetch(CX.sg[k]).catch(()=>st('tải'))})
-  .then(r=>{if(!r.ok)st('tải '+r.status);return r.arrayBuffer()})
-  .then(ab=>new Promise((res,rej)=>{const c=cxAC();if(!c)return rej('không có Web Audio');let done=false;const ok=b=>{if(!done){done=true;res(b)}},no=()=>{if(!done){done=true;rej('giải mã')}};try{const r=c.decodeAudioData(ab,ok,no);if(r&&r.then)r.then(ok,no)}catch(e){no()}}))
-  .then(b=>(CXA.bufs[k]=b)).catch(e=>{if(typeof e==='string')CXA.err=e;CXA.ld[k]=0;return null});
+  .then(r=>{if(!r.ok)st('tải '+r.status);return r.arrayBuffer()}).catch(e=>{if(typeof e==='string')CXA.err=e;CXA.raw[k]=0;return null});
+ CXA.raw[k]=p;return p}
+function cxBuf(k){if(CXA.bufs[k])return Promise.resolve(CXA.bufs[k]);if(CXA.ld[k])return CXA.ld[k];
+ const p=cxPrefetch(k).then(ab=>{if(!ab)return null;return new Promise(res=>{const c=cxAC();if(!c){CXA.err='không có Web Audio';return res(null)}let done=false;const ok=b=>{if(!done){done=true;res(b)}},no=()=>{if(!done){done=true;CXA.err='giải mã';res(null)}};try{const r=c.decodeAudioData(ab.slice(0),ok,no);if(r&&r.then)r.then(ok,no)}catch(e){no()}})})
+  .then(b=>{if(b)CXA.bufs[k]=b;else CXA.ld[k]=0;return b});
  CXA.ld[k]=p;return p}
+/* giải phóng bộ nhớ: chỉ giữ bản giải mã của bài đang dùng */
+function cxFreeBufs(keep){Object.keys(CXA.bufs).forEach(k=>{if(k!==keep){delete CXA.bufs[k];delete CXA.ld[k]}})}
 function cxMkPlayer(){const c=cxAC();let node=null,start=0,dur=0,poll=0,stopped=false;
  const sh={paused:false,started:false,ontimeupdate:null,onended:null,
   get currentTime(){return c?Math.max(0,c.currentTime-start):0},get duration(){return dur},
@@ -414,6 +420,7 @@ function cxStartAudio(i){
  const sh=cxMkPlayer();window.__ca=sh;const k='songs/'+i+'.m4a';
  sh.ontimeupdate=()=>{const el=document.getElementById('pgi'),tx=document.getElementById('pgt');if(el&&sh.duration)el.style.width=(sh.currentTime/sh.duration*100)+'%';if(tx)tx.textContent=cxFmt(sh.currentTime)};
  sh.onended=()=>cxSet({paused:true});
+ cxFreeBufs(k);
  if(!CXA.bufs[k])cxFlash('Đang tải nhạc…');
  cxBuf(k).then(b=>{if(window.__ca!==sh)return;if(!b){cxFlash('Không phát được nhạc ('+(CXA.err||'lỗi')+'), bấm Tiếp tục để thử lại');cxSet({paused:true});return}sh.begin(b)})}
 
@@ -463,7 +470,7 @@ function cxUltraMusic(imp) {
       g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(1, t + 1.3);
       var endAt = t + imp + 9.2; g.gain.setValueAtTime(1, endAt); g.gain.linearRampToValueAtTime(0, endAt + 1);
       s.start(0, Math.min(st, Math.max(0, b.duration - 1))); s.stop(endAt + 1.05);
-      window.__ugN = { s: s, g: g, c: c };
+      window.__ugN = { s: s, g: g, c: c }; setTimeout(function () { if (!window.__ca) cxFreeBufs(''); }, (imp + 11) * 1000);
     });
   } catch (e) {}
 }
