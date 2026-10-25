@@ -373,15 +373,25 @@ async function cxFinishReveal(){
 /* 2 phần tử audio dùng chung, mở khóa ở lần chạm đầu tiên để trình duyệt (iOS/Safari) không chặn phát về sau */
 const CXSIL='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
 function cxAudEl(k){if(!window[k]){const a=new Audio();a.preload='none';window[k]=a}return window[k]}
-(function(){const un=()=>{['__sa','__ugA'].forEach(k=>{try{const a=cxAudEl(k);if(a.src&&!a.paused)return;a.muted=true;a.src=CXSIL;const p=a.play();const done=()=>{try{a.pause();a.muted=false;a.removeAttribute('src')}catch(e){}};if(p&&p.then)p.then(done,done);else done()}catch(e){}});['pointerdown','touchend','keydown'].forEach(e=>document.removeEventListener(e,un,true))};['pointerdown','touchend','keydown'].forEach(e=>document.addEventListener(e,un,true))})();
+(function(){let ok=false;const EV=['click','touchend','pointerup','keydown'];
+ const un=()=>{if(ok)return;['__sa','__ugA'].forEach(k=>{try{const a=cxAudEl(k);if(a.src&&!a.paused)return;a.muted=true;a.src=CXSIL;const p=a.play();const done=g=>{try{a.pause();a.muted=false;a.removeAttribute('src');if(g&&!ok){ok=true;EV.forEach(e=>document.removeEventListener(e,un,true))}}catch(e){}};if(p&&p.then)p.then(()=>done(true),()=>done(false));else done(true)}catch(e){}})};
+ EV.forEach(e=>document.addEventListener(e,un,true))})();
 function cxStopAudio(){try{if(window.__ca){window.__ca.pause();window.__ca.onended=null;window.__ca.ontimeupdate=null;window.__ca=null}}catch(e){}}
 function cxStartAudio(i){
  cxStopAudio();
+ const a=cxAudEl('__sa');window.__ca=a;
+ /* giữ quyền phát trong cú chạm của người dùng: phát ngay (im lặng) rồi mới đổi sang bài thật khi link đã ký xong */
+ try{a.muted=true;a.src=CXSIL;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}
  const go1=src=>{try{
-  const a=cxAudEl('__sa');window.__ca=a;a.muted=false;a.preload='auto';a.src=src;
+  if(window.__ca!==a)return;
+  a.muted=false;a.preload='auto';a.src=src;
   a.ontimeupdate=()=>{const el=document.getElementById('pgi'),tx=document.getElementById('pgt');if(el&&a.duration)el.style.width=(a.currentTime/a.duration*100)+'%';if(tx)tx.textContent=cxFmt(a.currentTime)};
   a.onended=()=>cxSet({paused:true});
-  const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{cxFlash('Trình duyệt chặn phát nhạc, bấm Tạm dừng rồi Tiếp tục');cxSet({paused:true})})}catch(e){}};
+  const fail=()=>{cxFlash('Chạm lại màn hình để phát nhạc');cxSet({paused:true})};
+  const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{
+   /* bị chặn: thử lại ở cú chạm kế tiếp, không bắt người dùng bấm Tạm dừng/Tiếp tục */
+   const re=()=>{document.removeEventListener('click',re,true);document.removeEventListener('touchend',re,true);if(window.__ca!==a)return;const r2=a.play();if(r2&&r2.then)r2.then(()=>cxSet({paused:false}),fail)};
+   document.addEventListener('click',re,true);document.addEventListener('touchend',re,true);fail()})}catch(e){}};
  const k='songs/'+i+'.m4a';
  if(CX.sg[k])go1(CX.sg[k]);else cxSign([k]).then(()=>{if(CX.sg[k])go1(CX.sg[k])})}
 
