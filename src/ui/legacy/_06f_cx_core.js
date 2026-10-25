@@ -95,13 +95,13 @@ let cxHydT=0;
 const cxCard=(c,s)=>cxImg('c'+c+'-'+s+'.webp');
 async function cxSign(paths){
  let ch=false;
- for(const p of paths){if(CX.sg[p])continue;try{CX.sg[p]=await API.cxSigned(p);ch=true}catch(e){}}
+ await Promise.all(paths.map(async p=>{if(CX.sg[p])return;try{CX.sg[p]=await API.cxSigned(p);ch=true}catch(e){}}));
  if(ch){CX.ver++;cxPaint()}}
 
 /* ----- tải/làm mới trạng thái ----- */
 async function cxReload(){
  try{CX.s=await API.cxState();CX.loaded=true}catch(e){CX.s=CX.s||null}
- CX.ver++}
+ CX.ver++;if(CX.s&&!CX.sg['songs/0.m4a'])cxSign(['songs/0.m4a'])}
 async function cxEnsurePeople(){if(CX.people)return;try{CX.people=await API.cxPeople()}catch(e){CX.people=[]}}
 async function cxCall(p){try{return await p}catch(e){apiFail(e);return null}}
 
@@ -346,15 +346,18 @@ async function cxOpenPack(){
  const t0=Date.now(),pk=(CX.s.packs||[])[0];
  const r=await cxCall(API.cxOpen(pk?pk.id:null));
  if(!r){CX.busy=false;cxSet({tearing:false});await cxReload();cxTouch();return}
+ /* tải trạng thái + ảnh thẻ song song với animation xé gói, không đợi nối tiếp */
+ if(!r.app)r.cards.forEach(c=>{try{cxCard(c.con,c.slot)}catch(e){}});
+ const rl=cxReload();
+ const lite=r.app?API.reload('lite').catch(()=>{}):null;
  const w=Math.max(0,1500-(Date.now()-t0));await new Promise(res=>setTimeout(res,w));
  CX.busy=false;
+ await rl;
  if(r.app){
   const drawn=r.app.map(a=>{const cd=CBY[a.card_id];return {app:true,card:cd,r:cd?cd.r:'common',isNew:a.is_new,count:a.count}});
-  await cxReload();try{await API.reload('lite')}catch(e){}
-  cxSetAll({drawn,idx:0,tearing:false,fx:'reveal',flipped:false,queue:[],last:{unlocked:[],app:true}})}
+  cxSetAll({drawn,idx:0,tearing:false,fx:'reveal',flipped:false,queue:[],last:{unlocked:[],app:true}});lite.then(()=>{})}
  else{
   const drawn=r.cards.map(c=>({con:c.con,slot:c.slot,holo:c.holo,isNew:c.is_new,count:c.count}));
-  await cxReload();
   cxSetAll({drawn,idx:0,tearing:false,fx:'reveal',flipped:false,colCon:r.pack.con,queue:(r.unlocked||[]).slice(),last:{unlocked:r.unlocked||[],con:r.pack.con}})}}
 async function cxFinishReveal(){
  const x=CX.u;
@@ -366,11 +369,15 @@ async function cxFinishReveal(){
  cxSet({fx:'',flipped:false});go('col');cxSetAll({})}
 
 /* ===== nhạc thẻ Ultra ===== */
+/* 2 phần tử audio dùng chung, mở khóa ở lần chạm đầu tiên để trình duyệt (iOS/Safari) không chặn phát về sau */
+const CXSIL='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+function cxAudEl(k){if(!window[k]){const a=new Audio();a.preload='none';window[k]=a}return window[k]}
+(function(){const un=()=>{['__sa','__ugA'].forEach(k=>{try{const a=cxAudEl(k);if(a.src&&!a.paused)return;a.muted=true;a.src=CXSIL;const p=a.play();const done=()=>{try{a.pause();a.muted=false;a.removeAttribute('src')}catch(e){}};if(p&&p.then)p.then(done,done);else done()}catch(e){}});['pointerdown','touchend','keydown'].forEach(e=>document.removeEventListener(e,un,true))};['pointerdown','touchend','keydown'].forEach(e=>document.addEventListener(e,un,true))})();
 function cxStopAudio(){try{if(window.__ca){window.__ca.pause();window.__ca.onended=null;window.__ca.ontimeupdate=null;window.__ca=null}}catch(e){}}
 function cxStartAudio(i){
  cxStopAudio();
  const go1=src=>{try{
-  const a=new Audio(src);window.__ca=a;a.preload='auto';
+  const a=cxAudEl('__sa');window.__ca=a;a.muted=false;a.preload='auto';a.src=src;
   a.ontimeupdate=()=>{const el=document.getElementById('pgi'),tx=document.getElementById('pgt');if(el&&a.duration)el.style.width=(a.currentTime/a.duration*100)+'%';if(tx)tx.textContent=cxFmt(a.currentTime)};
   a.onended=()=>cxSet({paused:true});
   const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{cxFlash('Trình duyệt chặn phát nhạc, bấm Tạm dừng rồi Tiếp tục');cxSet({paused:true})})}catch(e){}};
@@ -412,7 +419,9 @@ function cxStopUltraMusic() {
 function cxUltraMusic(imp) {
   try {
     cxStopUltraMusic();
-    var a = window.__ugA; if (!a) { a = new Audio(CX.sg['songs/0.m4a']||''); a.preload = 'auto'; window.__ugA = a; }
+    var a = cxAudEl('__ugA'); var k0 = 'songs/0.m4a';
+    if (!CX.sg[k0]) { cxSign([k0]).then(function () { if (window.__ugOn) cxUltraMusic(imp); }); return; }
+    a.muted = false; a.preload = 'auto'; if (a.getAttribute('src') !== CX.sg[k0]) a.src = CX.sg[k0];
     var st = Math.max(0, (window.__ugs || 30) - imp);
     var go = function () {
       try { a.currentTime = st; } catch (e) {}

@@ -8,7 +8,7 @@ export const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAA
 
 let slots = 0
 const waiters: (() => void)[] = []
-async function slot() { if (slots >= 5) await new Promise<void>((r) => waiters.push(r)); slots++ }
+async function slot() { if (slots >= 8) await new Promise<void>((r) => waiters.push(r)); slots++ }
 function release() { slots--; waiters.shift()?.() }
 
 async function fetchBlob(bucket: string, path: string): Promise<Blob> {
