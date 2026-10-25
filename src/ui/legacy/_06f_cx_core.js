@@ -105,7 +105,7 @@ async function cxSign(paths){
 /* ----- tải/làm mới trạng thái ----- */
 async function cxReload(){
  try{CX.s=await API.cxState();CX.loaded=true}catch(e){CX.s=CX.s||null}
- CX.ver++;if(CX.s&&(CX.s.unlocks||[]).length>=2)cxWarm('songs/0.m4a')}
+ CX.ver++;if(CX.s&&(CX.s.unlocks||[]).length>=2)cxBuf('songs/0.m4a')}
 async function cxEnsurePeople(){if(CX.people)return;try{CX.people=await API.cxPeople()}catch(e){CX.people=[]}}
 async function cxCall(p){try{return await p}catch(e){apiFail(e);return null}}
 
@@ -313,13 +313,12 @@ function cxBuild(){
  for(let q=1;q<=2;q++){V['u'+q+'Ready']=allCel&&!!ult[q];V['u'+q+'New']=allCel&&!ult[q];V['u'+q+'Lock']=!allCel;
   V['u'+q+'Songs']=ult[q]?CXSONGS[ult[q][0]].t+' · '+CXSONGS[ult[q][1]].t:'';V['uPoster'+q]=cxImg('ultra-'+q+'.webp');V['uVid'+q]=CX.sg['ultra-'+q+'.mp4']||''}
  H.openU=e=>{const n=cxIdx(e);cxSet({u:n,sheet:'',pg:'ucard',ust:'idle',paused:false,disc:'A'});
-  const p=ult[n]||[0,4];cxSign(['ultra-'+n+'.mp4','songs/'+p[0]+'.m4a','songs/'+p[1]+'.m4a']);cxWarm('songs/'+p[0]+'.m4a');cxWarm('songs/'+p[1]+'.m4a')};
+  const p=ult[n]||[0,4];cxSign(['ultra-'+n+'.mp4','songs/'+p[0]+'.m4a','songs/'+p[1]+'.m4a']);cxBuf('songs/'+p[0]+'.m4a');cxBuf('songs/'+p[1]+'.m4a')};
  H.startU=e=>cxSet({u:cxIdx(e),sheet:'songs',sel:[0,4]});
  H.jumpU=()=>{
   if(!allCel){cxFlash('Cần đủ 3 concept trước');CX.u.colCon=4;cxSet({fx:'',pg:'',sheet:''});go('col');cxSetAll({});return}
-  /* phát lại hiệu ứng nhận 2 thẻ Ultra + nhạc GO; giữ quyền phát ngay trong cú chạm này */
-  try{const a=cxAudEl('__ugA');a.muted=true;a.loop=true;a.src=CXSIL;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}
-  cxWarm('songs/0.m4a');
+  /* phát lại hiệu ứng nhận 2 thẻ Ultra + nhạc GO; mở khóa Web Audio ngay trong cú chạm này */
+  cxAC();cxBuf('songs/0.m4a');
   window.__ugOn=false;
   cxSet({fx:'uget',ugSk:false})};
  H.startU1=()=>{CX.u.colCon=4;cxSet({fx:'',pg:'',u:1,sheet:'songs',sel:[0,4]});go('col');cxSetAll({})};
@@ -384,26 +383,36 @@ async function cxFinishReveal(){
 const CXSIL='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
 function cxAudEl(k){if(!window[k]){const a=new Audio();a.preload='none';window[k]=a}return window[k]}
 (function(){let ok=false;const EV=['click','touchend','pointerup','keydown'];
- const un=()=>{if(ok)return;['__sa','__ugA'].forEach(k=>{try{const a=cxAudEl(k);if(a.src&&!a.paused)return;a.muted=true;a.src=CXSIL;const p=a.play();const done=g=>{try{a.pause();a.muted=false;a.removeAttribute('src');if(g&&!ok){ok=true;EV.forEach(e=>document.removeEventListener(e,un,true))}}catch(e){}};if(p&&p.then)p.then(()=>done(true),()=>done(false));else done(true)}catch(e){}})};
+ const un=()=>{try{const c=cxAC();if(c&&!ok){const o=c.createBuffer(1,1,22050),sr=c.createBufferSource();sr.buffer=o;sr.connect(c.destination);sr.start(0)}}catch(e){}if(ok)return;['__sa','__ugA'].forEach(k=>{try{const a=cxAudEl(k);if(a.src&&!a.paused)return;a.muted=true;a.src=CXSIL;const p=a.play();const done=g=>{try{a.pause();a.muted=false;a.removeAttribute('src');if(g&&!ok){ok=true;EV.forEach(e=>document.removeEventListener(e,un,true))}}catch(e){}};if(p&&p.then)p.then(()=>done(true),()=>done(false));else done(true)}catch(e){}})};
  EV.forEach(e=>document.addEventListener(e,un,true))})();
-function cxStopAudio(){try{if(window.__ca){window.__ca.pause();window.__ca.onended=null;window.__ca.ontimeupdate=null;window.__ca=null}}catch(e){}}
+/* Nhạc chạy bằng Web Audio (đã chạy được trên iPhone: tiếng hiệu ứng nghe được), giải mã cả bài nên không phụ thuộc Range/moov của file m4a */
+const CXA={ctx:null,bufs:{},ld:{}};
+function cxAC(){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
+ try{if(!CXA.ctx||CXA.ctx.state==='closed')CXA.ctx=new AC();if(CXA.ctx.state!=='running'){const r=CXA.ctx.resume();if(r&&r.catch)r.catch(()=>{})}}catch(e){return null}
+ return CXA.ctx}
+function cxBuf(k){if(CXA.bufs[k])return Promise.resolve(CXA.bufs[k]);if(CXA.ld[k])return CXA.ld[k];
+ const p=cxSign([k]).then(()=>fetch(CX.sg[k])).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()})
+  .then(ab=>new Promise((res,rej)=>{const c=cxAC();if(!c)return rej();const r=c.decodeAudioData(ab,res,rej);if(r&&r.then)r.then(res,rej)}))
+  .then(b=>(CXA.bufs[k]=b)).catch(()=>{CXA.ld[k]=0;return null});
+ CXA.ld[k]=p;return p}
+function cxMkPlayer(){const c=cxAC();let node=null,start=0,dur=0,poll=0,stopped=false;
+ const sh={paused:false,ontimeupdate:null,onended:null,
+  get currentTime(){return c?Math.max(0,c.currentTime-start):0},get duration(){return dur},
+  begin(b){if(!c||stopped)return;node=c.createBufferSource();node.buffer=b;dur=b.duration;node.connect(c.destination);start=c.currentTime;
+   node.onended=()=>{if(!stopped&&sh.onended)sh.onended()};node.start(0);
+   poll=setInterval(()=>{if(sh.ontimeupdate)sh.ontimeupdate()},250)},
+  play(){sh.paused=false;try{if(c)c.resume()}catch(e){}return Promise.resolve()},
+  pause(){sh.paused=true;try{if(c)c.suspend()}catch(e){}},
+  stop(){stopped=true;clearInterval(poll);try{if(node){node.onended=null;node.stop()}}catch(e){}try{if(c)c.resume()}catch(e){}}};
+ return sh}
+function cxStopAudio(){try{if(window.__ca){if(window.__ca.stop)window.__ca.stop();else window.__ca.pause();window.__ca.onended=null;window.__ca.ontimeupdate=null;window.__ca=null}}catch(e){}}
 function cxStartAudio(i){
  cxStopAudio();
- const a=cxAudEl('__sa');window.__ca=a;
- /* giữ quyền phát trong cú chạm: phát im lặng lặp lại trong lúc tải, rồi đổi sang bài thật (iOS không cho phát sau khi chờ mạng nếu không làm vậy) */
- try{a.muted=true;a.loop=true;a.src=CXSIL;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}
- const k='songs/'+i+'.m4a';
- const go1=src=>{try{
-  if(window.__ca!==a||!src)return;
-  a.loop=false;a.muted=false;a.preload='auto';a.src=src;
-  a.ontimeupdate=()=>{const el=document.getElementById('pgi'),tx=document.getElementById('pgt');if(el&&a.duration)el.style.width=(a.currentTime/a.duration*100)+'%';if(tx)tx.textContent=cxFmt(a.currentTime)};
-  a.onended=()=>cxSet({paused:true});
-  const fail=()=>{cxFlash('Chạm lại màn hình để phát nhạc');cxSet({paused:true})};
-  const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{
-   const re=()=>{document.removeEventListener('click',re,true);document.removeEventListener('touchend',re,true);if(window.__ca!==a)return;const r2=a.play();if(r2&&r2.then)r2.then(()=>cxSet({paused:false}),fail)};
-   document.addEventListener('click',re,true);document.addEventListener('touchend',re,true);fail()})}catch(e){}};
- if(CX.bl&&CX.bl[k])go1(CX.bl[k]);
- else{cxFlash('Đang tải nhạc…');cxWarm(k).then(u=>go1(u||CX.sg[k]))}}
+ const sh=cxMkPlayer();window.__ca=sh;const k='songs/'+i+'.m4a';
+ sh.ontimeupdate=()=>{const el=document.getElementById('pgi'),tx=document.getElementById('pgt');if(el&&sh.duration)el.style.width=(sh.currentTime/sh.duration*100)+'%';if(tx)tx.textContent=cxFmt(sh.currentTime)};
+ sh.onended=()=>cxSet({paused:true});
+ if(!CXA.bufs[k])cxFlash('Đang tải nhạc…');
+ cxBuf(k).then(b=>{if(window.__ca!==sh)return;if(!b){cxFlash('Không tải được nhạc, bấm Tiếp tục để thử lại');cxSet({paused:true});return}sh.begin(b)})}
 
 /* ===== panorama: nghiêng điện thoại để nhìn quanh (có thanh kéo dự phòng) ===== */
 let cxTiltOn=false;
@@ -436,30 +445,22 @@ function cxUltraSfx3() {
 }
 function cxStopUltraMusic() {
   window.__ugTk = (window.__ugTk || 0) + 1;
-  try { var a = window.__ugA; if (window.__ugT) { clearInterval(window.__ugT); window.__ugT = 0; } if (window.__ugO) { clearTimeout(window.__ugO); window.__ugO = 0; } if (a) a.pause(); } catch (e) {}
+  try { if (window.__ugT) { clearInterval(window.__ugT); window.__ugT = 0; } if (window.__ugO) { clearTimeout(window.__ugO); window.__ugO = 0; }
+    var n = window.__ugN; window.__ugN = null;
+    if (n) { try { n.g.gain.cancelScheduledValues(0); n.g.gain.setValueAtTime(n.g.gain.value, n.c.currentTime); n.g.gain.linearRampToValueAtTime(0, n.c.currentTime + 0.25); n.s.stop(n.c.currentTime + 0.3); } catch (e) {} } } catch (e) {}
 }
 function cxUltraMusic(imp) {
   try {
     cxStopUltraMusic();
-    var a = cxAudEl('__ugA'); var k0 = 'songs/0.m4a';
-    /* phát từ blob đã tải về (không cần Range, chạy được trên iOS/Android); chờ tối đa 4s, quá thì dùng link ký */
-    var tk = (window.__ugTk = (window.__ugTk || 0) + 1);
-    var wait = new Promise(function (r) { setTimeout(function () { r(''); }, 4000); });
-    Promise.race([cxWarm(k0), wait]).then(function (bu) {
-      if (!window.__ugOn || tk !== window.__ugTk) return;
-      var u0 = bu || CX.sg[k0]; if (!u0) return;
-      var st = Math.max(0, (window.__ugs || 30) - imp);
-      a.loop = false; a.muted = false; a.preload = 'auto'; a.volume = 0;
-      if (a.getAttribute('src') !== u0) a.src = u0;
-      var seek = function () { try { if (Math.abs(a.currentTime - st) > 1) a.currentTime = st; } catch (e) {} };
-      if (a.readyState >= 1) seek(); else a.addEventListener('loadedmetadata', function f() { a.removeEventListener('loadedmetadata', f); seek(); });
-      var pr = a.play();
-      if (pr && pr.catch) pr.catch(function () {
-        var re = function () { document.removeEventListener('click', re, true); document.removeEventListener('touchend', re, true); if (window.__ugOn) { try { a.play(); } catch (e) {} } };
-        document.addEventListener('click', re, true); document.addEventListener('touchend', re, true);
-      });
-      var v = 0; window.__ugT = setInterval(function () { v = Math.min(1, v + 0.08); try { a.volume = v; } catch (e) {} if (v >= 1) { clearInterval(window.__ugT); window.__ugT = 0; } }, 60);
-      window.__ugO = setTimeout(function () { var w = 1; window.__ugT = setInterval(function () { w = Math.max(0, w - 0.1); try { a.volume = w; } catch (e) {} if (w <= 0) { clearInterval(window.__ugT); window.__ugT = 0; a.pause(); } }, 90); }, (imp + 9.2) * 1000);
+    var tk = window.__ugTk, k0 = 'songs/0.m4a', c = cxAC(); if (!c) return;
+    cxBuf(k0).then(function (b) {
+      if (!b || !window.__ugOn || tk !== window.__ugTk) return;
+      var st = Math.max(0, (window.__ugs || 30) - imp), t = c.currentTime;
+      var g = c.createGain(), s = c.createBufferSource(); s.buffer = b; s.connect(g); g.connect(c.destination);
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(1, t + 1.3);
+      var endAt = t + imp + 9.2; g.gain.setValueAtTime(1, endAt); g.gain.linearRampToValueAtTime(0, endAt + 1);
+      s.start(0, Math.min(st, Math.max(0, b.duration - 1))); s.stop(endAt + 1.05);
+      window.__ugN = { s: s, g: g, c: c };
     });
   } catch (e) {}
 }
