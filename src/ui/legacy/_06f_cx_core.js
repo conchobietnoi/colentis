@@ -93,6 +93,9 @@ function cxHydrate(){
 let cxHydT=0;
 {const ap=document.getElementById('app');if(ap)new MutationObserver(()=>{if(cxHydT)return;cxHydT=requestAnimationFrame(()=>{cxHydT=0;cxHydrate()})}).observe(ap,{childList:true,subtree:true})}
 const cxCard=(c,s)=>cxImg('c'+c+'-'+s+'.webp');
+/* tải sẵn bài vào bộ nhớ (blob) để tua/phát tức thì, không phải chờ mạng lúc hiệu ứng Ultra */
+function cxWarm(k){if(CX.bl&&CX.bl[k])return;if(CX['w:'+k])return;CX['w:'+k]=1;
+ cxSign([k]).then(()=>fetch(CX.sg[k])).then(r=>{if(!r.ok)throw 0;return r.blob()}).then(b=>{CX.bl=CX.bl||{};CX.bl[k]=URL.createObjectURL(b)}).catch(()=>{CX['w:'+k]=0})}
 async function cxSign(paths){
  let ch=false;
  await Promise.all(paths.map(async p=>{if(CX.sg[p])return;try{CX.sg[p]=await API.cxSigned(p);ch=true}catch(e){}}));
@@ -101,7 +104,7 @@ async function cxSign(paths){
 /* ----- tải/làm mới trạng thái ----- */
 async function cxReload(){
  try{CX.s=await API.cxState();CX.loaded=true}catch(e){CX.s=CX.s||null}
- CX.ver++;if(CX.s&&!CX.sg['songs/0.m4a'])cxSign(['songs/0.m4a'])}
+ CX.ver++;if(CX.s&&(CX.s.unlocks||[]).length>=2)cxWarm('songs/0.m4a')}
 async function cxEnsurePeople(){if(CX.people)return;try{CX.people=await API.cxPeople()}catch(e){CX.people=[]}}
 async function cxCall(p){try{return await p}catch(e){apiFail(e);return null}}
 
@@ -315,7 +318,7 @@ function cxBuild(){
   if(!allCel){cxFlash('Cần đủ 3 concept trước');CX.u.colCon=4;cxSet({fx:'',pg:'',sheet:''});go('col');cxSetAll({});return}
   /* phát lại hiệu ứng nhận 2 thẻ Ultra + nhạc GO; giữ quyền phát ngay trong cú chạm này */
   try{const a=cxAudEl('__ugA');a.muted=true;a.src=CXSIL;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}
-  cxSign(['songs/0.m4a']);
+  cxWarm('songs/0.m4a');
   window.__ugOn=false;
   cxSet({fx:'uget',ugSk:false})};
  H.startU1=()=>{CX.u.colCon=4;cxSet({fx:'',pg:'',u:1,sheet:'songs',sel:[0,4]});go('col');cxSetAll({})};
@@ -440,7 +443,8 @@ function cxUltraMusic(imp) {
     if (!CX.sg[k0]) { cxSign([k0]).then(function () { if (window.__ugOn) cxUltraMusic(imp); }); return; }
     var st = Math.max(0, (window.__ugs || 30) - imp);
     a.muted = false; a.preload = 'auto'; a.volume = 0;
-    if (a.getAttribute('src') !== CX.sg[k0]) a.src = CX.sg[k0];
+    var u0 = (CX.bl && CX.bl[k0]) || CX.sg[k0];
+    if (a.getAttribute('src') !== u0) a.src = u0;
     /* phát ngay (không đợi canplay: iOS không tải trước nếu chưa phát), tua tới đoạn cao trào khi đã có metadata */
     var seek = function () { try { if (Math.abs(a.currentTime - st) > 1) a.currentTime = st; } catch (e) {} };
     if (a.readyState >= 1) seek(); else a.addEventListener('loadedmetadata', function f() { a.removeEventListener('loadedmetadata', f); seek(); });
