@@ -21,7 +21,7 @@ const LABELS=[['Công việc','#FF2E88'],['Học tập','#4CC9FF'],['Cá nhân',
 const TITLES=[],WELCOME=[],EVT=[],TMAP={};
 const CARDS={common:[],rare:[],legend:[],supreme:[]},EV=[],ALLCARDS=[],CBY={},TOTAL={common:0,rare:0,legend:0,supreme:0};
 let TOTALN=0;
-const SUPFX=['s1','s2','s3','s4'];
+const SUPFX=['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13','s14','s15','s16'];
 const S={tab:'cal',month:[2026,0],sel:null,dark:false,reduce:false,offline:false,calIdx:0,
  own:{},streak:0,wait:false,rescue:0,taskTotal:0,claimed:false,groupReady:false,eventGot:false,
  equip:null,unlocked:new Set(),friends:[],tasks:{},locks:{},grants:{},catchup:[],tinfo:null,
@@ -122,6 +122,7 @@ function pcFx(el){if(!el||el.classList.contains('thumb')||document.body.classLis
  if(cl.contains('s2')){mk('rays2','');for(let i=0;i<4;i++)mk('ring2',`--l:${i*.55}s`);for(let i=0;i<30;i++)mk('fl',`left:${R(-10,110)}%;--x:${R(-30,30)}px;--d:${R(2,4)}s;--l:${R(0,4)}s`)}
  if(cl.contains('s3')){mk('fire','');fx.lastChild.innerHTML=Array.from({length:6},()=>`<i style="--d:${R(.35,.8)}s"></i>`).join('');for(let i=0;i<50;i++)mk('e',`left:${R(0,100)}%;--wd:${R(3,9)}px;--x:${R(-60,60)}px;--d:${R(1.6,3.2)}s;--l:${R(0,3)}s`)}
  if(cl.contains('s4')){for(let i=0;i<4;i++)mk('ring2',`--l:${i*.9}s`);for(let i=0;i<14;i++){const z=R(10,26);mk('bk',`left:${R(-10,105)}%;top:${R(-10,105)}%;width:${z}px;height:${z}px;--d:${R(3,6)}s;--l:${R(0,5)}s`)}}
+ {const k2=[...cl].find(x=>/^s\d+$/.test(x)&&+x.slice(1)>4);if(k2&&typeof pcFxS2==='function')pcFxS2(k2,el,fx)}
 }
 /* hiệu ứng chỉ chạy khi thấy: bật/tắt theo IntersectionObserver */
 const IO=new IntersectionObserver(es=>es.forEach(e=>{const f=$('.pc-fx',e.target);if(f)f.style.visibility=e.isIntersecting?'visible':'hidden'}),{threshold:0});

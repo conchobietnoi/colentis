@@ -3,6 +3,7 @@ import './mockup.css'
 import './concept.css'
 import './album.css'
 import './checkin.css'
+import './supreme2.css'
 import { mountUI } from 'virtual:colentis-ui'
 import { bridge } from './bridge'
 

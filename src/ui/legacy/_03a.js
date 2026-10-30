@@ -112,7 +112,7 @@ function themePage(){const cols=['#1E1B5E','#FF2E88','#2F8CFF','#9B5CFF','#E0A80
 /* ===== GACHA ===== */
 const STARC=['#cfd3ee','#4CC9FF','#9B5CFF','#FF2E88','#FFD75E'];
 function infoFor(it){if(it.type==='event'){const c0=it.card,c={...c0,tier:(c0.tier==='LTD'||c0.tier==='TAG')?'SSS':c0.tier},col={A:'#ffd23f',S:'#ff8a1f',SS:'#ff2d3d',SSS:'#ffc83a',AURA:'#ff5db6'}[c.tier];return {col,txt:c.tier,parts:{A:30,S:44,SS:56,SSS:80,AURA:110}[c.tier],rings:{A:1,S:2,SS:3,SSS:3,AURA:4}[c.tier],big:c.tier==='AURA'||c.tier==='SSS',ev:1,cols:ECOL[c.tier]}}
- if(it.type==='card'){const r=it.card.r,col=r==='supreme'?[ '#35e07a','#ffffff','#ffb02e','#ffc46b'][SUPFX.indexOf(it.card.fx)]:RCOL[r];return {col,txt:NAME[r],parts:{common:16,rare:34,legend:64,supreme:110}[r],rings:{common:1,rare:2,legend:3,supreme:4}[r],big:r==='legend'||r==='supreme',cols:r==='supreme'?[col,{s1:'#ff3b4e',s2:'#9fb0ff',s3:'#ff3d1f',s4:'#3a7bff'}[it.card.fx],'#fff']:[col,'#fff']}}
+ if(it.type==='card'){const r=it.card.r,col=r==='supreme'?(SUPCOL[it.card.fx]||SUPCOL.s1)[0]:RCOL[r];return {col,txt:NAME[r],parts:{common:16,rare:34,legend:64,supreme:110}[r],rings:{common:1,rare:2,legend:3,supreme:4}[r],big:r==='legend'||r==='supreme',cols:r==='supreme'?[col,(SUPCOL[it.card.fx]||SUPCOL.s1)[1],'#fff']:[col,'#fff']}}
  if(it.type==='title')return {col:'#FFE45E',txt:'Danh hiệu mới!',parts:70,rings:3,big:true,cols:['#FFE45E','#ff5db6','#4cc9ff','#fff']};
  return {col:'#4CC9FF',txt:'Thẻ cứu streak',parts:30,rings:2,big:false,cols:['#4CC9FF','#fff']}}
 let GST=null;

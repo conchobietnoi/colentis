@@ -420,3 +420,9 @@ Thiết kế gốc: `design/mua-concept/boards/AppBuild.dc.html`. Giao diện ch
 - 4 tab: Tổng quan (số liệu, hoạt động), Gửi thư (người nhận gồm "Chưa điểm danh", mẫu thư, quà gồm Gói Concept, hẹn giờ, xem trước, gửi thử cho mình, nháp lưu trên máy), Thành viên (tìm, lọc, chuỗi/thẻ/thư chưa nhận, nhắc điểm danh, tặng quà), Lịch sử (Hẹn giờ: sửa/gửi ngay/huỷ; Đã gửi: tiến độ nhận quà, nhắc người chưa nhận).
 - Hàm server (chỉ admin): `admin_overview`, `admin_members`, `admin_sent_mails` (có `scheduled`, `read`, `claimed`), `admin_cancel_mail`, `admin_send_now`, `admin_nudge_mail`. Giao diện ở `src/ui/legacy/_07b_admin.js`, test `supabase/tests/80_admin_v2.sql`, `e2e/s9_admin.mjs`.
 - Chưa làm so với mockup: gói thẻ thường/sự kiện/Bá khí (chỉ có Gói Concept), mở khoá ngày, thư lặp lại hằng ngày, tab Nháp trong Lịch sử.
+
+## Đợt thẻ 2 (31/10/2026)
+- Thêm 612 thẻ app chia đều: 204 Thường, 204 Hiếm, 204 Huyền Thoại, cùng 12 thẻ Bá khí mới. Tổng kho thẻ app sau khi bật: Thường 234, Hiếm 234, Huyền Thoại 219, Bá khí 16 (703 thẻ, chưa tính thẻ sự kiện). Số hiển thị trong app tự tính từ bảng `cards`.
+- Ảnh ở bucket riêng `cards`, thư mục `b2/<độ hiếm>/` và `thumbs/`, id `b2-<độ hiếm>-NNN`. Migration `021_cards_batch2.sql` thêm hàng với `active = false` (RLS ẩn khỏi client, gacha bỏ qua). Sau khi tải ảnh lên: `update public.cards set active = true where id like 'b2-%';`.
+- Xử lý ảnh: `node scripts/prepare-batch2.mjs <thư mục ảnh Drive>` (bảng chia hạng ở `scripts/batch2-map.json`, khớp theo tên file), rồi `npm run upload-cards -- manifest-b2.json manifest-b2-supreme.json`.
+- 12 hiệu ứng Bá khí `s5..s16` (CSS `src/ui/supreme2.css`, hạt `src/ui/legacy/_06h_sup2.js`, màu `SUPCOL`): s5 pháo hoa, s6 đèn flash, s7 ánh nến + vòng neon, s8 nổ truyện tranh, s9 pháo sáng, s10 vuốt hổ, s11 glitch, s12 lụa, s13 quét ánh nhìn, s14 tốc độ phố, s15 nắng, s16 photobooth. Thẻ s16 là ảnh động (WebP động 480×640, 52 khung), thumb là ảnh tĩnh.

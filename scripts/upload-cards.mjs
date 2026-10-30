@@ -9,7 +9,9 @@ const url = process.env.SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KE
 if (!url || !key) { console.error('Thiếu SUPABASE_URL hoặc SUPABASE_SERVICE_ROLE_KEY trong biến môi trường.'); process.exit(1) }
 const sb = createClient(url, key, { auth: { persistSession: false } })
 const root = path.resolve(fs.existsSync('local-cards/_upload') ? 'local-cards/_upload' : 'local-cards/_ready')
-const manifest = JSON.parse(fs.readFileSync(path.join(root, 'manifest.json'), 'utf8'))
+// Mặc định tải manifest.json; có thể chỉ định thêm: npm run upload-cards -- manifest-b2.json manifest-b2-supreme.json
+const names = process.argv.slice(2).length ? process.argv.slice(2) : ['manifest.json']
+const manifest = names.flatMap((n) => JSON.parse(fs.readFileSync(path.join(root, n), 'utf8')))
 let ok = 0, fail = 0
 const put = async (rel, file) => {
   if (!fs.existsSync(file)) { console.warn('Thiếu', rel); fail++; return }
