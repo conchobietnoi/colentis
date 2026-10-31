@@ -13,14 +13,30 @@ const names = process.argv.slice(2).length ? process.argv.slice(2) : ['manifest.
 // Thư mục gốc = thư mục đầu tiên (_upload rồi _ready) có chứa manifest được chỉ định
 const root = path.resolve(['local-cards/_upload', 'local-cards/_ready'].find((d) => fs.existsSync(path.join(d, names[0]))) || 'local-cards/_ready')
 const manifest = names.flatMap((n) => JSON.parse(fs.readFileSync(path.join(root, n), 'utf8')))
-let ok = 0, fail = 0
+let ok = 0, fail = 0, skip = 0
+// Bỏ qua tệp đã có trên Storage (chạy lại sau khi rớt mạng không tải lại từ đầu)
+const have = new Set()
+for (const dir of new Set(manifest.flatMap((c) => [path.posix.dirname(c.file), 'thumbs']))) {
+  for (let off = 0; ; off += 1000) {
+    const { data, error } = await sb.storage.from('cards').list(dir, { limit: 1000, offset: off })
+    if (error || !data?.length) break
+    data.forEach((o) => have.add(`${dir}/${o.name}`))
+    if (data.length < 1000) break
+  }
+}
 const put = async (rel, file) => {
+  if (have.has(rel)) { skip++; return }
   if (!fs.existsSync(file)) { console.warn('Thiếu', rel); fail++; return }
-  const { error } = await sb.storage.from('cards').upload(rel, fs.readFileSync(file), { contentType: 'image/webp', upsert: true, cacheControl: '31536000' })
-  if (error) { console.error('Lỗi', rel, error.message); fail++ } else ok++
+  const body = fs.readFileSync(file)
+  for (let t = 1; t <= 4; t++) {
+    const { error } = await sb.storage.from('cards').upload(rel, body, { contentType: 'image/webp', upsert: true, cacheControl: '31536000' })
+    if (!error) { ok++; return }
+    if (t === 4) { console.error('Lỗi', rel, error.message); fail++; return }
+    await new Promise((r) => setTimeout(r, 1500 * t))
+  }
 }
 for (const c of manifest) {
   await put(c.file, path.join(root, c.file))
   await put(`thumbs/${c.id}.webp`, path.join(root, 'thumbs', `${c.id}.webp`))
 }
-console.log(`Xong: ${ok} tệp đã tải, ${fail} lỗi/thiếu.`)
+console.log(`Xong: ${ok} tệp đã tải, ${skip} đã có sẵn, ${fail} lỗi/thiếu.`)
