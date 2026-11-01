@@ -171,5 +171,8 @@
 .kc-eyeb{z-index:1;background:radial-gradient(circle,#0c0828 38%,transparent 44%)}
 .kc-eye{z-index:4;clip-path:inset(50% 0 0 0)}
 .kc-box{position:absolute;left:calc(var(--ex) - 40px);top:calc(var(--ey) - 6px);width:80px;height:130px;z-index:3;pointer-events:none}
-.kc-cv{width:100%;height:100%}.kc-cv canvas{display:block;width:100%!important;height:100%!important}
-.kc-sheet{height:300px;padding:0;place-items:stretch}.kc-sheet .kc-cv{height:300px}
+.kc-spr{display:block;overflow:hidden;position:relative}.kc-spr img{position:absolute;left:0;top:0;height:100%;width:auto;max-width:none;animation:kcsw 3.6s steps(48) infinite;will-change:transform}
+.kc-spr.kc-small{width:80px;height:130px}.kc-spr.kc-big{width:188px;height:300px}
+@keyframes kcsw{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@media (prefers-reduced-motion:reduce){.kc-spr img{animation:none}}
+.kc-sheet{height:300px;padding:0;display:grid;place-items:start center}

@@ -17,22 +17,12 @@ function ballRender(){
  <div class="bl-grid">${cells}</div><div class="sub" style="text-align:center;padding:10px 24px">Ball mới sẽ được tặng qua hòm thư trong các sự kiện sắp tới.</div><div style="height:90px"></div>`}
 function ballView(id){
  const w=ballWorn()===id;
- openSheet(`<div style="text-align:center"><div class="bl-stage kc-sheet" id="kcSheet"></div><h2>${esc(BALL_NAME[id]||'Ball')}</h2><div class="sub">${w?'Đang treo cạnh frame danh hiệu trên Hồ sơ của bạn.':'Đeo lên để treo cạnh frame danh hiệu, đung đưa trên Hồ sơ.'}</div><button class="big" data-x="ballwear" data-id="${id}">${w?'Gỡ ball':'Đeo ball'}</button><button class="big gh" data-x="cfno">Đóng</button></div>`);kcMount('kcSheet','sheet',{px:0,py:3.9,scale:.62,auto:true,drag:true,camY:0,look:0,camZ:16})}
+ openSheet(`<div style="text-align:center"><div class="bl-stage kc-sheet">${kcSpr(id,'big')}</div><h2>${esc(BALL_NAME[id]||'Ball')}</h2><div class="sub">${w?'Đang treo cạnh frame danh hiệu trên Hồ sơ của bạn.':'Đeo lên để treo cạnh frame danh hiệu, đung đưa trên Hồ sơ.'}</div><button class="big" data-x="ballwear" data-id="${id}">${w?'Gỡ ball':'Đeo ball'}</button><button class="big gh" data-x="cfno">Đóng</button></div>`)}
 async function ballWear(id){if(!API.online()){toast('Cần có mạng để đổi');return}
  const w=ballWorn()===id;try{S.balls=await API.wornBall(w?null:id)}catch(e){return apiFail(e)}
  closeSheet();renderAll();if(S.tab==='col'&&COLTAB==='ball')renderCol();toast(w?'Đã gỡ ball':'Đã đeo ball')}
 function ballReveal(id){COLTAB='ball';go('col');renderCol();toast('Ball mới đã vào bộ sưu tập');setTimeout(()=>ballView(id),350)}
 
-/* ----- móc khóa 3D trên Hồ sơ (góc dưới phải frame ngang, xỏ qua lỗ) và trong màn xem Ball ----- */
-function kcSlot(){return ballWorn()?`<span class="kc-eyeb"></span><span class="kc-box" id="kcPro"></span><span class="kc-eye"></span>`:''}
-const KCI={};
-function kcMount(slotId,key,opt){const slot=document.getElementById(slotId);if(!slot)return;
- let k=KCI[key];if(!k){k=KCI[key]={box:document.createElement('div'),sc:null,busy:false};k.box.className='kc-cv'}
- slot.appendChild(k.box);
- if(k.sc){k.sc.resize();return}
- if(k.busy)return;k.busy=true;
- KC.lib().then(L=>{k.busy=false;if(!k.box.isConnected)return;k.sc=L.sceneStrap(k.box,opt);k.sc.st.vel=.5}).catch(()=>{k.busy=false})}
-function kcMountPro(){kcMount('kcPro','pro',{px:0,py:3.9,scale:.5,auto:false,camY:0,look:0,camZ:16})}
-{const _rp=renderPro;renderPro=function(){_rp();kcMountPro()}}
-/* nạp sẵn three.js lúc rảnh nếu người dùng đang đeo Ball, để móc khóa hiện ngay khi mở Hồ sơ */
-setTimeout(()=>{if(ballWorn())(window.requestIdleCallback||setTimeout)(()=>KC.lib().catch(()=>{}))},2500);
+/* ----- móc khóa Ball: dải khung hình dựng sẵn từ bản 3D (assets/balls/{id}-swing-small|big.webp, 48 khung), lật bằng transform nên rất nhẹ ----- */
+const kcSpr=(id,size)=>`<span class="kc-spr kc-${size}"><img src="${ASSETBASE}assets/balls/${id}-swing-${size}.webp" alt="" draggable="false"></span>`;
+function kcSlot(){const id=ballWorn();return id?`<span class="kc-eyeb"></span><span class="kc-box">${kcSpr(id,'small')}</span><span class="kc-eye"></span>`:''}

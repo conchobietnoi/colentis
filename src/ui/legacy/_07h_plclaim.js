@@ -7,7 +7,7 @@ function plClaimFX(res,done){
  const P=packs.filter(Boolean),hasBall=gr.some(g=>g.ball),hasFrame=(res.new_titles||[]).includes('ball-mint')||!!(S.unlocked&&S.unlocked.has&&S.unlocked.has('ball-mint'));
  const ov=document.createElement('div');ov.className='px-ov';document.body.appendChild(ov);
  let pi=0,fl=0,torn=false,prog=0,tearing=false,sx=0,holdT=null,ballBox=null;
- const end=()=>{if(ballBox)KCSTOP.add(ballBox);clearInterval(holdT);ov.remove();removeEventListener('pointerup',pu);done&&done()};
+ const end=()=>{clearInterval(holdT);ov.remove();removeEventListener('pointerup',pu);done&&done()};
  const steps=[];if(P.length)steps.push('pack','sum');if(hasBall)steps.push('ball');if(hasFrame)steps.push('frame');
  let si=-1;const next=()=>{si++;const s=steps[si];if(!s)return end();({pack:()=>packScene(0),sum:sumScene,ball:ballScene,frame:frameScene})[s]()};
  const bg=(x='')=>`<div class="px-bg ${x}"></div>`;
@@ -42,16 +42,13 @@ function plClaimFX(res,done){
   <div class="px-cnt">${['supreme','legend','rare','common'].filter(k=>cnt[k]).map(k=>`<span class="px-${k}">${PXN[k]} ×${cnt[k]}</span>`).join('')}</div></div><button class="px-btn on" data-n>${steps.length>si+1?'Còn quà nữa ›':'Xong'}</button>`;
   ov.querySelector('[data-n]').onclick=e=>{e.stopPropagation();next()}}
  function ballScene(){ov.onpointerdown=ov.onpointermove=ov.onclick=null;
-  ov.innerHTML=`${bg()}<div class="px-spot"></div><div class="px-b3d"></div><div class="px-notes">${[[-110,-25,.6],[110,25,1],[-60,-10,1.4],[70,15,1.8]].map(([x,r,d],k)=>`<i style="--x:${x}px;--r:${r}deg;animation-delay:${d}s">${k%2?'♫':'♪'}</i>`).join('')}</div>
+  ov.innerHTML=`${bg()}<div class="px-spot"></div><div class="px-b3d"><div class="px-drop">${kcSpr('ball-1','big')}</div></div><div class="px-notes">${[[-110,-25,.6],[110,25,1],[-60,-10,1.4],[70,15,1.8]].map(([x,r,d],k)=>`<i style="--x:${x}px;--r:${r}deg;animation-delay:${d}s">${k%2?'♫':'♪'}</i>`).join('')}</div>
   <div class="px-rt"><small>QUÀ MỞ MÀN</small><h2>Ball bạc hà</h2><p>Con đầu tiên trong 8 Ball. Treo lên frame danh hiệu để nó đung đưa trên Hồ sơ của bạn.</p></div><button class="px-btn px-b2 on" data-l>Để sau</button><button class="px-btn on" data-w>Đeo lên frame</button>`;
-  ballBox=document.createElement('div');ballBox.className='kc-cv';ov.querySelector('.px-b3d').appendChild(ballBox);
-  KC.lib().then(L=>{if(!ballBox.isConnected)return;const sc=L.sceneStrap(ballBox,{px:0,py:3.7,scale:.62,auto:false,camY:.1,look:.1,camZ:16});const tg=3.7,t0=performance.now();
-   if(KCRM()){sc.pivot.position.y=tg;return}sc.pivot.position.y=tg+9;const st=t=>{const k=Math.min(1,(t-t0)/750);if(k<0)return requestAnimationFrame(st);sc.pivot.position.y=tg+9*Math.pow(1-k,3);if(k<1)requestAnimationFrame(st);else sc.st.vel=.9};requestAnimationFrame(st)}).catch(()=>{});
-  ov.querySelector('[data-l]').onclick=e=>{e.stopPropagation();KCSTOP.add(ballBox);next()};
-  ov.querySelector('[data-w]').onclick=async e=>{e.stopPropagation();const b=e.currentTarget;b.disabled=true;try{S.balls=await API.wornBall('ball-1');toast('Đã đeo Ball lên frame')}catch(er){apiFail(er)}KCSTOP.add(ballBox);next()}}
+  ov.querySelector('[data-l]').onclick=e=>{e.stopPropagation();next()};
+  ov.querySelector('[data-w]').onclick=async e=>{e.stopPropagation();const b=e.currentTarget;b.disabled=true;try{S.balls=await API.wornBall('ball-1');toast('Đã đeo Ball lên frame')}catch(er){apiFail(er)}next()}}
  function frameScene(){
   ov.innerHTML=`${bg('mint')}<div class="px-flash"></div><div class="px-fw"><div class="px-av">${avatar(ME,250,'ball-mint')}</div><div class="px-dev"></div><div class="px-ring"></div></div>
   <div class="px-tfw">${titleFrame('ball-mint',null,62)}</div><div class="px-ft"><small>DANH HIỆU MỚI</small><h2>${esc((TMAP['ball-mint']||{name:'Ball-chan'}).name)}</h2><p>Khung tròn và khung ngang đã vào Hồ sơ.</p></div><button class="px-btn px-b2 on" data-l>Để sau</button><button class="px-btn on" data-e>Đeo ngay</button>`;
   ov.querySelector('[data-l]').onclick=e=>{e.stopPropagation();next()};
   ov.querySelector('[data-e]').onclick=async e=>{e.stopPropagation();const b=e.currentTarget;b.disabled=true;try{await API.equip('ball-mint');S.equip='ball-mint';ME.frame='ball-mint';toast('Đã đeo Ball-chan')}catch(er){apiFail(er)}next()}}
- KC.lib().catch(()=>{});next()}
+ next()}

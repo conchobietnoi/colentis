@@ -127,7 +127,9 @@
 .px-cnt{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}.px-cnt span{font:800 11px 'Be Vietnam Pro';border-radius:99px;padding:5px 10px;background:#1c1022;border:1px solid var(--rc);color:var(--rc)}
 .px-spot{position:absolute;left:50%;top:-40px;width:520px;height:640px;translate:-50% 0;background:conic-gradient(from 160deg at 50% 0,transparent 0deg,rgba(150,255,220,.16) 14deg,rgba(150,255,220,.22) 20deg,rgba(150,255,220,.16) 26deg,transparent 40deg);opacity:0;animation:pxo .5s forwards}
 @keyframes pxo{to{opacity:1}}
-.px-b3d{position:absolute;left:0;right:0;top:0;height:min(500px,62vh);z-index:3}
+.px-b3d{position:absolute;left:0;right:0;top:0;height:min(500px,62vh);z-index:3;display:grid;place-items:start center;padding-top:calc(env(safe-area-inset-top,0px) + 20px)}
+.px-drop{transform:translateY(-120%);animation:pxdr .8s cubic-bezier(.3,1.35,.5,1) forwards}.px-drop .kc-spr.kc-big{width:250px;height:400px}
+@keyframes pxdr{to{transform:none}}
 .px-notes i{position:absolute;left:50%;top:min(330px,40vh);font-size:26px;color:#ffe45e;opacity:0;z-index:4;text-shadow:0 0 10px rgba(255,228,94,.7);animation:pxn 2s ease-out infinite}
 .px-notes i{animation-delay:calc(var(--d,0s))}
 @keyframes pxn{0%{opacity:0;transform:translate(0,0) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translate(var(--x),-160px) scale(1.1) rotate(var(--r))}}

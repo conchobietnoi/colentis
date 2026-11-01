@@ -28,4 +28,4 @@ function plPoster(m){
  ${gtile(`<div class="plpk"><i></i><i></i><i></i></div>`,'5 gói thẻ','Mỗi gói 5 thẻ, ít nhất 1 Hiếm')}</div></div>`;
  const fab=got?`<button class="plfab done" disabled>${ic('check')} Đã nhận quà mở màn</button>`:`<button class="plfab" data-act="claimmail" data-id="${m.id}">${ic('gift')} Nhận quà mở màn</button>`;
  $('#pgLetter').innerHTML=`<div class="ptop plptop"><button class="ibtn" data-act="back" data-p="pgLetter" aria-label="Quay lại">${ic('left')}</button><h1>Thư sự kiện</h1></div><div class="pbody pl" style="padding:0">${hero}${steps}${rewards}${gifts}</div>${fab}`;
- openPage('pgLetter');renderMailList();syncBadges();if(!got)setTimeout(()=>KC.lib().catch(()=>{}),800)}
+ openPage('pgLetter');renderMailList();syncBadges()}

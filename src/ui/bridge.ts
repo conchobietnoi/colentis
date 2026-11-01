@@ -317,8 +317,6 @@ export const bridge = {
   chooseWelcome: (m: string) => wrap(api.chooseWelcomeMember(m)),
   equip: (id: string | null) => wrap(api.setEquipped(id)),
   wornBall: (id: string | null) => api.setWornBall(id),
-  /** three.js nạp lười (chỉ khi cần vẽ móc khóa Ball 3D). */
-  three: () => import('three'),
   setFavs: (ids: string[]) => wrap(api.setFavs(ids)),
 
   // ----- hồ sơ -----
