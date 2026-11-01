@@ -1370,3 +1370,5 @@ body.pdark .stagewrap{background:radial-gradient(900px 600px at 15% 0,#2a2468,tr
 .adpr{height:7px;border-radius:9px;background:var(--sleeve);margin:10px 0 6px;overflow:hidden}.adpr i{display:block;height:100%;background:var(--mint);border-radius:9px}
 .adlnk{font-size:12px;font-weight:800;color:var(--pink);min-height:32px}
 @media (prefers-reduced-motion:reduce){.adsw,.adsw i{transition:none}}
+
+.paper .mpost{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:16px;margin:14px 0 4px;box-shadow:0 8px 22px rgba(30,27,94,.28);background:#2a0f2e}
