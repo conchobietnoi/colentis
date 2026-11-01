@@ -16,7 +16,11 @@ begin
   perform t.ok(jsonb_array_length(my_balls()) = 1 and my_balls()->0->>'id' = 'ball-1', 'kệ có ball-1');
   res := claim_mail(mid);
   perform t.ok((select count(*) from user_balls where user_id = b) = 1, 'nhận lại không nhân đôi');
+  perform t.ok((set_worn_ball('ball-1')->0->>'worn')::boolean, 'đeo ball-1');
+  perform t.ok(not (set_worn_ball(null)->0->>'worn')::boolean, 'gỡ ball');
+  perform t.expect_err('BALL_NOT_OWNED', $q$select set_worn_ball('ball-8')$q$);
   perform t.as_user(c);
   perform t.ok(jsonb_array_length(my_balls()) = 0, 'người khác không thấy ball của bạn');
   perform t.ok(not exists (select 1 from user_balls), 'RLS: người khác không đọc được bảng');
 end $$;
+

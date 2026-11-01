@@ -316,6 +316,7 @@ export const bridge = {
   markMailRead: (id: string) => { api.markMailRead(id).catch(() => undefined) },
   chooseWelcome: (m: string) => wrap(api.chooseWelcomeMember(m)),
   equip: (id: string | null) => wrap(api.setEquipped(id)),
+  wornBall: (id: string | null) => api.setWornBall(id),
   setFavs: (ids: string[]) => wrap(api.setFavs(ids)),
 
   // ----- hồ sơ -----

@@ -145,7 +145,7 @@ export interface UiSnapshot {
   km: KhaiMacState | null
   idc: any | null
   albums: any[]
-  balls: { id: string; at: string }[]
+  balls: { id: string; at: string; worn: boolean }[]
   photos: Record<string, UiPhoto>   // task_id → ảnh check in
   cx: any | null
   stash: any[]
