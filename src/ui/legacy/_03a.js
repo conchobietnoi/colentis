@@ -17,6 +17,7 @@ function giftTile(g){if(g.k==='ball')return `<div class="gf"><div class="gi bl-g
 function openLetter(id){const m=MAILS.find(x=>x.id===id);if(!m)return;
  if(!m.read){m.read=true;API.markMailRead(id)}
  if(m.eid==='mua-concept-2026'&&m.kind==='event'){idPoster(m);return}
+ if(m.eid==='pola-day-2026'){plPoster(m);return}
  if(cxIsMail(m)){$('#pgLetter').innerHTML=cxMailDetailHTML(m);openPage('pgLetter');renderMailList();syncBadges();renderCalOnlyIfOn();return}
  $('#pgLetter').innerHTML=`<div class="ptop"><button class="ibtn" data-act="back" data-p="pgLetter" aria-label="Quay lại">${ic('left')}</button><h1>${m.type==='event'?'Thư sự kiện':m.type==='news'?'Thông báo':'Thư quà tặng'}</h1></div>
  <div class="pbody"><div class="envwrap"><div class="env ${m.type}" id="env"><div class="back"></div><div class="let"><i></i><i></i><i></i><i></i></div><div class="front"></div><div class="flap"></div><div class="wax">${ic(m.type==='event'?'cake':m.type==='news'?'megaphone':'gift')}</div></div><div class="sparkles" id="spk"></div></div>
