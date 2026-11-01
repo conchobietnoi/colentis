@@ -429,3 +429,8 @@ Thiết kế gốc: `design/mua-concept/boards/AppBuild.dc.html`. Giao diện ch
 
 ## Ball sưu tầm (migration 022)
 - 8 con Ball, tặng qua quà thư `{"type":"ball","id":"ball-N"}` (N=1..8); bảng `user_balls`, RPC `my_balls()`. Hiện có ball-1 (ảnh `public/assets/balls/ball-1.webp`); 7 ô còn lại hiện tối dấu "?" ở tab "Ball" trong Bộ sưu tập (`src/ui/legacy/_07e_ball.js`). Không tính vào bộ thẻ.
+
+## Quà thư gói thẻ + frame Ball / POLA DAY (migration 024)
+- Quà thư `{"type":"card_pack","qty":N}` (N ≤ 5): mỗi gói 5 thẻ rơi theo `daily_weights`, mỗi gói chắc chắn có ít nhất 1 thẻ Hiếm trở lên.
+- Danh hiệu `ball-mint` (bạn của Ball, tặng qua thư cùng Ball) và `pola-day` (thợ chụp pola, trao khi rửa đủ 40 pola). Frame SVG ở `public/assets/frames/titles/`.
+- Migration 023 (đeo/gỡ Ball) và 024 đã chạy trên Supabase thật; 020 vẫn chưa.

@@ -63,7 +63,7 @@ export type UiGift =
   | { k: 'title'; id: string }
   | { k: 'event' }
   | { k: 'frame' }
-  | { k: 'pack' }
+  | { k: 'pack'; n?: number }
   | { k: 'idcard' }
   | { k: 'idframe' }
   | { k: 'cpack'; con: number; n: number }

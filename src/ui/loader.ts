@@ -89,6 +89,7 @@ function giftsOf(m: MailRow, events: any[]): UiGift[] {
     else if (g.type === 'title') out.push({ k: 'title', id: g.id })
     else if (g.type === 'album') out.push({ k: 'album', id: String(g.id) })
     else if (g.type === 'ball') out.push({ k: 'ball', id: String(g.id) })
+    else if (g.type === 'card_pack') out.push({ k: 'pack', n: Math.max(1, Math.min(5, Number(g.qty ?? 1))) })
     else if (g.type === 'id_card') out.push({ k: 'idcard' })
     else if (g.type === 'id_frame') out.push({ k: 'idframe' })
     else if (g.type === 'stash_pack') out.push({ k: 'cpack', con: 1, n: 1 })

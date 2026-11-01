@@ -1,5 +1,7 @@
 // Chiều rộng khung ngang của từng danh hiệu (tỉ lệ rộng/200). Sinh từ manifest.json của bộ khung.
 export const TITLE_WIDTH: Record<string, number> = {
+ "ball-mint": 900,
+ "pola-day": 940,
  "streak-3": 760,
  "streak-7": 760,
  "streak-14": 870,
