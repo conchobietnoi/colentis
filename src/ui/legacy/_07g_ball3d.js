@@ -20,11 +20,11 @@ function dispAt(x,y,z){const g=(cx,cy,cz,a,k)=>a*Math.exp(-k*(1-(x*cx+y*cy+z*cz)
 function warp(geo){const p=geo.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i),l=Math.hypot(x,y,z),d=dispAt(x/l,y/l,z/l);p.setXYZ(i,x*d,y*d,z*d)}geo.computeVertexNormals();return geo}
 function makeBall(){
  const g=new THREE.Group();
- const body=new THREE.Mesh(warp(new THREE.SphereGeometry(1,64,48)),new THREE.MeshLambertMaterial({color:0x4cc9a2}));g.add(body);
- const SH=32;
- for(let i=1;i<=SH;i++){const k=i/SH;const m=new THREE.MeshLambertMaterial({color:new THREE.Color(MINT).lerp(new THREE.Color(0x9ff0d2),k*.55).multiplyScalar(.95+.12*k),alphaMap:NT,alphaTest:.1+.62*k});
-  const s=new THREE.Mesh(warp(new THREE.SphereGeometry(1+k*.3,56,40)),m);s.userData.k=k;g.add(s)}
- const face=new THREE.Mesh(warp(new THREE.SphereGeometry(1.38,72,56)),new THREE.MeshBasicMaterial({map:FT,transparent:true,depthWrite:false,depthTest:false}));face.renderOrder=20;face.rotation.y=Math.PI;g.add(face);
+ const body=new THREE.Mesh(warp(new THREE.SphereGeometry(1,40,30)),new THREE.MeshLambertMaterial({color:0x4cc9a2}));g.add(body);
+ const SH=14;
+ for(let i=1;i<=SH;i++){const k=i/SH;const m=new THREE.MeshLambertMaterial({color:new THREE.Color(MINT).lerp(new THREE.Color(0x9ff0d2),k*.55).multiplyScalar(.95+.12*k),alphaMap:NT,alphaTest:.08+.6*k});
+  const s=new THREE.Mesh(warp(new THREE.SphereGeometry(1+k*.3,36,26)),m);s.userData.k=k;g.add(s)}
+ const face=new THREE.Mesh(warp(new THREE.SphereGeometry(1.38,48,36)),new THREE.MeshBasicMaterial({map:FT,transparent:true,depthWrite:false,depthTest:false}));face.renderOrder=20;face.rotation.y=Math.PI;g.add(face);
  // gai kem nằm quanh phía trên/sau
  const sp=[[-.9,.55,-.1,.25],[-.5,.9,-.12,.27],[0,1.04,-.1,.28],[.52,.9,-.1,.27],[.92,.52,-.08,.25]];
  sp.forEach(([x,y,z,r])=>{const m=new THREE.Mesh(new THREE.SphereGeometry(r,20,16),new THREE.MeshLambertMaterial({color:CREAM,emissive:0x5a5748}));const d=new THREE.Vector3(x,y,z).normalize();d.multiplyScalar(1.34*dispAt(d.x,d.y,d.z));m.position.copy(d);g.add(m)});
@@ -139,7 +139,7 @@ function makeStrap(){
  return{root,left,right,bp,ball,sb,bow,LG,notes:[N1,N2,N3,N4]}}
 function sceneStrap(el,o){
  const W=()=>el.clientWidth,H=()=>el.clientHeight;
- const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(W(),H());el.prepend(r.domElement);
+ const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,1.5));r.setSize(W(),H());el.prepend(r.domElement);
  const sc=new THREE.Scene();const cam=new THREE.PerspectiveCamera(30,W()/H(),.1,80);cam.position.set(o.camX||0,o.camY||-3,o.camZ||19);cam.lookAt(o.camX||0,o.look??-3,0);
  sc.add(new THREE.AmbientLight(0xffffff,.55));const l=new THREE.DirectionalLight(0xffffff,.55);l.position.set(3,4,8);sc.add(l);
  const pivot=new THREE.Group();pivot.position.set(o.px||0,o.py||3.4,0);sc.add(pivot);
@@ -149,7 +149,7 @@ function sceneStrap(el,o){
  addEventListener('pointerup',()=>st.drag=false);
  el.addEventListener('pointermove',e=>{if(!st.drag||!o.drag)return;const dx=e.clientX-st.lx;st.lx=e.clientX;st.yaw+=dx*.012;st.vel+=dx*.0006});
  let t0=performance.now();
- function tick(t){if(KCRM())t=0;const dt=KCRM()?0:Math.min(.033,(t-t0)/1000);t0=t;
+ let lastR=0;function tick(t){if(t-lastR<30&&!KCRM()){requestAnimationFrame(tick);return}lastR=t;if(KCRM())t=0;const dt=KCRM()?0:Math.min(.033,(t-t0)/1000);t0=t;
   st.vel+=(-12*st.ang-.45*st.vel+Math.sin(t/950)*.45)*dt;st.ang+=st.vel*dt;
   pivot.rotation.z=st.ang;
   if(!st.drag)st.yaw+=dt*(o.auto?.5:0);
@@ -158,7 +158,6 @@ function sceneStrap(el,o){
   S.left.rotation.z=-st.ang*.5+Math.sin(t/560)*.1;S.right.rotation.z=-st.ang*.6+Math.sin(t/470+1.3)*.12;
   S.bp.rotation.z=-st.ang*.45+Math.sin(t/700+.6)*.08+st.vel*.1;
   S.bow.rotation.z=Math.sin(t/800)*.05;S.bow.rotation.y=Math.sin(t/1300)*.35;S.notes.forEach((n,i)=>{n.rotation.z=Math.sin(t/620+i*1.4)*.22;n.rotation.y=Math.sin(t/1100+i)*.5});S.LG.rotation.z=-st.ang*.3+Math.sin(t/640+.9)*.07;S.LG.rotation.y=Math.sin(t/1400)*.5;S.sb.rotation.y=Math.sin(t/900)*.6;
-  S.ball.children.forEach(c=>{const k=c.userData.k;if(k)c.rotation.z=Math.sin(t/600+k*3)*.004*k});
   if(el.isConnected&&el.offsetParent!==null&&!document.hidden)r.render(sc,cam);if(!KCSTOP.has(el))requestAnimationFrame(tick)}
  requestAnimationFrame(tick);
  return{st,pivot,S,ball:S.ball,renderer:r,cam,group:pivot,resize(){r.setSize(W(),H());cam.aspect=W()/H();cam.updateProjectionMatrix()}}}
