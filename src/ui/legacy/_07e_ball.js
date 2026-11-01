@@ -34,3 +34,5 @@ function kcMount(slotId,key,opt){const slot=document.getElementById(slotId);if(!
  KC.lib().then(L=>{k.busy=false;if(!k.box.isConnected)return;k.sc=L.sceneStrap(k.box,opt);k.sc.st.vel=.5}).catch(()=>{k.busy=false})}
 function kcMountPro(){kcMount('kcPro','pro',{px:0,py:3.9,scale:.5,auto:false,camY:0,look:0,camZ:16})}
 {const _rp=renderPro;renderPro=function(){_rp();kcMountPro()}}
+/* nạp sẵn three.js lúc rảnh nếu người dùng đang đeo Ball, để móc khóa hiện ngay khi mở Hồ sơ */
+setTimeout(()=>{if(ballWorn())(window.requestIdleCallback||setTimeout)(()=>KC.lib().catch(()=>{}))},2500);
