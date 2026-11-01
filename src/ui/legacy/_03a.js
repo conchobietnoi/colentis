@@ -37,6 +37,7 @@ async function claimMail(id){const m=MAILS.find(x=>x.id===id);if(!m||m.claimed)r
  if(cxIsMail(m)){cxClaimMail(m);return}
  let res;try{res=await API.claimMail(id)}catch(e){return apiFail(e,'claim')}
  closePage('pgLetter');closePage('pgMail');await API.reload();renderAll();
+ if(m.eid==='pola-day-2026'){plClaimFX(res,()=>{renderMailList();renderAll()});return}
  const alb=(res.grants||[]).filter(g=>g.album).map(g=>g.album),bl=(res.grants||[]).filter(g=>g.ball).map(g=>g.ball),its=itemsFromResult(res);if(bl.length&&!its.length&&!alb.length){renderMailList();ballReveal(bl[0]);return}
  if(alb.length&&!its.length){renderMailList();toast('Album đã vào kệ của bạn');openAlbums(alb[0]);return}
  runGacha(its,()=>{renderMailList();renderAll();if(bl.length)ballReveal(bl[0]);if(alb.length){toast('Album đã vào kệ của bạn');openAlbums(alb[0])}})}
