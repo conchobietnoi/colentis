@@ -426,3 +426,6 @@ Thiết kế gốc: `design/mua-concept/boards/AppBuild.dc.html`. Giao diện ch
 - Ảnh ở bucket riêng `cards`, thư mục `b2/<độ hiếm>/` và `thumbs/`, id `b2-<độ hiếm>-NNN`. Migration `021_cards_batch2.sql` thêm hàng với `active = false` (RLS ẩn khỏi client, gacha bỏ qua). Sau khi tải ảnh lên: `update public.cards set active = true where id like 'b2-%';`.
 - Xử lý ảnh: `node scripts/prepare-batch2.mjs <thư mục ảnh Drive>` (bảng chia hạng ở `scripts/batch2-map.json`, khớp theo tên file), rồi `npm run upload-cards -- manifest-b2.json manifest-b2-supreme.json`.
 - 12 hiệu ứng Bá khí `s5..s16` (CSS `src/ui/supreme2.css`, hạt `src/ui/legacy/_06h_sup2.js`, màu `SUPCOL`): s5 pháo hoa, s6 đèn flash, s7 ánh nến + vòng neon, s8 nổ truyện tranh, s9 pháo sáng, s10 vuốt hổ, s11 glitch, s12 lụa, s13 quét ánh nhìn, s14 tốc độ phố, s15 nắng, s16 photobooth. Thẻ s16 là ảnh động (WebP động 480×640, 52 khung), thumb là ảnh tĩnh.
+
+## Ball sưu tầm (migration 022)
+- 8 con Ball, tặng qua quà thư `{"type":"ball","id":"ball-N"}` (N=1..8); bảng `user_balls`, RPC `my_balls()`. Hiện có ball-1 (ảnh `public/assets/balls/ball-1.webp`); 7 ô còn lại hiện tối dấu "?" ở tab "Ball" trong Bộ sưu tập (`src/ui/legacy/_07e_ball.js`). Không tính vào bộ thẻ.

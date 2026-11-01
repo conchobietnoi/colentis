@@ -169,7 +169,7 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
  }},true);
 document.addEventListener('visibilitychange',()=>{if(!CI.open||CI.prev)return;if(document.hidden)ciStop();else if(!$('#ciCrop.on'))ciStart()});
 /* ----- Bộ sưu tập: tab "Ảnh của bản thân" ----- */
-function ciColSeg(){return `<div class="seg ci-seg"><button class="${COLTAB==='cards'?'on':''}" data-ci="tab" data-t="cards">Thẻ</button><button class="${COLTAB==='photos'?'on':''}" data-ci="tab" data-t="photos">Ảnh của bản thân</button></div>`}
+function ciColSeg(){return `<div class="seg ci-seg"><button class="${COLTAB==='cards'?'on':''}" data-ci="tab" data-t="cards">Thẻ</button><button class="${COLTAB==='photos'?'on':''}" data-ci="tab" data-t="photos">Ảnh của bản thân</button><button class="${COLTAB==='ball'?'on':''}" data-ci="tab" data-t="ball">Ball</button></div>`}
 function ciRenderPhotos(){
  if(!S.ckLoaded){S.ckLoaded=1;S.ck=S.ck||[];S.ckBusy=1;API.myCheckins().then(r=>{S.ck=r||[];S.ckBusy=0;if(COLTAB==='photos'&&S.tab==='col')ciRenderPhotos()}).catch(e=>{S.ckLoaded=0;S.ckBusy=0;if(!API.online())toast('Cần có mạng để tải ảnh')})}
  const all=(S.ck||[]).map(r=>({...r,P:ciP(r.taken_at)})),[y,m]=CKM||[TODAY.y,TODAY.m],ym=`${y}-${pad(m+1)}`;

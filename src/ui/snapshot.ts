@@ -69,6 +69,7 @@ export type UiGift =
   | { k: 'cpack'; con: number; n: number }
   | { k: 'stash'; id: string }
   | { k: 'album'; id: string }
+  | { k: 'ball'; id: string }
 
 export interface UiMail {
   id: string
@@ -144,6 +145,7 @@ export interface UiSnapshot {
   km: KhaiMacState | null
   idc: any | null
   albums: any[]
+  balls: { id: string; at: string }[]
   photos: Record<string, UiPhoto>   // task_id → ảnh check in
   cx: any | null
   stash: any[]

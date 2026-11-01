@@ -36,6 +36,7 @@ export const api = {
   khaiMacState: () => rpc<any>('khai_mac_state'),
   myIdCard: () => rpc<any>('my_id_card'),
   myAlbums: () => rpc<any[]>('my_albums'),
+  myBalls: () => rpc<{ id: string; at: string }[]>('my_balls'),
   myCheckins: () => rpc<any[]>('my_checkins'),
   taskPhotos: (from: string, to: string) => rpc<{ task_id: string; owner_id: string; path: string; source: string; taken_at: string }[]>('task_photos_range', { d1: from, d2: to }),
   setTaskPhoto: (tid: string, p_path: string, p_source: string) => rpc<{ path: string; old_path: string | null; taken_at: string }>('set_task_photo', { tid, p_path, p_source }),

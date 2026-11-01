@@ -130,3 +130,21 @@
 #pgPhoto .ci-ibtn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18);color:#fff}
 #pgPhoto .ci-btn.ghost{color:#fff;border-color:rgba(255,255,255,.25)}
 @media (prefers-reduced-motion:reduce){.cstamp,.cstamp::after,.ci-vfx,.ci-shutter,.ci-rec i,.ci-sent .ci-sq{animation:none!important}.ci-vf video,.ci-camsel .ind{transition:none!important}}
+
+/* ----- Ball sưu tầm ----- */
+.bl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px 14px 0}
+.bl-cell{position:relative;aspect-ratio:1;border-radius:20px;display:grid;place-items:center;overflow:hidden;border:2px solid var(--line);background:var(--paper);padding:0;color:inherit;font:inherit}
+.bl-cell b{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;font-weight:800;color:var(--soft)}
+.bl-cell.on{border-color:#8fe3c9;background:radial-gradient(circle at 50% 42%,#e9fff6,#c5f0e0 70%);box-shadow:0 6px 18px rgba(80,200,160,.3)}
+.bl-cell.on img{width:78%;height:78%;object-fit:cover;border-radius:50%;margin-bottom:14px}
+.bl-cell.on b{color:#1f6b54}
+.bl-cell.off{background:linear-gradient(160deg,#1c1840,#0f0c28);border-color:#2b2660}
+.bl-cell.off b{color:#6f6aa8}
+.bl-q{font-size:44px;font-weight:900;color:#3a3470;margin-bottom:16px}
+.bl-fx{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.7),transparent 45%);animation:blglow 3.2s ease-in-out infinite alternate}
+.bl-big{position:relative;width:230px;height:230px;margin:6px auto 4px;border-radius:50%;overflow:hidden;background:radial-gradient(circle,#e9fff6,#9fe6cf);box-shadow:0 0 36px rgba(110,230,190,.65)}
+.bl-big img{width:100%;height:100%;object-fit:cover;display:block}
+.bl-gi{overflow:hidden;padding:0;background:radial-gradient(circle,#e9fff6,#9fe6cf);box-shadow:0 0 24px rgba(110,230,190,.7)}
+.bl-gi img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+@keyframes blglow{from{opacity:.35}to{opacity:.9}}
+@media (prefers-reduced-motion:reduce){.bl-fx{animation:none!important}}
