@@ -51,7 +51,7 @@
 .plfr>div{background:linear-gradient(180deg,#24142a,#1a0e1e);border:1px solid #3a2440;border-radius:6px;padding:12px 9px 13px;display:flex;flex-direction:column;gap:5px}
 .plfr b{font:800 17px 'Unbounded',sans-serif;color:#ff6a78}.plfr strong{font-size:13px;color:#f6eadb}.plfr small{font-size:11.5px;line-height:1.4;color:#bfaeb8}
 .pld{margin:12px 2px 0;font-size:13px;line-height:1.55;color:#bfaeb8}
-.plrw{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.plrw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
 .plrc{background:#170c1a;border:1px solid #3a2440;border-radius:16px;padding:13px 12px;display:flex;flex-direction:column;gap:4px}
 .plrc b{font:800 20px 'Unbounded',sans-serif;color:#f6eadb}.plrc span{font-size:12px;line-height:1.4;color:#bfaeb8}
 .plrc.gold{border-color:rgba(255,228,94,.45);box-shadow:0 0 24px rgba(255,228,94,.12) inset}.plrc.gold b{color:#ffe45e}
@@ -122,7 +122,7 @@
 .px-b2{bottom:calc(env(safe-area-inset-bottom,0px) + 90px);background:none;color:#f6eadb;box-shadow:none;border:1.5px solid #5a3d66;padding:11px 22px;font-size:13px}
 .px-sum{position:absolute;top:calc(env(safe-area-inset-top,0px) + 70px);left:0;right:0;z-index:3;text-align:center;padding:0 16px;max-width:460px;margin:auto}
 .px-sum small{font:800 10.5px 'Be Vietnam Pro';letter-spacing:.32em;color:#ff6a78}.px-sum h2{font:800 22px 'Unbounded',sans-serif;margin:6px 0 14px}
-.px-sg{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;justify-items:center}
+.px-sg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;justify-items:center}
 .px-sg i{display:grid;place-items:center;opacity:0;animation:pxi .35s forwards}.px-sg i>.pc{box-shadow:0 0 0 2px var(--rc),0 0 12px var(--rg);border-radius:6px}@keyframes pxi{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
 .px-cnt{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}.px-cnt span{font:800 11px 'Be Vietnam Pro';border-radius:99px;padding:5px 10px;background:#1c1022;border:1px solid var(--rc);color:var(--rc)}
 .px-spot{position:absolute;left:50%;top:-40px;width:520px;height:640px;translate:-50% 0;background:conic-gradient(from 160deg at 50% 0,transparent 0deg,rgba(150,255,220,.16) 14deg,rgba(150,255,220,.22) 20deg,rgba(150,255,220,.16) 26deg,transparent 40deg);opacity:0;animation:pxo .5s forwards}
