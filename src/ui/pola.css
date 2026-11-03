@@ -216,7 +216,7 @@
 .pl-cam .k-lens::after{content:"";position:absolute;inset:22%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3b2d5c,#06030c 70%)}
 .pl-cam .k-logo{position:absolute;left:.95em;top:3em;width:2em;height:2em;object-fit:contain}
 .pl-cam .k-lcd{position:absolute;right:1em;top:3.2em;width:2.6em;height:1.45em;border-radius:.3em;background:#1a1604;color:#ff9d2e;font:900 .8em/1.8em 'Unbounded',sans-serif;text-align:center}
-.pl-cam .k-brand{position:absolute;left:0;right:0;bottom:1.9em;text-align:center;font:800 .42em/1 'Unbounded',sans-serif;letter-spacing:.5em;color:#d7c4f0}
+.pl-cam .k-brand{position:absolute;left:0;right:0;top:6.35em;z-index:3;text-align:center;font:800 .42em/1 'Unbounded',sans-serif;letter-spacing:.5em;color:#d7c4f0}
 .pl-cam .k-shb{position:absolute;left:2.3em;top:-.55em;width:2.1em;height:.95em;border-radius:.55em .55em 0 0;background:linear-gradient(180deg,#ff7a8c,#ff2e4a);z-index:2;transition:transform .12s}
 .pl-cam .k-cam.k-press .k-shb{transform:translateY(.28em)}
 .pl-cam .k-slot{position:absolute;left:1.2em;right:1.2em;bottom:1.1em;height:.55em;border-radius:.3em;background:#070520;z-index:4;aspect-ratio:auto;display:block}
