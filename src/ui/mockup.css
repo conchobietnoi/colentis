@@ -148,7 +148,7 @@ h1,h2,h3{font-weight:900}
 .sec{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 4px;font-weight:900;font-size:15px}.sec small{font-size:11.5px;color:var(--soft);font-weight:700}
 .gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;padding:8px 14px}
 .slot{min-width:0;aspect-ratio:3/4;display:grid;place-items:center;position:relative;cursor:pointer;transition:transform .15s}.slot:active{transform:scale(.94)}
-.slot .pc{--w:100%;max-width:100%}.slot>.sw{min-width:0;max-width:100%}.gal>*{min-width:0}
+.slot .pc{--w:100%;max-width:100%}.gal.land{grid-template-columns:repeat(2,minmax(0,1fr));padding-top:4px}.gal.land .slot{aspect-ratio:4/3}.slot>.sw{min-width:0;max-width:100%;display:grid;place-items:center}.gal>*{min-width:0}
 .slot.lk{cursor:default;border-radius:12px;border:2px dashed var(--line);background:var(--paper)}
 .slot.lk::after{content:"";position:absolute;inset:0;background:var(--logo) center/46% no-repeat;opacity:.25;filter:invert(.2)}
 .dk .slot.lk::after{filter:none;opacity:.12}

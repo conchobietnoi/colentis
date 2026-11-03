@@ -87,20 +87,25 @@ function renderToday(){const k=todayKey,mt=mine(k),done=mt.filter(t=>t.done).len
 let colFilter='all';
 function renderCol(){if(COLTAB==='photos')return ciRenderPhotos();if(COLTAB==='ball')return ballRender();const rs=['common','rare','legend','supreme'];const have=r=>CARDS[r].filter(c=>S.own[c.id]).length;
  const fl=[['all','Tất cả'],...rs.map(r=>[r,NAME[r]]),['event','Sự kiện']];
- const sec=(r,list,title,colr)=>{const owned=list.filter(c=>S.own[c.id]).length;let shown=list;if(colFilter==='all'&&list.length>9)shown=list.slice(0,9);
-  return `<div class="sec" style="--rc:${colr}"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:${colr};box-shadow:0 0 8px ${colr}"></i>${title}</span><small>${owned}/${list.length}${colFilter==='all'&&list.length>9?' · 9 thẻ đầu':''}</small></div><div class="gal">${shown.map(c=>slotHTML(c)).join('')}</div>${colFilter==='all'&&list.length>9?`<div style="text-align:center"><button class="chip" data-act="colf" data-f="${r}">Xem tất cả ${list.length} thẻ ${NAME[r]}</button></div>`:''}`};
+ const sec=(r,list0,title,colr)=>{const list=[...list0.filter(c=>!isLand(c)),...list0.filter(isLand)];const owned=list.filter(c=>S.own[c.id]).length;let shown=list;if(colFilter==='all'&&list.length>9)shown=list.slice(0,9);
+  return `<div class="sec" style="--rc:${colr}"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:${colr};box-shadow:0 0 8px ${colr}"></i>${title}</span><small>${owned}/${list.length}${colFilter==='all'&&list.length>9?' · 9 thẻ đầu':''}</small></div>${galSplit(shown)}${colFilter==='all'&&list.length>9?`<div style="text-align:center"><button class="chip" data-act="colf" data-f="${r}">Xem tất cả ${list.length} thẻ ${NAME[r]}</button></div>`:''}`};
  let body=idColTile();
  const show=colFilter==='all'?rs:colFilter==='event'?[]:[colFilter];
  show.forEach(r=>body+=sec(r,CARDS[r],NAME[r],RCOL[r]));
  if((colFilter==='all'||colFilter==='event')&&EV.length){const grp=[['birthday-james-2026','Sinh nhật James 2026'],['khai-mac-2026','Khai Mạc · Limited & Tag 1Y']];
   grp.forEach(([eid,nm])=>{const l=EV.filter(c=>c.ev===eid);if(!l.length)return;const h=l.filter(c=>S.own[c.id]).length;
-   body+=`<div class="sec"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,#ffd23f,#ff5db6,#4cd2ff)"></i>${nm}</span><small>${h}/${l.length} · Sự kiện</small></div><div class="gal">${l.map(c=>slotHTML(c)).join('')}</div>`});
+   body+=`<div class="sec"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,#ffd23f,#ff5db6,#4cd2ff)"></i>${nm}</span><small>${h}/${l.length} · Sự kiện</small></div>${galSplit(l)}`});
   body+=`<div class="sub" style="padding:0 16px 6px">Thẻ sự kiện có nhãn riêng, không tính vào “đủ bộ”. Thẻ chưa sở hữu được ẩn cho đến khi bạn nhận.</div>`}
  $('#col').innerHTML=`<div class="head"><div><small>Bộ sưu tập của bạn</small><h1>Thẻ ảnh</h1></div><div class="hact"><button class="ibtn" data-x="dup" aria-label="Thẻ trùng">${ic('copy')}</button><button class="ibtn" data-act="mail" aria-label="Hòm thư">${ic('mail')}</button></div></div>
  ${ciColSeg()}${cxColConcept()?cxColHTML():`${cxColActive()?cxColChipsHTML():''}<div class="rbar">${rs.map(r=>`<div style="--rc:${RCOL[r]}"><b>${have(r)}/${TOTAL[r]}</b>${NAME[r]}<div class="bar"><i style="width:${TOTAL[r]?have(r)/TOTAL[r]*100:0}%"></i></div></div>`).join('')}</div>
  <div class="fl">${fl.map(f=>`<button class="chip ${colFilter===f[0]?'on':''}" data-act="colf" data-f="${f[0]}">${f[1]}</button>`).join('')}</div>${body}`}`}
+/* ảnh dọc xếp trước (3 cột), ảnh ngang xếp sau trong lưới riêng 2 cột */
+const isLand=c=>(+c.ar||0)>1.05;
+function galSplit(l){const P=l.filter(c=>!isLand(c)),L=l.filter(isLand);return `${P.length?`<div class="gal">${P.map(c=>slotHTML(c)).join('')}</div>`:''}${L.length?`<div class="gal land">${L.map(c=>slotHTML(c)).join('')}</div>`:''}`}
+/* thu nhỏ thẻ cho vừa ô: ô dọc 3:4, ô ngang 4:3 */
+function slotW(c){const box=isLand(c)?4/3:3/4,ar=+c.ar||box;return ar<box?(ar/box*100).toFixed(1)+'%':'100%'}
 function slotHTML(c){const o=S.own[c.id];if(!o)return `<div class="slot lk" title="Chưa có"></div>`;
- return `<button class="slot" data-act="view" data-cid="${c.id}"><div class="sw">${cardHTML(c,{w:'100%',thumb:1})}${o.n>1?`<span class="cnt">×${o.n}</span>`:''}${o.fresh?'<span class="nw">MỚI</span>':''}</div></button>`}
+ return `<button class="slot" data-act="view" data-cid="${c.id}"><div class="sw">${cardHTML(c,{w:slotW(c),thumb:1})}${o.n>1?`<span class="cnt">×${o.n}</span>`:''}${o.fresh?'<span class="nw">MỚI</span>':''}</div></button>`}
 /* ----- bạn bè ----- */
 function renderFr(){const pf=S.friends,reqs=NOTIFS.filter(n=>n.kind==='req'),cal=curCal();
  $('#fr').innerHTML=`<div class="head"><div><small>Kết bạn bằng username</small><h1>Bạn bè</h1></div><div class="hact">${bellBtn()}<button class="ibtn" data-act="mail" aria-label="Hòm thư">${ic('mail')}</button></div></div>
