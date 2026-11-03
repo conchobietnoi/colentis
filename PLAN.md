@@ -434,3 +434,8 @@ Thiết kế gốc: `design/mua-concept/boards/AppBuild.dc.html`. Giao diện ch
 - Quà thư `{"type":"card_pack","qty":N}` (N ≤ 5): mỗi gói 5 thẻ rơi theo `daily_weights`, mỗi gói chắc chắn có ít nhất 1 thẻ Hiếm trở lên.
 - Danh hiệu `ball-mint` (bạn của Ball, tặng qua thư cùng Ball) và `pola-day` (thợ chụp pola, trao khi rửa đủ 40 pola). Frame SVG ở `public/assets/frames/titles/`.
 - Migration 023 (đeo/gỡ Ball) và 024 đã chạy trên Supabase thật; 020 vẫn chưa.
+
+## Gỡ Mùa Concept, phát thư POLA DAY cho người mới (026, 04/11/2026)
+- Banner, thư và thư tặng thẻ của Mùa Concept bị ẩn khỏi giao diện (`CX_ENDED` trong `_06f_cx_core.js`, lọc `eid==='mua-concept-2026'` khi nạp thư). Thư cũ trên server dời `deliver_at` sang 2099, không xóa; thẻ concept người dùng đã có vẫn giữ.
+- Thư POLA DAY có `broadcast_at`, nên ai đăng ký sau cũng nhận ở lần đăng nhập kế tiếp. "Nhận tất cả" bỏ qua thư POLA DAY (có hiệu ứng riêng).
+- e2e s6 (Mùa Concept) giờ báo thiếu thư/poster là đúng ý: sự kiện đã gỡ.

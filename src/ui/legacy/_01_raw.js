@@ -70,7 +70,7 @@ function applySnapshot(sn){
  S.km=sn.km||null;S.idc=sn.idc||null;S.albums=sn.albums||[];S.balls=sn.balls||[];S.photos=sn.photos||{};cxApply(sn);S.stash=sn.stash||[];S.eventGot=Object.values(sn.eventDone).every(Boolean)&&Object.keys(sn.eventDone).length>0;
  S.todayCards=(S.grants[TODAY.iso]||[]).map(g=>CBY[g.card]).filter(Boolean);
  S.groupReady=(S.tinfo?S.tinfo.groups:[]).some(g=>g.claimed);
- MAILS.length=0;sn.mails.forEach(x=>MAILS.push(x));
+ MAILS.length=0;sn.mails.forEach(x=>{if(x.eid!=='mua-concept-2026')MAILS.push(x)});
  NOTIFS.length=0;sn.notifs.forEach(x=>NOTIFS.push(x));
 }
 /* ----- tài nguyên ----- */

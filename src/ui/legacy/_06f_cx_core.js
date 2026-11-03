@@ -483,7 +483,9 @@ function cxUgWatch(){
 
 /* ===== mảnh giao diện chèn vào các tab hiện có ===== */
 const cxFrag=(name,extra)=>{if(!cxOn())return '';try{return cxTpl(name,cxV())}catch(e){console.error('cx',name,e);return ''}};
-function cxBannerHTML(){return cxLive()?cxFrag('bnx'):''}
+/* Mùa Concept đã kết thúc: gỡ banner, thư và thư tặng thẻ của sự kiện khỏi giao diện (dữ liệu vẫn giữ nguyên) */
+const CX_ENDED=true;
+function cxBannerHTML(){return !CX_ENDED&&cxLive()?cxFrag('bnx'):''}
 function cxTaskHTML(){return cxLive()&&cxDay()<=9?cxFrag('taskRow'):''}
 function cxClaimHTML(){return cxLive()&&(CX.s.packs||[]).length?cxFrag('claim'):''}
 function cxGiftHTML(){return cxOn()&&(CX.s.gifts||[]).length?cxFrag('gift'):''}
@@ -507,7 +509,7 @@ const cxMailDay=m=>m.date.split(' ')[0];
 function cxMailStat(m){return m.gifts.length&&!m.claimed?['Quà chưa nhận','rw']:!m.read?['Mới','nw']:['Đã đọc','']}
 function cxMailItemHTML(m){const st=cxMailStat(m),t=m.tag?`<span class="mbxt" style="background:${esc(m.tc||'#FFE45E')}">${esc(m.tag)}</span>`:'';
  return `<button class="card-b mbxi ${need(m)?'new':''}" data-act="letter" data-id="${m.id}">${t}<b>${esc(m.t)}</b>${m.sum?`<span class="mbxs">${esc(m.sum)}</span>`:''}<span class="mbxf"><em>Colentis · ${esc(cxMailDay(m))}</em><i class="mbxc ${st[1]}">${st[0]}</i></span></button>`}
-function cxGiftLetters(){const gf=(CX.s&&CX.s.gifts)||[],by={};gf.forEach(g=>{(by[g.from]=by[g.from]||{name:g.name,ks:[]}).ks.push(cxKey(g))});
+function cxGiftLetters(){if(CX_ENDED)return '';const gf=(CX.s&&CX.s.gifts)||[],by={};gf.forEach(g=>{(by[g.from]=by[g.from]||{name:g.name,ks:[]}).ks.push(cxKey(g))});
  return Object.keys(by).map(f=>{const x=by[f];
   return `<button class="card-b mbxi new" data-cx-gift="${f}"><span class="mbxt" style="background:#FF4FA3">QUÀ TỪ BẠN BÈ</span><b>${esc(x.name)} gửi bạn ${x.ks.length} thẻ</b><span class="mbxs">${esc(x.ks.slice(0,3).map(cxNm).join(', ')+(x.ks.length>3?'…':''))}</span><span class="mbxf"><em>${esc(x.name)}</em><i class="mbxc gift">Chưa nhận</i></span></button>`}).join('')}
 function cxMailDetailHTML(m){const st=m.tag?`<span class="mbxt" style="background:${esc(m.tc||'#FFE45E')}">${esc(m.tag)}</span>`:'';
