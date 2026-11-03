@@ -36,6 +36,7 @@ function renderCal(){const [y,m]=S.month,first=new Date(y,m,1).getDay(),off=(fir
  <div class="hact"><div class="streak ${S.wait?'wait':''}">${slogo()} ${S.wait?S.streakSaved:S.streak}</div>${bellBtn()}<button class="ibtn ${unread?'ring':''}" data-act="mail" aria-label="Hòm thư">${ic('mail')}${unread?`<span class="dot-n">${unread}</span>`:''}</button></div></div>
  ${kmBanner()}
  ${cxBannerHTML()}
+ ${plCalHTML()}
  ${em?`<button class="banner ev" data-act="evmail"><span class="bi">${ic('cake')}</span><span><b>${esc(em.t)}</b><small>Bạn có quà sự kiện. Mở thư để nhận.</small></span></button>`:''}
  <div class="dow" style="margin-top:10px"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
  <div class="grid" id="grid">${g}</div>
@@ -92,6 +93,7 @@ function renderCol(){if(COLTAB==='photos')return ciRenderPhotos();if(COLTAB==='b
  let body=idColTile();
  const show=colFilter==='all'?rs:colFilter==='event'?[]:[colFilter];
  show.forEach(r=>body+=sec(r,CARDS[r],NAME[r],RCOL[r]));
+ if(colFilter==='all'||colFilter==='event')body+=plColHTML();
  if((colFilter==='all'||colFilter==='event')&&EV.length){const grp=[['birthday-james-2026','Sinh nhật James 2026'],['khai-mac-2026','Khai Mạc · Limited & Tag 1Y']];
   grp.forEach(([eid,nm])=>{const l=EV.filter(c=>c.ev===eid);if(!l.length)return;const h=l.filter(c=>S.own[c.id]).length;
    body+=`<div class="sec"><span style="display:flex;gap:8px;align-items:center"><i style="width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,#ffd23f,#ff5db6,#4cd2ff)"></i>${nm}</span><small>${h}/${l.length} · Sự kiện</small></div>${galSplit(l)}`});

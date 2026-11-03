@@ -1,3 +1,5 @@
+-- 026 đã tắt phát thư Mùa Concept trên bản thật; test này kiểm tra lại logic phát thư nên bật lại cho DB thử.
+update mails set broadcast_at = case title when 'Aniyaaa đã lên sàn' then '2026-10-20 17:00+00'::timestamptz when 'Poyoyoi · concept cuối' then '2026-10-23 17:00+00'::timestamptz when 'Sự kiện bí mật · 01/11' then '2026-10-17 17:00+00'::timestamptz end where event_id = 'mua-concept-2026' and kind = 'news';
 -- Mùa Concept giai đoạn 2: nhiệm vụ ngày, pack, thẻ concept, mở khóa, pack thưởng, tặng/xin, Ultra, thư
 select t.now_is('2026-10-18 10:00+07');
 do $$

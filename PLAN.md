@@ -439,3 +439,8 @@ Thiết kế gốc: `design/mua-concept/boards/AppBuild.dc.html`. Giao diện ch
 - Banner, thư và thư tặng thẻ của Mùa Concept bị ẩn khỏi giao diện (`CX_ENDED` trong `_06f_cx_core.js`, lọc `eid==='mua-concept-2026'` khi nạp thư). Thư cũ trên server dời `deliver_at` sang 2099, không xóa; thẻ concept người dùng đã có vẫn giữ.
 - Thư POLA DAY có `broadcast_at`, nên ai đăng ký sau cũng nhận ở lần đăng nhập kế tiếp. "Nhận tất cả" bỏ qua thư POLA DAY (có hiệu ứng riêng).
 - e2e s6 (Mùa Concept) giờ báo thiếu thư/poster là đúng ý: sự kiện đã gỡ.
+
+## POLA DAY (migration 027, 04–08/11/2026)
+- 40 pola (`pola_items`: id `<thành viên>-<n>`, ngày 1–5, ô 1–8, việc kiểm tra ở server qua `private.pola_done`). Rửa bằng `pola_develop(d,s)` khi việc đã xong (từ ngày của tấm tới hôm nay, hạn 08/11). Đủ 8 tấm/ngày: sticker (`pola_rewards`). Đủ 40: danh hiệu `pola-day` + 4 gói 5 thẻ (source `event`).
+- Ảnh ở bucket riêng `pola` (`<id>.webp`), RLS chỉ cho đọc tấm đã rửa. Tải lên: `.\scripts\upload-pola.ps1` (ảnh nằm ở `local-cards/pola`, không commit).
+- UI: `src/ui/legacy/_07i_pola.js` + `pola.css` (banner + việc ở tab Lịch, trang sự kiện, máy ảnh rửa ảnh, sticker, frame + hộp phim, nhóm POLA DAY trong Thẻ › Sự kiện). Test: `99_pola.sql`, `e2e/s12_pola_day.mjs` (`VP=ios` để giả lập iPhone; shim cần `POLA_DIR` trỏ tới thư mục ảnh).

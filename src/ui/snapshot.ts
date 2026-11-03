@@ -146,6 +146,7 @@ export interface UiSnapshot {
   idc: any | null
   albums: any[]
   balls: { id: string; at: string; worn: boolean }[]
+  pola: any | null
   photos: Record<string, UiPhoto>   // task_id → ảnh check in
   cx: any | null
   stash: any[]

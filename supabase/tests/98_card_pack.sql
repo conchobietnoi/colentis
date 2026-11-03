@@ -5,7 +5,7 @@ declare b uuid := t.id('bob'); mid uuid; res jsonb; n int;
 begin
   perform t.as_super();
   insert into mails(kind,title,body,gifts) values ('event','Gói thử','x','[{"type":"card_pack","qty":3},{"type":"title","id":"ball-mint"},{"type":"ball","id":"ball-1"}]') returning id into mid;
-  insert into mail_recipients(mail_id,user_id,deliver_at) values (mid,b,now() - interval '1 day');
+  insert into mail_recipients(mail_id,user_id,deliver_at) values (mid,b,'2026-10-01');
   perform t.as_user(b);
   res := claim_mail(mid);
   select count(*) into n from jsonb_array_elements(res->'grants') g where g ? 'card_id';

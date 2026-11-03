@@ -1,7 +1,7 @@
 /* ===== Hiệu ứng nhận quà thư POLA DAY: xé từng gói 5 thẻ -> tổng kết -> Ball 3D rơi xuống -> frame Ball-chan hiện ra.
    Dữ liệu lấy từ kết quả claim_mail (grants có trường pack, ball; new_titles). Mockup đã duyệt: scratchpad mail/claim.html ===== */
 const PXN={common:'THƯỜNG',rare:'HIẾM',legend:'HUYỀN THOẠI',supreme:'BÁ KHÍ'};
-function plClaimFX(res,done){
+function plClaimFX(res,done){titleSeen('ball-mint');
  const gr=res.grants||[],packs=[];
  gr.forEach(g=>{if(g.pack&&CBY[g.card_id]){(packs[g.pack-1]=packs[g.pack-1]||[]).push(CBY[g.card_id])}});
  const P=packs.filter(Boolean),hasBall=gr.some(g=>g.ball),hasFrame=(res.new_titles||[]).includes('ball-mint')||!!(S.unlocked&&S.unlocked.has&&S.unlocked.has('ball-mint'));

@@ -205,6 +205,8 @@ async function doClaim(iso){closeSheet();if(!API.online()){toast('Cần có mạ
  iso=iso||TODAY.iso;let res;try{res=await API.claimDay(iso)}catch(e){const c=e&&e.app&&e.app.code;if(c==='NOTHING_TO_CLAIM'){await API.reload();renderAll();toast('Chưa có thẻ nào để nhận');return}return apiFail(e,'claim')}
  await API.reload();renderAll();
  runGacha(itemsFromResult(res),()=>{toast(`Thẻ đã lưu, ngày ${iso.split('-')[2]}/${iso.split('-')[1]} đã khóa`);renderAll();mileCheck()})}
+/* danh hiệu đã có hiệu ứng nhận riêng: đánh dấu đã thấy để không mở thêm màn danh hiệu mới */
+function titleSeen(id){const k='titles:'+ME.uid,a=lsGet(k,null);if(a&&!a.includes(id)){a.push(id);lsSet(k,a)}}
 async function newTitlesPrompt(){const k='titles:'+ME.uid,seen=new Set(lsGet(k,null)||[]);const first=lsGet(k,null)===null;const all=[...S.unlocked];
  lsSet(k,all);if(first)return false;const fresh=all.filter(t=>!seen.has(t)&&TMAP[t]&&!t.startsWith('welcome-'));
  if(!fresh.length||GST||WZ)return false;runGacha(fresh.map(id=>({type:'title',id})),()=>renderAll());return true}

@@ -264,9 +264,15 @@ function placeholder(p) {
 async function ctl(req, res, url) {
   const body = JSON.parse((await readBody(req)).toString() || '{}')
   if (url.pathname === '/__ctl/now') { fakeNow = body.iso ?? null; return send(res, 200, { now: fakeNow }) }
-  if (url.pathname === '/__ctl/sql') { const r = await pool.query(body.sql, body.params ?? []); return send(res, 200, r.rows) }
+  if (url.pathname === '/__ctl/sql') { const r = await pool.query(body.sql, body.params ?? []); return send(res, 200, Array.isArray(r) ? r.at(-1).rows : r.rows) }
   if (url.pathname === '/__ctl/seed-objects') {
     const r = await pool.query(`insert into storage.objects(bucket_id,name) select 'cards', p from (select storage_path p from public.cards union select thumb_path from public.cards where thumb_path is not null) x on conflict do nothing returning 1`)
+    return send(res, 200, { n: r.rowCount })
+  }
+  if (url.pathname === '/__ctl/seed-pola') {
+    const r = await pool.query(`insert into storage.objects(bucket_id,name) select 'pola', id || '.webp' from public.pola_items on conflict do nothing returning 1`)
+    const dir = process.env.POLA_DIR
+    if (dir) for (const f of fs.readdirSync(dir)) { const id = f.replace(/^pola-/, ''); if (/^[a-z]+-[1-8]\.webp$/.test(id)) objects.set('pola/' + id, { buf: fs.readFileSync(path.join(dir, f)), type: 'image/webp' }) }
     return send(res, 200, { n: r.rowCount })
   }
   if (url.pathname === '/__ctl/seed-concept') {

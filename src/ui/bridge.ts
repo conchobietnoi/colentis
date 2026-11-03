@@ -317,6 +317,8 @@ export const bridge = {
   chooseWelcome: (m: string) => wrap(api.chooseWelcomeMember(m)),
   equip: (id: string | null) => wrap(api.setEquipped(id)),
   wornBall: (id: string | null) => api.setWornBall(id),
+  polaState: () => api.polaState(),
+  polaDevelop: (d: number, s: number) => api.polaDevelop(d, s),
   setFavs: (ids: string[]) => wrap(api.setFavs(ids)),
 
   // ----- hồ sơ -----
